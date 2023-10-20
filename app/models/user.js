@@ -27,6 +27,7 @@ const User = sequelize.define("user", {
   },{
     timestamps: false
   });
+
   const Seat = sequelize.define("seat", {
     id: {
       type: Sequelize.BIGINT,
@@ -42,8 +43,7 @@ const User = sequelize.define("user", {
     },
     email: {
       type: Sequelize.STRING,
-      allowNull:false,
-      unique:true
+      allowNull:false
     }
   });
   const Event = sequelize.define("event", {
@@ -57,15 +57,15 @@ const User = sequelize.define("user", {
       type: Sequelize.TEXT,
     },
     date:{
-      type:Sequelize.DATE
+      type:Sequelize.DATEONLY
     }
   });
 
+Event.hasMany(Seat, { onDelete: "cascade" })
 
 
 
-
-sequelize.sync({force: false}).then(async function (result){
+sequelize.sync({force: true}).then(async function (result){
 
 
     

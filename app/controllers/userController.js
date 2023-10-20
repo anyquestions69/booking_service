@@ -3,13 +3,6 @@ const { Op } = require("sequelize");
 const Sequelize = require('sequelize')
 const jwt = require('jsonwebtoken')
 
-const getPagingData = (data, page, limit) => {
-    const { count: totalItems, rows: users } = data;
-    const currentPage = page ? +page : 0;
-    const totalPages = Math.ceil(totalItems / limit);
-  
-    return { totalItems, users, totalPages, currentPage };
-  };
 
 class Manager{
    
@@ -22,8 +15,7 @@ class Manager{
         let page=req.query.page
         var limit =5
         let result= await User.findAndCountAll( {offset: page>=1?((page-1)*2):0, limit: limit})
-        let resData= getPagingData(result, page, limit)
-        return res.send(resData)
+        return res.send(result)
     }
 
     async register(req, res){
@@ -103,7 +95,7 @@ class Manager{
     }
     async deleteAccount(req,res){
         let user = await User.destroy({where:{id:req.params['id']}})
-        await web3.eth.accounts.wallet.remove(user.wallet)
+      
         return res.redirect('/admin')
     }
     
