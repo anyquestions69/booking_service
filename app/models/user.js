@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const sequelize = require('../config/database')
-
+function hash(data){
+  return 'aaa'+data
+}
 
 const User = sequelize.define("user", {
     id: {
@@ -22,7 +24,10 @@ const User = sequelize.define("user", {
     },
     password: {
       type: Sequelize.STRING,
-      allowNull:false
+      allowNull:false,
+      set(value) {
+        this.setDataValue('password', hash(value));
+      }
     }
   },{
     timestamps: false
@@ -65,7 +70,7 @@ Event.hasMany(Seat, { onDelete: "cascade" })
 
 
 
-sequelize.sync({force: true}).then(async function (result){
+sequelize.sync({force: false}).then(async function (result){
 
 
     
