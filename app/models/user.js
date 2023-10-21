@@ -51,7 +51,7 @@ const User = sequelize.define("user", {
       allowNull:false
     },
     price:{
-      type: Sequelize.INTEGER
+      type: Sequelize.FLOAT
     }
   });
   const Event = sequelize.define("event", {
@@ -68,14 +68,34 @@ const User = sequelize.define("user", {
       type:Sequelize.DATEONLY
     }
   });
+  const Sector = sequelize.define('sector', {
+    name:{
+      type:Sequelize.TEXT
+    }
+  },{
+    timestamps: false
+  })
+  const Status = sequelize.define('status', {
+    name:{
+      type:Sequelize.STRING
+    }
+  },{
+    timestamps: false
+  })
 
 Event.hasMany(Seat, { onDelete: "cascade" })
 
+Sector.hasMany(Seat, { onDelete: "cascade" })
+Status.hasMany(Seat, { onDelete: "cascade"})
 
+const sectors = [{name:"Арена"},{name:"Обычные"}, {name:"VIP"}]
+const status = [{name: "Свободно"}, {name: "Ожидает подтверждения"}, {name:"Забронирован"}]
 
-sequelize.sync({force: false}).then(async function (result){
-
-
+sequelize.sync({force: true}).then(async function (result){
+  if((await Sector.findAll()).length==0)
+     await Sector.bulkCreate(sectors, { validate: true })
+  if((await Status.findAll()).length==0)
+    await Status.bulkCreate(status, { validate: true })
     
 })
 .catch(err=> console.log(err));
