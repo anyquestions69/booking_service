@@ -31,7 +31,7 @@ const movies = [
   },
 ]
 
-const seats = Array.from({ length: 8 * 8 }, (_, i) => i)
+const seats = Array.from({ length: 52 * 19 }, (_, i) => i)
 
 export default function App() {
   const [selectedMovie, setSelectedMovie] = useState(movies[0])

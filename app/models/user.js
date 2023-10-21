@@ -48,7 +48,7 @@ const User = sequelize.define("user", {
     },
     email: {
       type: Sequelize.STRING,
-      allowNull:false
+      allowNull:true
     },
     price:{
       type: Sequelize.FLOAT
@@ -88,10 +88,10 @@ Event.hasMany(Seat, { onDelete: "cascade" })
 Sector.hasMany(Seat, { onDelete: "cascade" })
 Status.hasMany(Seat, { onDelete: "cascade"})
 
-const sectors = [{name:"Арена"},{name:"Обычные"}, {name:"VIP"}]
+const sectors = [{name:"Arena"},{name:"Arena1"},{name:"Arena2"},{name:"Arena3"},{name:"Arena4"},{name:"Arena5"},{name:"Stalls"}, {name:"VIP"}]
 const status = [{name: "Свободно"}, {name: "Ожидает подтверждения"}, {name:"Забронирован"}]
 
-sequelize.sync({force: true}).then(async function (result){
+sequelize.sync({force: false}).then(async function (result){
   if((await Sector.findAll()).length==0)
      await Sector.bulkCreate(sectors, { validate: true })
   if((await Status.findAll()).length==0)
