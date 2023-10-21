@@ -49,6 +49,9 @@ const User = sequelize.define("user", {
     email: {
       type: Sequelize.STRING,
       allowNull:false
+    },
+    price:{
+      type: Sequelize.INTEGER
     }
   });
   const Event = sequelize.define("event", {
