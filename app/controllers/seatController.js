@@ -15,12 +15,11 @@ class Manager{
     async getOne(req,res){
         let {eventId}= req.params
         let {row,col} = req.body
-        let seat = await Seat.findOne({where:{eventId, row, col}})
+        let seat = await Seat.findOne({where:{active:true, eventId, row, col}})
         return res.send(seat)
     }
     async getAll(req,res){
-        let {eventId}= req.params
-        let seats = await Seat.findAll({where:{eventId}})
+        let seats = await Seat.findAll({where:{active:true}})
         return res.send(seats)
     }
     async updatePrice(req,res){

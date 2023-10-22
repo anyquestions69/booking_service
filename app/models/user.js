@@ -55,6 +55,10 @@ const User = sequelize.define("user", {
     },
     price:{
       type: Sequelize.FLOAT
+    },
+    active:{
+      type:Sequelize.BOOLEAN,
+      default:true
     }
   });
   const Event = sequelize.define("event", {
