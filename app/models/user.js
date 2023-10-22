@@ -50,6 +50,9 @@ const User = sequelize.define("user", {
       type: Sequelize.STRING,
       allowNull:true
     },
+    seatId:{
+      type: Sequelize.STRING,
+    },
     price:{
       type: Sequelize.FLOAT
     }
@@ -88,7 +91,7 @@ Event.hasMany(Seat, { onDelete: "cascade" })
 Sector.hasMany(Seat, { onDelete: "cascade" })
 Status.hasMany(Seat, { onDelete: "cascade"})
 
-const sectors = [{name:"Arena"},{name:"Arena1"},{name:"Arena2"},{name:"Arena3"},{name:"Arena4"},{name:"Arena5"},{name:"Stalls"}, {name:"VIP"}]
+const sectors = [{name:"Arena"},{name:"Stalls"}, {name:"Silver"},{name:"Gold"}, {name:"Platinum"}, {name:"Disabled"}]
 const status = [{name: "Свободно"}, {name: "Ожидает подтверждения"}, {name:"Забронирован"}]
 
 sequelize.sync({force: false}).then(async function (result){

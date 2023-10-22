@@ -41,7 +41,7 @@ services:
       - '80:80'
     volumes:
       - ./nginx:/etc/nginx/conf.d
-    #     - ./static:/var/www/static
+      - ./static:/var/www/static
     restart: always
 
   # Контейнер с pgadmin
@@ -51,8 +51,8 @@ services:
       - db
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: a@mail.cu
-      PGADMIN_DEFAULT_PASSWORD: 0666
+      PGADMIN_DEFAULT_EMAIL: admin@mail.ru
+      PGADMIN_DEFAULT_PASSWORD: aaa
     expose:
       - '80'
     restart: always

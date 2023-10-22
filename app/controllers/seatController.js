@@ -1,5 +1,5 @@
 const {Seat, Event} = require('../models/user')
-
+const { Op } = require("sequelize");
 function filterInput(data){
     for(let prop in data){
         console.log(prop)
@@ -23,8 +23,29 @@ class Manager{
         let seats = await Seat.findAll({where:{eventId}})
         return res.send(seats)
     }
+    async updatePrice(req,res){
+        let {eventId}= req.params
+        let {sectorId, row, col, price} = req.body
+        let response = await Seat.update({where:{
+            eventId, 
+            row:{
+                [Op.and]: [
+                {[Op.gte]: row.start},
+                {[Op.lte]: row.end},
+                ]
+            }, 
+            col:{
+                [Op.and]: [
+                {[Op.gte]: col.start},
+                {[Op.lte]: col.end},
+                ]
+            }, 
+            sectorId
+        }},{price})
+        return res.send(response)
+    }
     async bookOne(req,res){
-        let {row,col,email} = req.body
+        let {row,col,sectorId, email} = req.body
         let {eventId}= req.params
         //filterInput(req.body) soon
         let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
@@ -33,11 +54,11 @@ class Manager{
         let event  = await Event.findByPk(eventId)
         if(!event)
             return res.status(400).send({error:'Неверно указано событие'})
-        let seat = await Seat.findOne({where:{eventId, row, col}})
+        let seat = await Seat.findOne({where:{eventId, row, col, sectorId}})
         if(seat)
             return res.status(400).send({error:'Место уже занято'})
 
-        let response = await Seat.create({eventId, row, col, email })
+        let response = await Seat.update({where:{eventId, row, col, sectorId}},{statusId:2, email })
         return res.send(response)
     }
     

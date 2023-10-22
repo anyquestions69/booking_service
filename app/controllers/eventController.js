@@ -10,59 +10,50 @@ const getPagingData = (data, page, limit) => {
     return { totalItems:totalItems.length, rows, totalPages, currentPage };
   };
 function createSeats(body, eventId){
-    let {arena} = body
+    let {arena, stalls} = body
     let arenaSeats=[]
-    for(let j=1;j<3;j++){
-        for(let i=1;i<19;i++){
-            arenaSeats.push({row:j, col:i, statusId:1, sectorId:1, price:arena, eventId}) //первые 2 ряда
+    
+    for(let i=1;i<42;i++){//arena
+        if(i<19){
+            arenaSeats.push({row:1, col:i, statusId:1, sectorId:1, price:arena, eventId, }) //1
+            arenaSeats.push({row:2, col:i, statusId:1, sectorId:1, price:arena, eventId, }) //2
         }
+        if(i<15){
+            arenaSeats.push({row:3, col:i, statusId:2, sectorId:1, price:arena, eventId}) //3
+        }
+        if(i<11){
+            arenaSeats.push({row:4, col:i, statusId:1, sectorId:1, price:arena, eventId}) //4
+        }
+        if(i<37){
+            arenaSeats.push({row:5, col:i, statusId:1, sectorId:1, price:arena, eventId}) //5
+        }
+            arenaSeats.push({row:6, col:i, statusId:1, sectorId:1, price:arena, eventId}) //6  
+        
     }
-    for(let i=1;i<15;i++){
-        arenaSeats.push({row:3, col:i, statusId:1, sectorId:1, price:arena, eventId}) //3
+    for(let i=1;i<104;i++){//stalls
+        if(i<102)
+            arenaSeats.push({row:10, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //10
+        if(i<96)
+            arenaSeats.push({row:8, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //8
+        if(i<92)
+            arenaSeats.push({row:9, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //9
+        if(i<79)
+            arenaSeats.push({row:7, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //7
+        if(i<64){
+            arenaSeats.push({row:4, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //4
+            arenaSeats.push({row:6, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //6
+            arenaSeats.push({row:12, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //12
+        }
+        if(i<61){
+            arenaSeats.push({row:3, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //3
+            arenaSeats.push({row:5, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //5
+        }
+        if(i<56)
+            arenaSeats.push({row:2, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //2
+        if(i<51)
+            arenaSeats.push({row:1, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //1
+        arenaSeats.push({row:11, col:i, statusId:1, sectorId:2, price:stalls, eventId}) //11
     }
-    for(let i=1;i<11;i++){
-        arenaSeats.push({row:4, col:i, statusId:1, sectorId:1, price:arena, eventId}) //4
-    }
-    for(let i=1;i<37;i++){
-        switch (i) {
-            case i<7:
-                arenaSeats.push({row:5, col:i, statusId:1, sectorId:2, price:arena, eventId}) //5-a1
-                break;
-            case i<14:
-                arenaSeats.push({row:5, col:i, statusId:1, sectorId:3, price:arena, eventId}) //5-a2
-                break;
-            case i<24:
-                arenaSeats.push({row:5, col:i, statusId:1, sectorId:4, price:arena, eventId}) //5-a3
-                break;  
-            case i<31:
-                arenaSeats.push({row:5, col:i, statusId:1, sectorId:5, price:arena, eventId}) //5-a4
-                break;
-            default:
-                arenaSeats.push({row:5, col:i, statusId:1, sectorId:6, price:arena, eventId}) //5-a5
-                break;
-        }    
-    }
-    for(let i=1;i<42;i++){
-        switch (i) {
-            case i<8:
-                arenaSeats.push({row:6, col:i, statusId:1, sectorId:2, price:arena, eventId}) //6-a1
-                break;
-            case i<16:
-                arenaSeats.push({row:6, col:i, statusId:1, sectorId:3, price:arena, eventId}) //6-a2
-                break;
-            case i<27:
-                arenaSeats.push({row:6, col:i, statusId:1, sectorId:4, price:arena, eventId}) //6-a3
-                break;  
-            case i<35:
-                arenaSeats.push({row:6, col:i, statusId:1, sectorId:5, price:arena, eventId}) //6-a4
-                break;
-            default:
-                arenaSeats.push({row:6, col:i, statusId:1, sectorId:6, price:arena, eventId}) //6-a5
-                break;
-        }    
-    }
-
-    console.log(arenaSeats)
     return arenaSeats
    
 }
