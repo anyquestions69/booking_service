@@ -25,6 +25,12 @@ class Manager{
     async updatePrice(req,res){
         let {eventId}= req.params
         let {sectorId, row, col, price} = req.body
+        if(!row.end){
+            row.end=row.start
+        }
+        if(!col.end){
+            col.end=col.start
+        }
         let response = await Seat.update({where:{
             eventId, 
             row:{

@@ -98,7 +98,8 @@ CREATE TABLE public.seats (
     email character varying(255) NOT NULL,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
-    "eventId" bigint
+    "eventId" bigint,
+    "active" boolean DEFAULT true
 );
 
 

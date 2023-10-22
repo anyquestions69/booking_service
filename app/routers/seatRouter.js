@@ -2,7 +2,7 @@ const express = require("express");
 const seatController = require("../controllers/seatController.js");
 const seatRouter = express.Router();
  
-seatRouter.get("/:eventId", seatController.getAll);
+seatRouter.get("/", seatController.getAll);
 seatRouter.get('/:eventId/:row/:col', seatController.getOne)
 seatRouter.post('/:eventId', seatController.bookOne)
 

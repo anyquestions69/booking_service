@@ -1755,7 +1755,7 @@
       </svg>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
       <script>
-fetch('/api/seat/1').then(async(res)=>{
+fetch('/api/seat').then(async(res)=>{
     let array=await res.json()
     console.log(array)
     for(let seat of array){

@@ -60,7 +60,7 @@ bot.on('text', async msg => {
             });
 
         }
-        else if(msg.text == '/link') {
+        else if(msg.text == '/\/name (.+)\n\r\//') {
 
             await bot.sendMessage(msg.chat.id, `https://habr.com/`, {
 
@@ -111,84 +111,6 @@ bot.on('text', async msg => {
 
                 },
                 //Сообщение будет ответом на сообщение пользователя
-                reply_to_message_id: msg.message_id
-
-            })
-
-        }
-        else if(msg.text == '⭐️ Картинка') {
-
-            //Скидываем изображение ссылкой
-            //await bot.sendPhoto(msg.chat.id, process.env.URL_TO_IMG);
-
-            //Скидываем изображение указав путь
-            //await bot.sendPhoto(msg.chat.id, './image.jpg');
-
-            //Скидываем изображение с помощью Readable Stream
-            const imageStream = fs.createReadStream('./image.jpg');
-            await bot.sendPhoto(msg.chat.id, imageStream, {
-
-                caption: '<b>⭐️ Картинка</b>',
-                parse_mode: 'HTML'
-
-            });
-
-            //Скидываем изображение с помощью буфера
-            //const imageBuffer = fs.readFileSync('./image.jpg');
-            //await bot.sendPhoto(msg.chat.id, imageBuffer);
-
-        }
-        else if(msg.text == '⭐️ Видео') {
-
-            //Скидываем видео (можно другими методами - аналогично картинкам)
-            await bot.sendVideo(msg.chat.id, './video.mp4', {
-
-                caption: '<b>⭐️ Видео</b>',
-                parse_mode: 'HTML'
-
-            });
-
-        }
-        else if(msg.text == '⭐️ Аудио') {
-
-            //Скидываем аудио
-            await bot.sendAudio(msg.chat.id, './audio.mp3', {
-
-                caption: '<b>⭐️ Аудио</b>',
-                parse_mode: 'HTML'
-
-            });
-
-        }
-        else if(msg.text == '⭐️ Голосовое сообщение') {
-
-            //Скидываем голосовое сообщение
-            await bot.sendVoice(msg.chat.id, './audio.mp3', {
-
-                caption: '<b>⭐️ Голосовое сообщение</b>',
-                parse_mode: 'HTML'
-
-            });
-
-        }
-        else if(msg.text == '⭐️ Контакт') {
-
-            //Скидываем контакт
-            await bot.sendContact(msg.chat.id, process.env.CONTACT, `Контакт`, {
-
-                reply_to_message_id: msg.message_id
-
-            });
-
-        }
-        else if(msg.text == '⭐️ Геолокация') {
-
-            //Определяем широту и долготу нужной координаты
-            const latitudeOfRedSquare = 55.753700;
-            const longitudeOfReadSquare = 37.621250;
-            //Скидываем геолокацию нужной координаты
-            await bot.sendLocation(msg.chat.id, latitudeOfRedSquare, longitudeOfReadSquare, {
-
                 reply_to_message_id: msg.message_id
 
             })

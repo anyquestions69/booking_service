@@ -98,7 +98,7 @@ Status.hasMany(Seat, { onDelete: "cascade"})
 const sectors = [{name:"Arena"},{name:"Stalls"}, {name:"Silver"},{name:"Gold"}, {name:"Platinum"}, {name:"Disabled"}]
 const status = [{name: "Свободно"}, {name: "Ожидает подтверждения"}, {name:"Забронирован"}]
 
-sequelize.sync({force: false}).then(async function (result){
+sequelize.sync({force: true}).then(async function (result){
   if((await Sector.findAll()).length==0)
      await Sector.bulkCreate(sectors, { validate: true })
   if((await Status.findAll()).length==0)
