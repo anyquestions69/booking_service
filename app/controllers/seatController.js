@@ -12,18 +12,11 @@ function filterInput(data){
 
 class Manager{
    
-    async getOne(req,res){
-        let {eventId}= req.params
-        let {row,col} = req.body
-        let seat = await Seat.findOne({where:{active:true, eventId, row, col}})
-        return res.send(seat)
-    }
     async getAll(req,res){
         let seats = await Seat.findAll({where:{active:true}})
         return res.send(seats)
     }
     async updatePrice(req,res){
-        let {eventId}= req.params
         let {sectorId, row, col, price} = req.body
         if(!row.end){
             row.end=row.start
@@ -31,8 +24,8 @@ class Manager{
         if(!col.end){
             col.end=col.start
         }
-        let response = await Seat.update({where:{
-            eventId, 
+        let response = await Seat.update({price}, {where:{
+            active:true, 
             row:{
                 [Op.and]: [
                 {[Op.gte]: row.start},
@@ -46,27 +39,39 @@ class Manager{
                 ]
             }, 
             sectorId
-        }},{price})
+        }})
         return res.send(response)
     }
     async bookOne(req,res){
         let {row,col,sectorId, email} = req.body
-        let {eventId}= req.params
         //filterInput(req.body) soon
         let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
         if(!re.test(email))
             return res.status(400).send({error:'Неверно указан email'})
-        let event  = await Event.findByPk(eventId)
-        if(!event)
-            return res.status(400).send({error:'Неверно указано событие'})
-        let seat = await Seat.findOne({where:{eventId, row, col, sectorId}})
-        if(seat)
+        let seat = await Seat.findOne({where:{active:true, row, col, sectorId}})
+        if(!seat)
+            return res.status(400).send({error:'Место указано не верно'})
+        if(seat.statusId==3){
             return res.status(400).send({error:'Место уже занято'})
-
-        let response = await Seat.update({where:{eventId, row, col, sectorId}},{statusId:2, email })
-        return res.send(response)
+        }
+        let response = await Seat.update({statusId:3, email },{where:{active:true, row, col, sectorId}})
+        return res.send({res:"Место успешно забронировано"})
     }
     
+    async requestBooking(req,res){
+        let {email, row,col, sectorId}= req.body
+        if(!re.test(email))
+            return res.status(400).send({error:'Неверно указан email'})
+       
+        let seat = await Seat.findOne({where:{active:true, row, col, sectorId}})
+        if(!seat)
+            return res.status(400).send({error:'Место указано не верно'})
+        if(seat.statusId==3){
+            return res.status(400).send({error:'Место уже занято'})
+        }
+        let response = await Seat.update({statusId:2, email },{where:{active:true, row, col, sectorId}})
+        return res.send({res:"Ожидайте рассмотрения заявки менеджером"})
+    }
     
 }
 

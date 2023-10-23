@@ -85,8 +85,8 @@ padding-top: 20px;
   --bs-border-radius-xl: 1rem;
   --bs-border-radius-2xl: 2rem;
   --bs-border-radius-pill: 50rem;
-  --bs-link-color: #800000;
-  --bs-link-hover-color: #0a58ca;
+  --bs-link-color: var(--bs-purple);
+  --bs-link-hover-color: var(--bs-pink);
   --bs-code-color: #d63384;
   --bs-highlight-bg: #fff3cd;
 }
@@ -259,7 +259,7 @@ sup {
 
 a {
   color: var(--bs-link-color);
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:hover {
   color: var(--bs-link-hover-color);
@@ -2858,15 +2858,15 @@ textarea.form-control-lg {
 
 .btn-primary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: #800000;
-  --bs-btn-border-color: #800000;
-  --bs-btn-hover-color: #ecaf07;
-  --bs-btn-hover-bg: #570000;
-  --bs-btn-hover-border-color: #570000;
+  --bs-btn-bg: var(--bs-purple);
+  --bs-btn-border-color: var(--bs-purple);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--bs-pink);
+  --bs-btn-hover-border-color: var(--bs-pink);
   --bs-btn-focus-shadow-rgb: 128, 0, 0;
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #a10000;
-  --bs-btn-active-border-color: #a10000;
+  --bs-btn-active-bg: var(--bs-purple);
+  --bs-btn-active-border-color: var(--bs-purple);
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: #0d6efd;
@@ -3636,7 +3636,7 @@ textarea.form-control-lg {
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
   font-size: var(--bs-nav-link-font-size);
   font-weight: var(--bs-nav-link-font-weight);
-  color: var(--bs-nav-link-color);
+  color: var(--bs-pink);
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
@@ -3683,8 +3683,8 @@ textarea.form-control-lg {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: var(--bs-nav-tabs-link-active-color);
-  background-color: var(--bs-nav-tabs-link-active-bg);
-  border-color: var(--bs-nav-tabs-link-active-border-color);
+  background-color: var(--bs-pink);
+  border-color: var(--bs-pink);
 }
 .nav-tabs .dropdown-menu {
   margin-top: calc(-1 * var(--bs-nav-tabs-border-width));
@@ -3710,7 +3710,7 @@ textarea.form-control-lg {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: var(--bs-nav-pills-link-active-color);
-  background-color: var(--bs-nav-pills-link-active-bg);
+  background-color: var(--bs-pink);
 }
 
 .nav-fill > .nav-link,

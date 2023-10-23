@@ -17,45 +17,35 @@
         
     </head>
     <body>
-       
-       
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidenav" >
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-              <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-              <span class="fs-4">Главная</span>
+      <nav class="navbar border-bottom border-body" >
+        <ul class="nav nav-pills  mb-auto mx-auto justify-content-center" >
+              
+          <li class="nav-item">
+            <a class="nav-link " href="/admin/requests">
+              Все заявки
             </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-              
-              <li class="nav-item">
-                <a class="nav-link text-white " href="/admin/requests">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                  Все заявки
-                </a>
-              </li>
-              <li>
-                <a class="nav-link text-white admin-only"  href="/admin/addEvent">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-                  Добавить ивент
-                </a>
-              </li>
-              <li>
-                <a class="nav-link text-white active admin-only" href="/admin/event">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-                  Изменить цену
-                </a>
-              </li>
-              
-            </ul>
+          </li>
+          <li>
+            <a class="nav-link "  href="/admin/addEvent">
             
-          </div>
-       
-          <div class="container " style="padding-left :280px;">
+              Добавить ивент
+            </a>
+          </li>
+          <li>
+            <a class="nav-link active" href="/admin/event">
+             
+              Изменить цену
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+          <div class="container " >
                 
             <form   class="row p-4"
-              id="updateUser"
+              id="updatePrice"
               role="tabpanel">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="500px" height="" viewBox="100 60 700 400">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="col-8" height="" viewBox="120 60 600 400">
        
                 <defs>
                     <clipPath id="clip_26">
@@ -1801,33 +1791,38 @@
                   </g>
                   
                       </svg>
-                <div class="col-md-12 mx-auto mb-3">
+                <div class="col-md-4  mb-3">
                   <div class="row">
-                    <div class="form-group col-md-2">
+                    <div class="col-12"> <label for="">Ряд</label>
+                      <input type="text" class="form-control" id="row-start" placeholder="С какого">
+                      <br>
+                      <input type="text" class="form-control" id="row-end" placeholder="По какой (Пустое если 1 ряд)"></div>
+                      <div class="col-12">
+                        <br>
+                        <label for="">Место</label>
+                        <input type="text" class="form-control" id="col-start" placeholder="С какого">
+                        <br>
+                        <input type="text" class="form-control" id="col-end" placeholder="По какое (Пустое если одно место)">
+                      </div>
+                    <div class="col-6">
+                     <br>
                       <label for="sector">Сектор</label>
                       <select id="sector" class="form-control">
-                        <option selected>Arena</option>
-                        <option>Stalls</option>
-                        <option>Silver</option>
-                        <option>Gold</option>
-                        <option>Platinum</option>
-                        <option>Disabled</option>
+                        <option value="1" selected>Arena</option>
+                        <option value="2">Stalls</option>
+                        <option value="3">Silver</option>
+                        <option value="4">Gold</option>
+                        <option value="5">Platinum</option>
+                        <option value="6">Disabled</option>
                       </select>
+                    </div>
+                    <div class="col-6">
+                      <br>
                       <label for="">Цена</label>
-                      <input type="text" class="form-control" id="зкшсу" placeholder="1000">
+                      <input type="text" class="form-control" id="price" placeholder="1000">
                     </div>
-                    <div class="col-4">
-                      <label for="">Ряд</label>
-                      <input type="text" class="form-control" id="row-start" placeholder="С какого">
-                      <input type="text" class="form-control" id="row-end" placeholder="По какой (Пустое если 1 ряд)">
-                    </div>
-                    <div class="col-4">
-                      <label for="">Место</label>
-                      <input type="text" class="form-control" id="row-start" placeholder="С какого">
-                      <input type="text" class="form-control" id="row-end" placeholder="По какое (Пустое если одно место)">
-                    </div>
-                    <div class="col-2 mt-4">
-                    <button type="submit"  class="btn btn-primary">Обновить цену</button>
+                    <div class="col-12 mt-4">
+                    <button type="submit"  class="w-100 btn btn-primary">Обновить цену</button>
                   </div>
                   </div>
                  
@@ -1848,9 +1843,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="js/admin-auth.js"></script>
-        <script src="js/profile.js"></script>
-        
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script src="js/admin-panel.js"></script>
     </body>
 </html>

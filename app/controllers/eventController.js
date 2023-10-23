@@ -10,7 +10,7 @@ const getPagingData = (data, page, limit) => {
     return { totalItems:totalItems.length, rows, totalPages, currentPage };
   };
 function createSeats(body, eventId){
-    let {arena, stalls} = body
+    let {arena, stalls, silver, gold, platinum, disabled} = body
     let arenaSeats=[]
     
     for(let i=1;i<42;i++){//arena
@@ -19,7 +19,7 @@ function createSeats(body, eventId){
             arenaSeats.push({row:2, col:i, statusId:1, sectorId:1, price:arena, eventId,active:true }) //2
         }
         if(i<15){
-            arenaSeats.push({row:3, col:i, statusId:2, sectorId:1, price:arena, eventId,active:true}) //3
+            arenaSeats.push({row:3, col:i, statusId:1, sectorId:1, price:arena, eventId,active:true}) //3
         }
         if(i<11){
             arenaSeats.push({row:4, col:i, statusId:1, sectorId:1, price:arena, eventId,active:true}) //4
@@ -105,7 +105,8 @@ class Manager{
     }
     async addOne(req,res){
         let event = await Event.create({name:req.body.name, date:req.body.date})
-        await Seat.update({active:false})
+        await Seat.update({active:false},{where:{active:true}})
+        console.log(event.id)
         let seats  = createSeats(req.body, event.id)
         let result = await Seat.bulkCreate(seats, { validate: true })
         return res.send(event)

@@ -17,63 +17,45 @@
         
     </head>
     <body>
-       
-       
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidenav" >
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-              <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-              <span class="fs-4">Главная</span>
+      <nav class="navbar border-bottom border-body" >
+        <ul class="nav nav-pills  mb-auto mx-auto justify-content-center" >
+              
+          <li class="nav-item">
+            <a class="nav-link active " href="/admin/requests">
+              Все заявки
             </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-              
-              <li class="nav-item">
-                <a class="nav-link text-white active" href="/admin/requests">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                  Все заявки
-                </a>
-              </li>
-              <li>
-                <a class="nav-link text-white admin-only"  href="/admin/addEvent">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-                  Добавить ивент
-                </a>
-              </li>
-              <li>
-                <a class="nav-link text-white admin-only" href="/admin/event">
-                  <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-                  Изменить цену
-                </a>
-              </li>
-              
-            </ul>
+          </li>
+          <li>
+            <a class="nav-link  "  href="/admin/addEvent">
             
-          </div>
-       
-            <div class="container" style="padding-left:280px" >
-                
-                  <div   class="row p-4">
-                      <div class="h3 mb-3">Все заявки</div>
-                      <div class="list-group" id="orderList">
-                        
-                      </div>
+              Добавить ивент
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/event">
+             
+              Изменить цену
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+        <div class="container"  >
+            
+              <div   class="row p-4">
+                  <div class="h3 mb-3 text-center">Все заявки</div>
+                  <div class="list-group col-8 mx-auto" id="reqList">
+                    
+                  </div>
 
-                    </div>
-           
-                 
-            </div>
-               
-   
+                </div>
         
-       
-       
-      
-      
+              
+        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/users.js"></script>
         
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>
