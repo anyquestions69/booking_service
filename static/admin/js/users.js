@@ -11,6 +11,7 @@
       console.log(res)
       let i=1
       for(let r of res){
+        if(r.statusId==2){
           let dateStart=new Date(r.updatedAt)
           let day = dateStart.getDate();
           let month = dateStart.getMonth();
@@ -31,6 +32,7 @@
           </div>
             `)
             i++
+        }
       }
 }}).then(fin=>{
   $('.request-accept').each(function (index, value) { 

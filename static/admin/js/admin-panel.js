@@ -24,6 +24,7 @@ $('#addForm').on('submit', async (e)=>{
     if(response.ok){    
         let res = await response.json()
         console.log(res)
+        window.location.href="/admin/event"
     }
 })
 $('#updatePrice').on('submit', async (e)=>{

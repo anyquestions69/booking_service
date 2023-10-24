@@ -60,6 +60,7 @@ class Manager{
     
     async requestBooking(req,res){
         let {email, row,col, sectorId}= req.body
+        let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
         if(!re.test(email))
             return res.status(400).send({error:'Неверно указан email'})
        
