@@ -40,8 +40,8 @@ class Manager{
                 password:password,
                 
             })
-            const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '3600s' });
-            return res.cookie('user',token, { maxAge: 900000, httpOnly: true }).send(user.email)
+            const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '360000s' });
+            return res.cookie('user',token, { maxAge: 1200000, httpOnly: true }).send(user.email)
         }catch(e){
             console.log(e)
             return res.status(404).send('Ошибка')
@@ -60,7 +60,7 @@ class Manager{
                 return res.status(401).send({error:'Такого email не существует'})
            
             if(user.password==password){
-                const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '3600s' });
+                const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '360000s' });
                 return res.cookie('user',token, { maxAge: 900000, httpOnly: true }).send(user)
             }else{
                 return res.status(404).send({error:'Неверный пароль'})

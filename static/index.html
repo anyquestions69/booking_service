@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Зал</title>
     
 </head>
 <body>
@@ -1756,6 +1756,11 @@
       </svg>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
       <script>
+        $('path').on('click', (e)=>{
+          let cursorX = e.clientX;
+          let cursorY = e.clientY;
+          console.log(this)
+        })
 fetch('/api/seat').then(async(res)=>{
     let array=await res.json()
     console.log(array)
@@ -1771,7 +1776,7 @@ fetch('/api/seat').then(async(res)=>{
         }
         if(seat.sectorId==1){
             $('#arena-'+seat.row+'-'+seat.col).css({ fill: color })
-        }else if(seat.sectorId==2){
+        }else if(seat.sectorId==3){
             $('#stalls-'+seat.row+'-'+seat.col).css({ fill: color })
         }
     }

@@ -50,9 +50,6 @@ const User = sequelize.define("user", {
       type: Sequelize.STRING,
       allowNull:true
     },
-    seatId:{
-      type: Sequelize.STRING,
-    },
     price:{
       type: Sequelize.FLOAT
     },

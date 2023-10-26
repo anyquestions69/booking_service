@@ -4,6 +4,8 @@ const userRouter = express.Router();
  
 userRouter.get("/", userController.getAll);
 userRouter.get('/:id', userController.getOne)
+userRouter.post('/register', userController.register)
+userRouter.post('/login', userController.login)
 
  
 module.exports = userRouter;

@@ -1,6 +1,5 @@
 $('#registerForm').on('submit',async(e)=>{
     e.preventDefault()
-    if($('#role').prop('checked')){
    
     if($('#password').val()!=$('#repass').val()){
         return $('#error').text('Пароли не совпадают')
@@ -22,9 +21,6 @@ $('#registerForm').on('submit',async(e)=>{
         let msg = await response.json()
         return $('#error').text(msg.error)
     }
-}else{
-    return $('#error').html('Согласитесь с <a href="/privacy">политикой конфиденциальности</a>')
-}
 })
 $('#loginForm').on('submit',async(e)=>{
    
