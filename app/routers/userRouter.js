@@ -2,8 +2,6 @@ const express = require("express");
 const userController = require("../controllers/userController.js");
 const userRouter = express.Router();
  
-userRouter.get("/", userController.getAll);
-userRouter.get('/:id', userController.getOne)
 userRouter.post('/register', userController.register)
 userRouter.post('/login', userController.login)
 

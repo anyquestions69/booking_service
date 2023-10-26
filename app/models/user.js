@@ -1,22 +1,8 @@
 const Sequelize = require("sequelize");
 const sequelize = require('../config/database')
-function hash(data){
-  return 'aaa'+data
-}
 
 const User = sequelize.define("user", {
-    id: {
-      type: Sequelize.BIGINT,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false
-    },
-    firstname: {
-      type: Sequelize.STRING,
-    },
-    lastname: {
-      type: Sequelize.STRING,
-    },
+   
     email: {
       type: Sequelize.STRING,
       allowNull:false,
@@ -24,10 +10,7 @@ const User = sequelize.define("user", {
     },
     password: {
       type: Sequelize.STRING,
-      allowNull:false,
-      set(value) {
-        this.setDataValue('password', hash(value));
-      }
+      allowNull:false
     }
   },{
     timestamps: false
@@ -100,6 +83,8 @@ sequelize.sync({force: false}).then(async function (result){
      await Sector.bulkCreate(sectors, { validate: true })
   if((await Status.findAll()).length==0)
     await Status.bulkCreate(status, { validate: true })
+  if(!(await User.findOne({where:{email:process.env.ADMIN_EMAIL}})))
+    await User.create({email:process.env.ADMIN_EMAIL, password:process.env.ADMIN_PASSWORD})
     
 })
 .catch(err=> console.log(err));

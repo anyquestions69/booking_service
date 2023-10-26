@@ -136,8 +136,6 @@ ALTER SEQUENCE public.seats_id_seq OWNED BY public.seats.id;
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    firstname character varying(255),
-    lastname character varying(255),
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL
 );

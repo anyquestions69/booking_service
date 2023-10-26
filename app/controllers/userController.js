@@ -58,7 +58,7 @@ class Manager{
             
             if(!user)
                 return res.status(401).send({error:'Такого email не существует'})
-           
+            
             if(user.password==password){
                 const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '360000s' });
                 return res.cookie('user',token, { maxAge: 900000, httpOnly: true }).send(user)
@@ -66,7 +66,8 @@ class Manager{
                 return res.status(404).send({error:'Неверный пароль'})
             }
         }catch(e){
-            return res.status(404).send({error:'Неверный пароль'})
+            console.log(e)
+            return res.status(405).send({error:e})
         }
     }
 

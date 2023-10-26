@@ -1,4 +1,10 @@
-
+$(document).ready(async function () {
+    let response = await fetch('/api/event/')
+    if(!response.ok){
+        console.log('Not authorized')
+        window.location.href="/admin/login"
+    }
+});
 
 $('#addForm').on('submit', async (e)=>{
     e.preventDefault()
@@ -41,6 +47,7 @@ $('#updatePrice').on('submit', async (e)=>{
             end: $('#col-end').val()
         },
     }
+    console.log(user)
     let response = await fetch('/api/seat/',{
         method: 'PUT',
         headers: {
@@ -49,7 +56,7 @@ $('#updatePrice').on('submit', async (e)=>{
         body:JSON.stringify(user)
     })
     let text = await response.json()
-    console.log(text)
+    
     if(response.ok){    
        location.reload()
     }

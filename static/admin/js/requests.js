@@ -1,6 +1,13 @@
- function show(){
+$(document).ready(async function () {
+  let response = await fetch('/api/event/')
+  if(!response.ok){
+      console.log('Not authorized')
+      window.location.href="/admin/login"
+  }
+});
+function show(){
     $('#reqList').empty()
-    fetch('/api/seat/',{
+    fetch('/api/seat/requests',{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
@@ -24,7 +31,7 @@
             
             <div class="d-flex gap-2 justify-content-end align-items-center">
             <span class="opacity-70 text-nowrap">${day}.${month}.${year}</span>
-                <div data-row=${r.row} data-col=${r.col} data-sectorId=${r.sectorId} data-email=${r.email}  
+                <div data-id=${r.id} 
                 class="mb-0  request-accept btn-success text-white btn" >Забронировать</div>
                 <div class="mb-0 btn-danger text-small btn text-white request-decline ">Отклонить</div>
               
@@ -36,10 +43,18 @@
       }
 }}).then(fin=>{
   $('.request-accept').each(function (index, value) { 
-  $(this).on('click', function(){
-   console.log($(this).data('sectorId'))
-   console.log($(this).data('col'))
-   console.log($(this).data('row'))
+  $(this).on('click', async function(){
+    let id   = $(this).data('id')
+   console.log(id)
+   let res = await fetch('/api/seat/', {
+    method:'POST',
+    body:JSON.stringify({id:id}),
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    }
+   })
+   let resText = await res.json()
+   console.log(resText)
    show()
   })
 })})
