@@ -177,6 +177,7 @@
           var array=[]
          
         $('svg circle').mouseover(async function(e) {
+          if(!$(this).attr("data-booked")){
             let position = $(this).offset()
             $('#hoverInfo').css("top", position.top-167).css('left', position.left-65)
             $('#hoverInfo').css("display", 'block')
@@ -252,7 +253,7 @@
               $('#colText').text(result.col)
               $('#rowText').text(result.row)
           }
-      
+        }
           });
         fetch('/api/seat').then(async(res)=>{
             array=await res.json()
