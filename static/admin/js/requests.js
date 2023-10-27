@@ -33,7 +33,7 @@ function show(){
             <span class="opacity-70 text-nowrap">${day}.${month}.${year}</span>
                 <div data-id=${r.id} 
                 class="mb-0  request-accept btn-success text-white btn" >Забронировать</div>
-                <div class="mb-0 btn-danger text-small btn text-white request-decline ">Отклонить</div>
+                <div data-id=${r.id} class="mb-0 btn-danger text-small btn text-white request-decline ">Отклонить</div>
               
             </div>
           </div>
@@ -57,7 +57,24 @@ function show(){
    console.log(resText)
    show()
   })
-})})
+})
+  $('.request-decline').each(function (index, value) { 
+    $(this).on('click', async function(){
+      let id   = $(this).data('id')
+     console.log(id)
+     let res = await fetch('/api/seat/decline', {
+      method:'POST',
+      body:JSON.stringify({id:id}),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+     })
+     let resText = await res.json()
+     console.log(resText)
+     show()
+    })
+  })
+})
     
 }
 show()

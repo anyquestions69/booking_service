@@ -4,6 +4,7 @@ const userRouter = express.Router();
  
 userRouter.post('/register', userController.register)
 userRouter.post('/login', userController.login)
+userRouter.post('/forgotPassword', userController.forgot)
 
  
 module.exports = userRouter;

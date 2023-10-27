@@ -12,12 +12,11 @@ $('#addForm').on('submit', async (e)=>{
     let order = {
         name:$('#eventName').val(),
         date:$('#date').val(),
-        arena:$('#arena').val(),
-        stalls:$('#stalls').val(),
+        bronze:$('#bronze').val(),
         silver:$('#silver').val(),
         gold:$('#gold').val(),
         platinum:$('#platinum').val(),
-        disabled:$('#disabled').val(),
+       
     }
     console.log(JSON.stringify(order))
     let response = await fetch('/api/event/',{

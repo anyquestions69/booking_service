@@ -7,6 +7,7 @@ seatRouter.get("/", seatController.getAll);
 
 seatRouter.put('/', mw.isAuth, seatController.updatePrice)
 seatRouter.post('/request',  seatController.requestBooking)
+seatRouter.post('/decline', mw.isAuth, seatController.declineBooking)
 seatRouter.post('/', mw.isAuth, seatController.bookOne)
 
  

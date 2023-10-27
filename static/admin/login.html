@@ -124,15 +124,18 @@
           <div class="form-floating">
             <input type="password" class="form-control" id="password" required placeholder="Пароль">
             <label for="password">Пароль</label>
+            <p class="" id="forgotPass">Не помню пароль</p></div>
           </div>
           
           <div id="error" style="color:red" class="text-center mb-3"></div>
           <button class="btn btn-primary w-100 py-2 mb-4" type="submit">Войти в учетную запись</button>
           <br>
           <div class="text-center"> <a href="/">На главную</a>
-            <br><br>
-            <a href="/register">Регистрация</a></div>
-         
+            <br>
+           
+            <div id="msg" class="d-none">
+              <p class="blockquote text-center" >Проверьте свою почту. Мы отправили на нее письмо с Вашим паролем</p>
+            </div>
         </form>
       </main>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

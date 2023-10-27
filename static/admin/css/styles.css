@@ -1,5 +1,11 @@
 @charset "UTF-8";
-
+#forgotPass{
+  color:var(--bs-pink);
+  cursor:pointer;
+}
+#msg{
+  display: none;
+}
 .sidenav {
 height: 100%; /* Full-height: remove this if you want "auto" height */
 width: 240px; /* Set the width of the sidebar */

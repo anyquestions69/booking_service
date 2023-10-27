@@ -23,3 +23,15 @@ $('#loginForm').on('submit',async(e)=>{
     }
 
 })
+$('#forgotPass').on('click',async(e)=>{
+   e.preventDefault()
+   $('#msg').show()
+    
+    
+
+    let response = await fetch('/api/users/forgotPassword',{
+        method: 'POST'
+    })
+        let msg = await response.json()
+       console.log(msg)
+})

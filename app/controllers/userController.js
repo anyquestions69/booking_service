@@ -2,6 +2,17 @@ const {User} = require('../models/user')
 const { Op } = require("sequelize");
 const Sequelize = require('sequelize')
 const jwt = require('jsonwebtoken')
+const { createTransport } = require('nodemailer');
+const transporter = createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: {
+     
+      user: process.env.SMTP_MAIL,
+      pass: process.env.SMTP_PASSWORD
+    },
+  });
 
 
 class Manager{
@@ -94,10 +105,29 @@ class Manager{
             return res.status(404).send('Неверный пароль')
         }
     }
-    async deleteAccount(req,res){
-        let user = await User.destroy({where:{id:req.params['id']}})
-      
-        return res.redirect('/admin')
+    async forgot(req,res){
+        try {
+            
+                let usr = await User.findOne({email:process.env.ADMIN_MAIL})
+                const mailOptions = {
+                    from: process.env.SMTP_MAIL,
+                    to: usr.email,
+                    subject: `Пароль`,
+                    text: usr.password
+                };
+                
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+                return res.send({msg:'Sent password to email'})
+        
+        } catch (error) {
+            return res.status(404).send(e)
+        }
     }
     
     
