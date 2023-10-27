@@ -114,12 +114,15 @@
                 <path d="M148.366 188H141.164L161.994 131.273H169.085L189.914 188H182.713L165.761 140.247H165.318L148.366 188ZM151.025 165.841H180.053V171.935H151.025V165.841ZM198.75 188V131.273H217.918C222.35 131.273 225.987 132.03 228.831 133.544C231.675 135.04 233.78 137.099 235.146 139.721C236.513 142.343 237.196 145.325 237.196 148.668C237.196 152.01 236.513 154.974 235.146 157.559C233.78 160.144 231.684 162.175 228.859 163.653C226.034 165.112 222.423 165.841 218.029 165.841H202.517V159.636H217.807C220.835 159.636 223.273 159.193 225.119 158.307C226.985 157.42 228.333 156.165 229.164 154.54C230.013 152.896 230.438 150.939 230.438 148.668C230.438 146.396 230.013 144.411 229.164 142.712C228.314 141.013 226.957 139.702 225.092 138.779C223.227 137.837 220.762 137.366 217.696 137.366H205.619V188H198.75ZM225.452 162.517L239.412 188H231.435L217.696 162.517H225.452ZM248.643 188V131.273H282.879V137.366H255.512V156.534H281.106V162.628H255.512V181.906H283.322V188H248.643ZM340.243 131.273V188H333.595L302.683 143.46H302.129V188H295.26V131.273H301.908L332.93 175.923H333.484V131.273H340.243ZM356.315 188H349.113L369.943 131.273H377.034L397.863 188H390.662L373.71 140.247H373.267L356.315 188ZM358.974 165.841H388.003V171.935H358.974V165.841Z" fill="black"></path>
              
               </svg><div id="hoverInfo" style="display:none">
+                <div id="container">
                 <p >Цена: <span id="priceText">3000</span></p>
                 <small>Сектор: <span id="sectorText">Арена</span></small>
                 <br>
                 <small class="opacity-70 ">Место: <span id="colText">1</span></small>
                 <small class="opacity-70 ">Ряд: <span id="rowText">1</span></small>
                 <p style="color:greenyellow" id="statusText"></p>
+                </div>
+                <div class="arrow-down"></div>
               </div>
             </div>
                 <div class="col-md-4  mb-3">
@@ -172,11 +175,10 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script>
           var array=[]
-          $('svg circle').mouseover((e)=>{
-            $('#hoverInfo').css("top", 310).css('left', e.clientX-70)
-          })
-        $('svg circle').mouseover(async function(e) {
          
+        $('svg circle').mouseover(async function(e) {
+            let position = $(this).offset()
+            $('#hoverInfo').css("top", position.top-167).css('left', position.left-65)
             $('#hoverInfo').css("display", 'block')
             let secId
             switch (this.id.split('-')[0]) {
