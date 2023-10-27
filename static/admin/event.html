@@ -46,7 +46,8 @@
             <form   class="row p-4"
               id="updatePrice"
               role="tabpanel">
-              <svg class="col-8" viewBox="0 0 538 484" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+              <div class="col-8">
+              <svg  viewBox="0 0 538 484" fill="#fff" xmlns="http://www.w3.org/2000/svg">
                 <defs></defs>
                 <rect width="538" height="484" fill="#1E1E1E"></rect>
                 <circle cx="35.5" cy="266.5" r="15.5" fill="#D9D9D9"></circle>
@@ -111,15 +112,16 @@
                 <circle cx="159.5" cy="458.5" r="15.5" fill="#D9D9D9"></circle>
                 <ellipse cx="269" cy="113.5" rx="269" ry="113.5" fill="#D9D9D9"></ellipse>
                 <path d="M148.366 188H141.164L161.994 131.273H169.085L189.914 188H182.713L165.761 140.247H165.318L148.366 188ZM151.025 165.841H180.053V171.935H151.025V165.841ZM198.75 188V131.273H217.918C222.35 131.273 225.987 132.03 228.831 133.544C231.675 135.04 233.78 137.099 235.146 139.721C236.513 142.343 237.196 145.325 237.196 148.668C237.196 152.01 236.513 154.974 235.146 157.559C233.78 160.144 231.684 162.175 228.859 163.653C226.034 165.112 222.423 165.841 218.029 165.841H202.517V159.636H217.807C220.835 159.636 223.273 159.193 225.119 158.307C226.985 157.42 228.333 156.165 229.164 154.54C230.013 152.896 230.438 150.939 230.438 148.668C230.438 146.396 230.013 144.411 229.164 142.712C228.314 141.013 226.957 139.702 225.092 138.779C223.227 137.837 220.762 137.366 217.696 137.366H205.619V188H198.75ZM225.452 162.517L239.412 188H231.435L217.696 162.517H225.452ZM248.643 188V131.273H282.879V137.366H255.512V156.534H281.106V162.628H255.512V181.906H283.322V188H248.643ZM340.243 131.273V188H333.595L302.683 143.46H302.129V188H295.26V131.273H301.908L332.93 175.923H333.484V131.273H340.243ZM356.315 188H349.113L369.943 131.273H377.034L397.863 188H390.662L373.71 140.247H373.267L356.315 188ZM358.974 165.841H388.003V171.935H358.974V165.841Z" fill="black"></path>
-              </svg>
-                <div id="hoverInfo" style="display:none">
-                  <p >Цена: <span id="priceText">3000</span></p>
-                  <small>Сектор: <span id="sectorText">Арена</span></small>
-                  <br>
-                  <small class="opacity-70 ">Место: <span id="colText">1</span></small>
-                  <small class="opacity-70 ">Ряд: <span id="rowText">1</span></small>
-                  <p style="color:greenyellow" id="statusText"></p>
-                </div>
+             
+              </svg><div id="hoverInfo" style="display:none">
+                <p >Цена: <span id="priceText">3000</span></p>
+                <small>Сектор: <span id="sectorText">Арена</span></small>
+                <br>
+                <small class="opacity-70 ">Место: <span id="colText">1</span></small>
+                <small class="opacity-70 ">Ряд: <span id="rowText">1</span></small>
+                <p style="color:greenyellow" id="statusText"></p>
+              </div>
+            </div>
                 <div class="col-md-4  mb-3">
                   <div class="row">
                     <div class="col-12"> <label for="">Ряд</label>
@@ -172,61 +174,66 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script>
           var array=[]
-        $('svg circle').mouseenter(async function(e) {
-          await new Promise(resolve => setTimeout(resolve, 900));
-          $('#hoverInfo').toggle(150).css("top",e.clientY).css("left",e.clientX)
-          var result = await array.find(obj => {
-            return obj.col == this.id.split('-')[2] & obj.row ==this.id.split('-')[1] & obj.active==true
+          $('svg circle').mouseover((e)=>{
+            $('#hoverInfo').css("top", 310).css('left', e.clientX-70)
           })
-          if(result){
-            console.log(result)
-            let color="#000"
-                if(result.statusId==1){
-                    color="#1cda07"
-                }else{
-                    color="#da0707"
-                }
-            $('#priceText').text(result.price)
-            let status =''
-            switch (result.statusId) {
-              case 1:
-              status = 'Свободно'
-                break;
-              case 2:
-              status = 'Ожидает рассмотрения'
-                break;
-              case 3:
-              status = 'Занято'
-                break;
-              
-              default:
-                break;
-            }
-        
-          let sector = ''
-            switch (result.sectorId) {
-              case 1:
-                sector =  'Bronze'
-                break;
-              case 2:
-                sector =  'Silver'
-                break;
-              case 3:
-              sector =  'Gold'
-                break;
-              case 4:
-              sector =  'Platinum'
-                break;
-              default:
-                break;
-            }
+        $('svg circle').mouseover(async function(e) {
+         
+            $('#hoverInfo').css("display", 'block')
+            var result = await array.find(obj => {
+              return obj.col == this.id.split('-')[2] & obj.row ==this.id.split('-')[1] & obj.active==true
+            })
+            if(result){
+              let price='-'
+              let color="#000"
+                  if(result.statusId==1){
+                      color="#1cda07"
+                  }else{
+                      color="#da0707"
+                  }
+             
+              let status =''
+              switch (result.statusId) {
+                case 1:
+                status = 'Свободно'
+                price=result.price
+                  break;
+                case 2:
+                status = 'Ожидает рассмотрения'
+                  break;
+                case 3:
+                status = 'Занято'
+                  break;
+                
+                default:
+                  break;
+              }
           
-            $('#sectorText').text(sector)
-            $('#statusText').text(status)
-            $('#statusText').css('color', color)
-            $('#colText').text(result.col)
-            $('#rowText').text(result.row)
-        }
+            let sector = ''
+              switch (result.sectorId) {
+                case 1:
+                  sector =  'Bronze'
+                  break;
+                case 2:
+                  sector =  'Silver'
+                  break;
+                case 3:
+                sector =  'Gold'
+                  break;
+                case 4:
+                sector =  'Platinum'
+                  break;
+                default:
+                  break;
+              }
+              $('#priceText').text(price)
+              $('#sectorText').text(sector)
+              $('#statusText').text(status)
+              $('#statusText').css('color', color)
+              $('#colText').text(result.col)
+              $('#rowText').text(result.row)
+          }
+      
           });
         fetch('/api/seat').then(async(res)=>{
             array=await res.json()
@@ -240,6 +247,7 @@
                     color="#da0707"
                    
                    await  $('#arena-'+seat.row+'-'+seat.col).attr("fill", color )
+                   await  $('#arena-'+seat.row+'-'+seat.col).attr("data-booked",  true)
                    await  $('#arena-'+seat.row+'-'+seat.col).css("fill", color )
             
                 }

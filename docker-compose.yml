@@ -9,6 +9,7 @@ services:
     working_dir: /opt/server
     env_file:
       - .env
+    restart: always
     expose:
       - '3000'
     depends_on:
