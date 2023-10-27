@@ -178,20 +178,39 @@
         $('svg circle').mouseover(async function(e) {
          
             $('#hoverInfo').css("display", 'block')
+            let secId
+            switch (this.id.split('-')[0]) {
+                case 'arena':
+                  secId =  1
+                  break;
+                case 'silver':
+                secId =  2
+                  break;
+                case 'gold':
+                secId =  3
+                  break;
+                case 'platinum':
+                secId =  4
+                  break;
+                default:
+                  break;
+              }
             var result = await array.find(obj => {
-              return obj.col == this.id.split('-')[2] & obj.row ==this.id.split('-')[1] & obj.active==true
+              return obj.col == this.id.split('-')[2] && obj.row ==this.id.split('-')[1] && obj.active==true && obj.sectorId==secId
             })
             if(result){
               let price='-'
               let color="#000"
-                  if(result.statusId==1){
+              
+             
+                  if(result.statusId==1 ){
                       color="#1cda07"
                   }else{
                       color="#da0707"
                   }
              
               let status =''
-              switch (result.statusId) {
+              switch (parseInt(result.statusId)) {
                 case 1:
                 status = 'Свободно'
                 price=result.price
