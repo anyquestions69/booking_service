@@ -23,14 +23,37 @@ function show(){
           let day = dateStart.getDate();
           let month = dateStart.getMonth();
           let year = dateStart.getFullYear();
+          let sector = ''
+          let color=''
+              switch (r.sectorId) {
+                case 1:
+                  sector =  'Bronze'
+                  color='#CD7F32'
+                  break;
+                case 2:
+                  sector =  'Silver'
+                  color='#C0C0C0'
+                  break;
+                case 3:
+                sector =  'Gold'
+                color='#DAA520'
+                  break;
+                case 4:
+                sector =  'Platinum'
+                color='#E5E4E2'
+                  break;
+                default:
+                  break;
+              }
           
             $('#reqList').append(`
-            <div class="list-group-item list-group-item-action d-flex justify-content-between gap-3 py-3 align-items-center" aria-current="true">
-            <span>${i}</span>
-             <h6 class="mb-0">${r.email}</h6>
+            <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2 py-3 align-items-center" aria-current="true">
             
-            <div class="d-flex gap-2 justify-content-end align-items-center">
-            <span class="opacity-70 text-nowrap">${day}.${month}.${year}</span>
+             <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
+            
+            <div class="d-lg-flex gap-2 justify-content-end align-items-center">
+            <div><span style="color:${color}">${sector}</span> Ряд: ${r.row} Место: ${r.col}</div>
+            <div class="opacity-50 text-nowrap">${day}.${month}.${year}</div>
                 <div data-id=${r.id} 
                 class="mb-0  request-accept btn-success text-white btn" >Забронировать</div>
                 <div data-id=${r.id} class="mb-0 btn-danger text-small btn text-white request-decline ">Отклонить</div>

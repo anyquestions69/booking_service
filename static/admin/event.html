@@ -46,7 +46,7 @@
             <form   class="row p-4"
               id="updatePrice"
               role="tabpanel">
-              <div class="col-8">
+              <div class="col-lg-8">
               <svg  viewBox="0 0 538 484" fill="#fff" xmlns="http://www.w3.org/2000/svg">
                 <defs></defs>
                 <rect width="538" height="484" fill="#1E1E1E"></rect>
@@ -98,9 +98,9 @@
                 <circle cx="66.5" cy="325.5" r="15.5" fill="#D9D9D9"></circle>
                 <circle cx="66.5" cy="368.5" r="15.5" fill="#D9D9D9"></circle>
                 <circle cx="66.5" cy="411.5" r="15.5" fill="#D9D9D9"></circle>
-                <circle cx="128.5" cy="313.5" r="15.5" fill="#D9D9D9"></circle>
+                <circle cx="128.5" cy="313.5" r="15.5" fill="#D9D9D9" id="gold-1-3"></circle>
                 <circle cx="128.5" cy="356.5" r="15.5" fill="#D9D9D9"></circle>
-                <circle cx="128.5" cy="399.5" r="15.5" fill="#D9D9D9"></circle>
+                <circle cx="128.5" cy="399.5" r="15.5" fill="#D9D9D9" id="silver-1-3"></circle>
                 <circle cx="128.5" cy="442.5" r="15.5" fill="#D9D9D9"></circle>
                 <circle cx="190.5" cy="339.5" r="15.5" fill="#D9D9D9" id="arena-1-10"></circle>
                 <circle cx="190.5" cy="382.5" r="15.5" fill="#D9D9D9"></circle>
@@ -203,16 +203,30 @@
             })
             if(result){
               let price='-'
-              let color="#000"
-              
-             
-                  if(result.statusId==1 ){
-                      color="#1cda07"
-                  }else{
-                      color="#da0707"
-                  }
-             
               let status =''
+              let  color="#1cda07"
+              let spanColor='#000'
+              let sector = ''
+              switch (result.sectorId) {
+                case 1:
+                  sector =  'Bronze'
+                  spanColor='#CD7F32'
+                  break;
+                case 2:
+                  sector =  'Silver'
+                  spanColor='#C0C0C0'
+                  break;
+                case 3:
+                  sector =  'Gold'
+                  spanColor='#DAA520'
+                  break;
+                case 4:
+                  sector =  'Platinum'
+                  spanColor='#E5E4E2'
+                  break;
+                default:
+                  break;
+              }
               switch (parseInt(result.statusId)) {
                 case 1:
                 status = 'Свободно'
@@ -229,25 +243,8 @@
                   break;
               }
           
-            let sector = ''
-              switch (result.sectorId) {
-                case 1:
-                  sector =  'Bronze'
-                  break;
-                case 2:
-                  sector =  'Silver'
-                  break;
-                case 3:
-                sector =  'Gold'
-                  break;
-                case 4:
-                sector =  'Platinum'
-                  break;
-                default:
-                  break;
-              }
               $('#priceText').text(price)
-              $('#sectorText').text(sector)
+              $('#sectorText').text(sector).css('color', spanColor)
               $('#statusText').text(status)
               $('#statusText').css('color', color)
               $('#colText').text(result.col)
@@ -258,17 +255,39 @@
         fetch('/api/seat').then(async(res)=>{
             array=await res.json()
             for(let seat of array){
-                let color="#da0707"
+                let color="#d9d9d9"
+                let sector=''
+                switch (seat.sectorId) {
+                case 1:
+                  sector='arena'
+                  color='#CD7F32'
+                  break;
+                case 2:
+                  sector='silver'
+                  color='#C0C0C0'
+                  break;
+                case 3:
+                  sector='gold'
+                color='#DAA520'
+                  break;
+                case 4:
+                  sector='platinum'
+                color='#E5E4E2'
+                  break;
+                default:
+                  break;
+              }
                 if(seat.statusId==1){
-                    color="#1cda07"
-                    $('#arena-'+seat.row+'-'+seat.col).attr("fill", color )
+                   
+                    $('#'+sector+'-'+seat.row+'-'+seat.col).attr("fill", color )
+                    
                 }else{
                   
                     color="#da0707"
                    
-                   await  $('#arena-'+seat.row+'-'+seat.col).attr("fill", color )
-                   await  $('#arena-'+seat.row+'-'+seat.col).attr("data-booked",  true)
-                   await  $('#arena-'+seat.row+'-'+seat.col).css("fill", color )
+                   await  $('#'+sector+'-'+seat.row+'-'+seat.col).attr("fill", color )
+                   await  $('#'+sector+'-'+seat.row+'-'+seat.col).attr("data-booked",  true)
+                   await  $('#'+sector+'-'+seat.row+'-'+seat.col).css("fill", color )
             
                 }
                
