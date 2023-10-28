@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "faee7804-fa1c-4938-8266-87fbd5fc1d7b",
+		"name": "booking",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23758793"
+	},
+	"item": [
+		{
+			"name": "request-booking",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sectorId\":1,\n   \"row\":1,\n   \"col\":4,\n   \"email\":\"dan.tyrenko@yandex.ru\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://91.222.239.55/api/seat/request",
+					"protocol": "http",
+					"host": [
+						"91",
+						"222",
+						"239",
+						"55"
+					],
+					"path": [
+						"api",
+						"seat",
+						"request"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
