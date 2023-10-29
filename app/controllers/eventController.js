@@ -50,7 +50,7 @@ function createSeats(body, eventId){
             arenaSeats.push({row:11, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //11
             arenaSeats.push({row:12, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //12
         }
-        if(i>32 && i<38)
+        if(i>32 && i<37)
             arenaSeats.push({row:5, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //5
         if(i>37 && i<42){
             arenaSeats.push({row:6, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //6
