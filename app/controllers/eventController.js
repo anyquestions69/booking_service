@@ -13,46 +13,46 @@ function createSeats(body, eventId){
     let {bronze, silver, gold, platinum} = body
     let arenaSeats=[]
     
-    for(let i=1;i<42;i++){//bronze
+    for(let i=1;i<43;i++){//silver
         if(i<19){
-            arenaSeats.push({row:1, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true }) //1
-            arenaSeats.push({row:2, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true }) //2
+        arenaSeats.push({row:1, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //1
+        if(i<5 || i>8){
+            arenaSeats.push({row:2, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //2
+        }
         }
         if(i<15){
-            arenaSeats.push({row:3, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //3
+            arenaSeats.push({row:3, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //3
         }
         if(i<11){
-            arenaSeats.push({row:4, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //4
+            arenaSeats.push({row:4, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //4
         }
-        if(i<37){
-            arenaSeats.push({row:5, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //5
+        if(i>6 || 31){
+            arenaSeats.push({row:5, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //5
         }
-            arenaSeats.push({row:6, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //6  
-        
+        if(i>7 ||i<21 || i>26 || i<35){
+            arenaSeats.push({row:6, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //6
+        }
+        if(i>8 || i<43){
+            arenaSeats.push({row:7, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //7
+        }
+        if(i>20 || i<36){
+            arenaSeats.push({row:8, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true }) //8
+        }
     }
-    for(let i=1;i<104;i++){//silver
-        if(i<102)
-            arenaSeats.push({row:10, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //10
-        if(i<96)
-            arenaSeats.push({row:8, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //8
-        if(i<92)
-            arenaSeats.push({row:9, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //9
-        if(i<79)
-            arenaSeats.push({row:7, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //7
-        if(i<64){
-            arenaSeats.push({row:4, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //4
-            arenaSeats.push({row:6, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //6
-            arenaSeats.push({row:12, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //12
+    for(let i=1;i<104;i++){//bronze
+        if(i<5){
+            arenaSeats.push({row:6, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //5
+            arenaSeats.push({row:5, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //6
+            arenaSeats.push({row:7, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //7
+            arenaSeats.push({row:8, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //8
+            arenaSeats.push({row:9, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //9
+            arenaSeats.push({row:10, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //10
+            arenaSeats.push({row:11, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //11
+            arenaSeats.push({row:12, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //12
         }
-        if(i<61){
-            arenaSeats.push({row:3, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //3
-            arenaSeats.push({row:5, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //5
-        }
-        if(i<56)
-            arenaSeats.push({row:2, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //2
-        if(i<51)
-            arenaSeats.push({row:1, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //1
-        arenaSeats.push({row:11, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true}) //11
+        if(i>32 || i<38)
+            arenaSeats.push({row:5, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true}) //8
+       
     }
     return arenaSeats
    
