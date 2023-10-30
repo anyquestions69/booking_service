@@ -9556,8 +9556,9 @@
          
         $('svg path').mouseover(async function(e) {
           if(!$(this).attr("data-booked")){
-            let position = $(this).offset()
-            $('#hoverInfo').css("top", position.top-167).css('left', position.left-78)
+          var pos = this.getBoundingClientRect();
+          var boxPos = document.getElementById('hoverInfo').getBoundingClientRect()
+            $('#hoverInfo').css("top", pos.top-boxPos.height).css('left', pos.left+(pos.width/2)-(boxPos.width/2))
             $('#hoverInfo').css("display", 'block')
             let secId
             switch (this.id.split('-')[0]) {
