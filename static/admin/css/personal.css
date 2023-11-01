@@ -13,6 +13,7 @@
   padding: 5px;
   border-radius: 3px;
   border: 1px solid green;
+  font-size: 80%;
 }
 
 .arrow-down{
@@ -23,4 +24,14 @@
   border-right: 16px solid transparent;
   
   border-top: 16px solid green;
+}
+#clickInfo{
+  display: flex;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  justify-content: space-around;
+  background: ghostwhite;
+  align-items: center;
 }

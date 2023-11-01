@@ -2,8 +2,7 @@ const {Seat, Event} = require('../models/user')
 const { Op } = require("sequelize");
 const { createTransport } = require('nodemailer');
 const transporter = createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
+    host: "big-beauty-boss.ru",
     secure: false,
     auth: {
      
@@ -89,7 +88,7 @@ class Manager{
                 break;
             }
             const mailOptions = {
-                from: 'juuzodes@yandex.ru',
+                from: process.env.SMTP_MAIL,
                 to: seat.email,
                 subject: `Бронь места`,
                 text: `<h4>Ваше место успешно забронировано!</h4>
@@ -120,7 +119,7 @@ class Manager{
                 return res.status(400).send({error:'Место указано не верно'})
             let response = await Seat.update({statusId:1, email:seat.email },{where:{id}})
             const mailOptions = {
-                from: 'juuzodes@yandex.ru',
+                from: process.env.SMTP_MAIL,
                 to: seat.email,
                 subject: `Бронь места отменена`,
                 text: `<h4>Ваш запрос был отклонён менеджером</h4>
@@ -173,8 +172,8 @@ class Manager{
                 break;
             }
             const mailOptions = {
-                from: 'juuzodes@yandex.ru',
-                to: 'dan.tyrenko@yandex.ru',//process.env.ADMIN_EMAIL,
+                from: process.env.SMTP_MAIL,
+                to: process.env.ADMIN_EMAIL,//process.env.ADMIN_EMAIL,
                 subject: `Новая заявка на бронирование`,
                 text: `<p>Пользователь <a href="mailto:${email}">${email}</a> оставил заявку на бронь</p>
                         <p>Сектор: ${sector} Место: ${col} Ряд: ${row}</p>`

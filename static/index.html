@@ -9540,6 +9540,21 @@
                 </div>
                 <div class="arrow-down"></div>
               </div>
+              <div id="clickInfo" class="py-4" style="display:none">
+                <div class="ticket d-flex gap-3 border border-primary p-2 rounded">
+                  <div>
+                    <div>Сектор: silver</div>
+                   
+                  <div>место: 1</div>
+                  <div>ряд:2</div>
+                  </div>
+                  <div>
+                    3000р
+                  </div>
+                  
+                </div>
+                <div class="btn btn-success">Заброниовать</div>
+              </div>
             </div>
            
       
@@ -9547,7 +9562,10 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script>
           var array=[]
-         
+          var ticketArray=[]
+          $('svg path').on('click',async(e)=>{
+            $('#clickInfo').css("display", 'flex')
+          })
         $('svg path').mouseover(async function(e) {
           if(!$(this).attr("data-booked")){
           var pos = this.getBoundingClientRect();
