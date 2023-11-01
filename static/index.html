@@ -9615,9 +9615,6 @@
           var boxPos = document.getElementById('hoverInfo').getBoundingClientRect()
             $('#hoverInfo').css("top", pos.top-boxPos.height).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
             
-          }else{
-            $('#hoverInfo').css('position', 'fixed').css("bottom", window.visualViewport.offsetBottom).css('left', window.visualViewport.offsetLeft).css('right', window.visualViewport.offsetRight).css('width', w/window.visualViewport.width)
-            $('#container').css("width", window.visualViewport.width).css("font-size", $('#container').css('font-szie')/window.visualViewport.scale)
           }
           $('#hoverInfo').css("display", 'block')
             let secId
