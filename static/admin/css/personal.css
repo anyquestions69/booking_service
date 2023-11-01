@@ -35,3 +35,6 @@
   background: ghostwhite;
   align-items: center;
 }
+#ticketArray{
+  overflow-x:scroll
+}

@@ -9540,20 +9540,12 @@
                 </div>
                 <div class="arrow-down"></div>
               </div>
-              <div id="clickInfo" class="py-4" style="display:none">
-                <div class="ticket d-flex gap-3 border border-primary p-2 rounded">
-                  <div>
-                    <div>Сектор: silver</div>
-                   
-                  <div>место: 1</div>
-                  <div>ряд:2</div>
-                  </div>
-                  <div>
-                    3000р
-                  </div>
-                  
-                </div>
-                <div class="btn btn-success">Заброниовать</div>
+              <div id="clickInfo" class="py-4 row" style="display:none">
+               <div id="ticketArray" class="col-8 mx-auto d-flex gap-2 "></div>
+               <div class="d-flex justify-content-between col-2">
+               <div class="text-large">Итого: <div id="totalPrice" class=""></div></div>
+                <div class="btn btn-success">Забронировать</div>
+              </div>
               </div>
             </div>
            
@@ -9561,10 +9553,57 @@
       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script>
+          var sectorList={
+            1:{title:'Bronze',color:"#CD7F32" },
+            2:'silver',
+            3:'gold',
+            4:'platinum'
+          }
+          
           var array=[]
           var ticketArray=[]
-          $('svg path').on('click',async(e)=>{
+          $('svg path').on('click',async function(e){
+            if(!$(this).attr("data-booked")){
             $('#clickInfo').css("display", 'flex')
+            let secId
+            switch (this.id.split('-')[0]) {
+                case 'bronze':
+                  secId =  1
+                  break;
+                case 'silver':
+                secId =  2
+                  break;
+                case 'gold':
+                secId =  3
+                  break;
+                case 'platinum':
+                secId =  4
+                  break;
+                default:
+                  break;
+              }
+            var result = await array.find(obj => {
+              return obj.col == this.id.split('-')[2] && obj.row ==this.id.split('-')[1] && obj.active==true && obj.sectorId==secId
+            })
+            ticketArray.push(result)
+            $('#ticketArray').empty()
+            let price=0
+            for(let ticket of ticketArray){
+              $('#ticketArray').append(`
+              <div class="ticket border border-primary p-2 rounded">
+                <div class="text-sm">Сектор: ${sectorList[ticket.sectorId].title}</div>
+               
+                <div class="opacity-70 ">Место:  ${ticket.col}</div>
+                <div class="opacity-70 ">Ряд: ${ticket.row}</div>\n
+                    ${ticket.price} рублей
+                
+                  
+                </div>
+              `)
+              price+=parseInt(ticket.price)
+            }
+            $('#totalPrice').text(price)
+            }
           })
         $('svg path').mouseover(async function(e) {
           if(!$(this).attr("data-booked")){
