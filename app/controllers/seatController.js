@@ -142,41 +142,40 @@ class Manager{
     
     async requestBooking(req,res){
         try{
-            let {email, row,col, sectorId}= req.body
+            console.log(req.body)
+            let tickets= req.body.tickets
+            let email=req.body.email
             let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
+            let text = ``
             if(!re.test(email))
                 return res.status(400).send({error:'Неверно указан email'})
-        
-            let seat = await Seat.findOne({where:{active:true, row, col, sectorId}})
-            if(!seat)
-                return res.status(400).send({error:'Место указано не верно'})
-            if(seat.statusId==3){
-                return res.status(400).send({error:'Место уже занято'})
+            for(let ticket of tickets){
+                let response = await Seat.update({statusId:2, email },{where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
+                switch (ticket.sectorId) {
+                case 1:
+                    ticket.sector =  'Bronze'
+                    break;
+                case 2:
+                    ticket.sector =  'Silver'
+                    break;
+                case 3:
+                    ticket.sector =  'Gold'
+                    break;
+                case 4:
+                    ticket.sector =  'Platinum'
+                    break;
+                default:
+                    break;
+                }
+                text+=`<p>Сектор: ${ticket.sector} Место: ${ticket.col} Ряд: ${ticket.row}</p>`
             }
-            let response = await Seat.update({statusId:2, email },{where:{active:true, row, col, sectorId}})
-            let sector = ''
-            switch (sectorId) {
-              case 1:
-                sector =  'Bronze'
-                break;
-              case 2:
-                sector =  'Silver'
-                break;
-              case 3:
-              sector =  'Gold'
-                break;
-              case 4:
-              sector =  'Platinum'
-                break;
-              default:
-                break;
-            }
+            
+            
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
                 to: process.env.ADMIN_EMAIL,//process.env.ADMIN_EMAIL,
                 subject: `Новая заявка на бронирование`,
-                text: `<p>Пользователь <a href="mailto:${email}">${email}</a> оставил заявку на бронь</p>
-                        <p>Сектор: ${sector} Место: ${col} Ряд: ${row}</p>`
+                text: text
             };
             
             transporter.sendMail(mailOptions, function(error, info){

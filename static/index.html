@@ -9540,13 +9540,26 @@
                 </div>
                 <div class="arrow-down"></div>
               </div>
-              <div id="clickInfo" class="py-4 row" style="display:none">
-               <div id="ticketArray" class="col-8 mx-auto d-flex gap-2 "></div>
-               <div class="d-flex justify-content-between col-2">
+              <div id="clickInfo" class="p-4 row" style="display:none">
+               <div id="ticketArray" class="col-sm-8 mx-auto d-sm-flex gap-2 "></div>
+               <div class="d-flex justify-content-between gap-4 col-sm-2">
                <div class="text-large">Итого: <div id="totalPrice" class=""></div></div>
-                <div class="btn btn-success">Забронировать</div>
+                <div class="btn btn-success" id="requestBooking">Забронировать</div>
               </div>
               </div>
+
+              <form id="bookingForm" class="container p-5 text-center row">
+                <h5>Укажите свой email, и модератор свяжется с Вами</h5>
+                <div class="col-4 mx-auto">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Email</span>
+                    <input type="text" id="emailForm" class="form-control" placeholder="ivan@mail.ru" aria-label="email" aria-describedby="basic-addon1">
+                  </div>
+                  <button class="btn btn-primary">Оставить заявку</button>
+                </div>
+                
+                
+              </form>
             </div>
            
       
@@ -9554,10 +9567,10 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script>
           var sectorList={
-            1:{title:'Bronze',color:"#CD7F32" },
-            2:'silver',
-            3:'gold',
-            4:'platinum'
+            1:{title:'Bronze',color:"#C9C9C9" },
+            2:{title:'Silver',color:"#5F2C9F"},
+            3:{title:'Gold', color:"#DEC37A"},
+            4:{title:'Platinum', color: '#1E1E1E'}
           }
           
           var array=[]
@@ -9585,25 +9598,25 @@
             var result = await array.find(obj => {
               return obj.col == this.id.split('-')[2] && obj.row ==this.id.split('-')[1] && obj.active==true && obj.sectorId==secId
             })
-            ticketArray.push(result)
+            if(result){
+              ticketArray.push(result)
             $('#ticketArray').empty()
             let price=0
             for(let ticket of ticketArray){
               $('#ticketArray').append(`
               <div class="ticket border border-primary p-2 rounded">
-                <div class="text-sm">Сектор: ${sectorList[ticket.sectorId].title}</div>
+                <div class="small">Сектор: <span style="color:${sectorList[ticket.sectorId].color}">${sectorList[ticket.sectorId].title}</span></div>
                
-                <div class="opacity-70 ">Место:  ${ticket.col}</div>
-                <div class="opacity-70 ">Ряд: ${ticket.row}</div>\n
-                    ${ticket.price} рублей
-                
-                  
+                <div class="small text-secondary">Место:  ${ticket.col}</div>
+                <div class="small text-secondary">Ряд: ${ticket.row}</div>\n
+                    ${ticket.price}₽                
                 </div>
               `)
               price+=parseInt(ticket.price)
             }
-            $('#totalPrice').text(price)
+            $('#totalPrice').text(price+'₽')
             }
+          }
           })
         $('svg path').mouseover(async function(e) {
           if(!$(this).attr("data-booked")){
@@ -9615,7 +9628,6 @@
           var boxPos = document.getElementById('hoverInfo').getBoundingClientRect()
             $('#hoverInfo').css("top", pos.top-boxPos.height).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
             
-          }
           $('#hoverInfo').css("display", 'block')
             let secId
             switch (this.id.split('-')[0]) {
@@ -9641,28 +9653,6 @@
               let price='-'
               let status =''
               let  color="#1cda07"
-              let spanColor='#000'
-              let sector = ''
-              switch (result.sectorId) {
-                case 1:
-                  sector =  'Bronze'
-                  spanColor='#CD7F32'
-                  break;
-                case 2:
-                  sector =  'Silver'
-                  spanColor='#C0C0C0'
-                  break;
-                case 3:
-                  sector =  'Gold'
-                  spanColor='#DAA520'
-                  break;
-                case 4:
-                  sector =  'Platinum'
-                  spanColor='#E5E4E2'
-                  break;
-                default:
-                  break;
-              }
               switch (parseInt(result.statusId)) {
                 case 1:
                 status = 'Свободно'
@@ -9674,18 +9664,18 @@
                 case 3:
                 status = 'Занято'
                   break;
-                
                 default:
                   break;
               }
           
               $('#priceText').text(price)
-              $('#sectorText').text(sector).css('color', spanColor)
+              $('#sectorText').text(sectorList[result.sectorId].title).css('color', sectorList[result.sectorId].color)
               $('#statusText').text(status)
               $('#statusText').css('color', color)
               $('#colText').text(result.col)
               $('#rowText').text(result.row)
           }
+        }
         }
           });
         fetch('/api/seat').then(async(res)=>{
@@ -9715,9 +9705,32 @@
                     $('#'+sector+'-'+seat.row+'-'+seat.col).attr("data-booked",  true)
                    //await  $('#'+sector+'-'+seat.row+'-'+seat.col).css("fill", color )
             
+                }else{
+                  $('#'+sector+'-'+seat.row+'-'+seat.col).attr("fill", sectorList[seat.sectorId].color )
                 }
                
             }
+        })
+        $('#requestBooking').on('click', async function(){
+          $('#bookingForm').css('display', 'block')
+        })
+        $('#bookingForm').on('submit', async function(e){
+          e.preventDefault()
+         
+          let body={
+            email:$('#emailForm').val(),
+            tickets:ticketArray
+          }
+          console.log(body)
+          let res = await fetch('/api/seat/request',{
+            method:'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body:JSON.stringify(body)
+          })
+          let text=await res.text()
+          location.reload()
         })
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
