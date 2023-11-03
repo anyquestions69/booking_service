@@ -78,16 +78,16 @@ function createSeats(body, eventId){
         if(i>69 && i<79){
             arenaSeats.push({row:13, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true})
         }
-        if(i>87 && i<95){
+        if(i>86 && i<96){
             arenaSeats.push({row:14, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true})
         }
-        if(i>84 && i<92){
+        if(i>82 && i<92){
             arenaSeats.push({row:15, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true})
         }
         if(i>92 && i<102){
             arenaSeats.push({row:16, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true})
         }
-        if(i<63){
+        if(i<64){
             arenaSeats.push({row:18, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true})
         }
         if(i!=26 && i!=27 && i!= 78 && i!=79){
@@ -133,7 +133,7 @@ function createSeats(body, eventId){
         }
         
     }
-    for(let i=9;i<55;i++){
+    for(let i=9;i<56;i++){
         if(i<21||(i>35&&i<48)){
             arenaSeats.push({row:8, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true})
         }
@@ -146,7 +146,7 @@ function createSeats(body, eventId){
         if(i>10&&i<51&&i!=30&&i!=31){
             arenaSeats.push({row:11, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true})
         }
-        if(i>10&&i<54&&i!=32&&i!=33){
+        if(i>10&&i<54&&i!=32){
             arenaSeats.push({row:12, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true})
         }
         if(i>24&&i<56&&i!=40&&i!=41){
