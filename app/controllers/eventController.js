@@ -94,7 +94,7 @@ function createSeats(body, eventId){
             arenaSeats.push({row:17, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true})
         }
     }
-    for(let i=5;i<92;i++){
+    for(let i=5;i<93;i++){
         if(i<7||(i>30&&i<33)){
             arenaSeats.push({row:5, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true})
         }

@@ -1,8 +1,5 @@
 #hoverInfo{
     position: absolute;
-  top: 200px;
-  left: 400px;
- 
   width: 160px;
   text-align: center;
   
@@ -50,4 +47,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+.ticket{
+  background: #fff;
 }

@@ -36,7 +36,6 @@ services:
     depends_on:
       - app
       - db
-      - pgadmin
     image: nginx:latest
     ports:
       - '80:80'
@@ -45,20 +44,6 @@ services:
       - ./static:/var/www/static
     restart: always
 
-  # Контейнер с pgadmin
-  pgadmin:
-    container_name: pgadmin
-    depends_on:
-      - db
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@mail.ru
-      PGADMIN_DEFAULT_PASSWORD: aaa
-    expose:
-      - '80'
-    restart: always
-
-  
 
 
 networks:
