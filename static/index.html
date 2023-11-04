@@ -8138,11 +8138,11 @@
             </svg>
             
           </div>
-          <div id="track" class="col-2 mx-auto text-center py-4">
+          <div id="track" class="col-6 mx-auto text-center py-4">
             <div id="zoomer" class="btn btn-primary">
               +
             </div>
-            <div id="zoomOut" class="btn btn-secondary">
+            <div id="zoomOut" class="btn btn-primary">
               -
             </div>
           </div>
@@ -8160,7 +8160,7 @@
               </div>
               <div id="clickInfo" class="p-4 row" style="display:none">
                <div id="ticketArray" class="col-sm-8 mx-auto d-sm-flex gap-2 "></div>
-               <div class="d-flex justify-content-between gap-4 col-sm-2">
+               <div class="d-flex my-2 justify-content-between gap-4 col-sm-2">
                <div class="text-large">Итого: <div id="totalPrice" class=""></div></div>
                 <div class="btn btn-success" id="requestBooking">Забронировать</div>
               </div>
@@ -8184,16 +8184,20 @@
       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
         <script>
+          var scale=1
             $( function() {
               $( "#draggable" ).draggable();
               
             } );
             $('#zoomer').on('click',function (){
-              $('#draggable').css('transform','scale(1.6,1.6)')
+              scale+=0.5
+              $('#draggable').css('transform',`scale(${scale}, ${scale})`)
               })
               $('#zoomOut').on('click',function (){
-              $('#draggable').css('transform','scale(1,1)')
+                scale-=0.5
+              $('#draggable').css('transform',`scale(${scale}, ${scale})`)
               })
           var sectorList={
             1:{title:'Bronze',color:"#c9c9c9" },
