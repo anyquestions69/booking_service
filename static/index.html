@@ -8237,7 +8237,7 @@
           var h = screen.height 
           if(w>750){
             console.log(pos.top)
-            $('#hoverInfo').css("top", pos.top-50).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
+            $('#hoverInfo').css("top", pos.top-boxPos.height).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
             
           $('#hoverInfo').css("display", 'block')
             let secId
