@@ -15,12 +15,14 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="admin/css/styles.css" rel="stylesheet" />
         <link href="admin/css/personal.css" rel="stylesheet" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
         
     </head>
     <body>
      
-          <div class="container " >
-            <svg width="" height="" viewBox="0 0 600 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div class=" " >
+            <div id="canvas">
+            <svg width="" id="draggable" height="" viewBox="0 0 600 450" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="ÑÑ…ÐµÐ¼Ð° Ð·Ð°Ð»Ð° 1">
                 <g id="Group">
                   <g id="Group_2">
@@ -8134,6 +8136,17 @@
                 </linearGradient>
               </defs>
             </svg>
+            
+          </div>
+          <div id="track" class="col-2 mx-auto text-center py-4">
+            <div id="zoomer" class="btn btn-primary">
+              +
+            </div>
+            <div id="zoomOut" class="btn btn-secondary">
+              -
+            </div>
+          </div>
+          </div>
               <div id="hoverInfo" style="display:none">
                 <div id="container">
                 <p >Цена: <span id="priceText">3000</span></p>
@@ -8170,7 +8183,18 @@
       
       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script>
+            $( function() {
+              $( "#draggable" ).draggable();
+              
+            } );
+            $('#zoomer').on('click',function (){
+              $('#draggable').css('transform','scale(1.6,1.6)')
+              })
+              $('#zoomOut').on('click',function (){
+              $('#draggable').css('transform','scale(1,1)')
+              })
           var sectorList={
             1:{title:'Bronze',color:"#c9c9c9" },
             2:{title:'Silver',color:"#1E1E1E"},
@@ -8236,7 +8260,6 @@
           var w = screen.width
           var h = screen.height 
           if(w>750){
-            console.log(pos.top)
             $('#hoverInfo').css("top", pos.top-boxPos.height).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
             
           $('#hoverInfo').css("display", 'block')

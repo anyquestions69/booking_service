@@ -51,3 +51,6 @@
 .ticket{
   background: #fff;
 }
+#canvas{
+  overflow:hidden
+}
