@@ -2,7 +2,8 @@ const {Seat, Event} = require('../models/user')
 const { Op } = require("sequelize");
 const { createTransport } = require('nodemailer');
 const transporter = createTransport({
-    host: "big-beauty-boss.ru",
+    host: process.env.SMTP_SERVER,
+    port:587,
     secure: false,
     auth: {
      
@@ -175,7 +176,7 @@ class Manager{
                 from: process.env.SMTP_MAIL,
                 to: process.env.ADMIN_EMAIL,//process.env.ADMIN_EMAIL,
                 subject: `Новая заявка на бронирование`,
-                text: text
+                text: text+`<p>email: ${email}</p>`
             };
             
             transporter.sendMail(mailOptions, function(error, info){

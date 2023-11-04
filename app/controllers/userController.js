@@ -4,8 +4,8 @@ const Sequelize = require('sequelize')
 const jwt = require('jsonwebtoken')
 const { createTransport } = require('nodemailer');
 const transporter = createTransport({
-    host: "smtp.timeweb.ru",
-    port:2525,
+    host: process.env.SMTP_SERVER,
+    port:587,
     secure: false,
     auth: {
      
