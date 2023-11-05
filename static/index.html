@@ -8155,18 +8155,19 @@
                 <small class="opacity-70 ">Место: <span id="colText">1</span></small>
                 <small class="opacity-70 ">Ряд: <span id="rowText">1</span></small>
                 <p style="color:greenyellow" id="statusText"></p>
+                <div class="btn btn-success" id="addItem">Добавить</div>
                 </div>
                 <div class="arrow-down"></div>
               </div>
-              <div id="clickInfo" class="p-4 row" style="display:none">
-               <div id="ticketArray" class="col-sm-8 mx-auto d-sm-flex gap-2 "></div>
+              <div id="clickInfo" class="mx-0 p-4 row" style="display:none">
+               <div id="ticketArray" class="col-sm-8 mx-auto d-flex gap-2 "></div>
                <div class="d-flex my-2 justify-content-between gap-4 col-sm-2">
                <div class="text-large">Итого: <div id="totalPrice" class=""></div></div>
                 <div class="btn btn-success" id="requestBooking">Забронировать</div>
               </div>
               </div>
 
-              <form id="bookingForm" class="container p-5 text-center row">
+              <form id="bookingForm" class="container p-5 text-center">
                 <h5>Укажите свой email, и модератор свяжется с Вами</h5>
                 <div class="col-sm-4 mx-auto">
                   <div class="input-group mb-3">
@@ -8208,11 +8209,12 @@
           
           var array=[]
           var ticketArray=[]
-          $('svg path').on('click',async function(e){
-            if(!$(this).attr("data-booked")){
+          $('#addItem').on('click',async function(e){
+            let el = $('#'+$('#addItem').attr('data-id'))
+            if(!el.attr("data-booked")){
             $('#clickInfo').css("display", 'flex')
             let secId
-            switch (this.id.split('-')[0]) {
+            switch ($('#addItem').attr('data-id').split('-')[0]) {
                 case 'bronze':
                   secId =  1
                   break;
@@ -8229,8 +8231,9 @@
                   break;
               }
             var result = await array.find(obj => {
-              return obj.col == this.id.split('-')[2] && obj.row ==this.id.split('-')[1] && obj.active==true && obj.sectorId==secId
+              return obj.col == $('#addItem').attr('data-id').split('-')[2] && obj.row ==$('#addItem').attr('data-id').split('-')[1] && obj.active==true && obj.sectorId==secId
             })
+           
             if(result){
               ticketArray.push(result)
             $('#ticketArray').empty()
@@ -8248,6 +8251,10 @@
               price+=parseInt(ticket.price)
             }
             $('#totalPrice').text(price+'₽')
+            $('#addItem').css('display', 'none')
+            $(el).attr("fill", "#ff0000" )
+                    $(el).attr("opacity", "0.3" )
+                    $(el).attr("data-booked",  true)
             }
           }
           })
@@ -8263,7 +8270,7 @@
           var ratio = window.devicePixelRatio || 1;
           var w = screen.width
           var h = screen.height 
-          if(w>750){
+          if(true){
             $('#hoverInfo').css("top", pos.top-boxPos.height).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
             
           $('#hoverInfo').css("display", 'block')
@@ -8288,6 +8295,7 @@
               return obj.col == this.id.split('-')[2] && obj.row ==this.id.split('-')[1] && obj.active==true && obj.sectorId==secId
             })
             if(result){
+              $('#addItem').attr('data-id', this.id)
               $(this).css('filter', `drop-shadow(0px 0px 2px ${sectorList[result.sectorId].color}`)
               let price='-'
               let status =''
@@ -8313,6 +8321,7 @@
               $('#statusText').css('color', color)
               $('#colText').text(result.col)
               $('#rowText').text(result.row)
+              $('#addItem').css('display', 'block')
           }else{
             $('#priceText').text('-')
               $('#sectorText').text('-')
@@ -8320,6 +8329,7 @@
               $('#statusText').css('color', '#ff0000')
               $('#colText').text('-')
               $('#rowText').text('-')
+              $('#addItem').css('display', 'none')
           }
         }
         }
