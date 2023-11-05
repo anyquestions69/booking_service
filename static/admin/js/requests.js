@@ -28,19 +28,19 @@ function show(){
               switch (r.sectorId) {
                 case 1:
                   sector =  'Bronze'
-                  color='#CD7F32'
+                  color='#c9c9c9'
                   break;
-                case 2:
+                case 4:
                   sector =  'Silver'
-                  color='#C0C0C0'
+                  color='#5F2C9F'
                   break;
                 case 3:
                 sector =  'Gold'
-                color='#DAA520'
+                color='#F4D581'
                   break;
-                case 4:
+                case 2:
                 sector =  'Platinum'
-                color='#E5E4E2'
+                color='#313131'
                   break;
                 default:
                   break;
@@ -96,7 +96,6 @@ function show(){
       }
      })
      let resText = await res.json()
-     console.log(resText)
      show()
     })
   })

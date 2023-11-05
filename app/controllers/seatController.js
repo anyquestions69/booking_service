@@ -76,13 +76,13 @@ class Manager{
                 sector =  'Bronze'
                 break;
               case 2:
-                sector =  'Silver'
+                sector =  'Platinum'
                 break;
               case 3:
               sector =  'Gold'
                 break;
               case 4:
-              sector =  'Platinum'
+              sector =  'Silver'
                 break;
               default:
                 break;
@@ -156,13 +156,13 @@ class Manager{
                     ticket.sector =  'Bronze'
                     break;
                 case 2:
-                    ticket.sector =  'Silver'
+                    ticket.sector =  'Platinum'
                     break;
                 case 3:
                     ticket.sector =  'Gold'
                     break;
                 case 4:
-                    ticket.sector =  'Platinum'
+                    ticket.sector =  'Silver'
                     break;
                 default:
                     break;
