@@ -40,8 +40,10 @@ services:
     ports:
       - '80:80'
     volumes:
+      - ./certs/private.key:/etc/nginx/private.key
       - ./nginx:/etc/nginx/conf.d
       - ./static:/var/www/static
+      
     restart: always
 
 
