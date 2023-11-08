@@ -5,6 +5,7 @@
   
   transition: all .4s;
 }
+body{background: #120B1C;color:white}
 .square{
   width: 1.7em;
   height: 1.7em;
