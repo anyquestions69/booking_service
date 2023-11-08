@@ -40,7 +40,7 @@ services:
     ports:
       - '80:80'
     volumes:
-      - ./certs/private.key:/etc/nginx/private.key
+      - ./certs/:/etc/nginx/
       - ./nginx:/etc/nginx/conf.d
       - ./static:/var/www/static
       
