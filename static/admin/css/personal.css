@@ -5,7 +5,12 @@
   
   transition: all .4s;
 }
-
+.square{
+  width: 1.7em;
+  height: 1.7em;
+  background: #1c1c1c;
+  border-radius: 50%;
+}
 #container{
   background: #fff;
   padding: 5px;
