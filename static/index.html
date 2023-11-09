@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="overflow: hidden;">
+<html lang="en" >
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -8144,16 +8144,16 @@
           <div id="track" class="col-md-12 mx-auto text-center">
             <div class="d-sm-flex mb-3">
               <div class="col d-flex gap-1 justify-content-center align-items-center">
-                <div class="square" style="background:#313131"></div> <div class="lead">Билет категории "Platinum"</div>
+                <div class="square" style="background:#313131"></div> <div class="">Билет категории "Platinum"</div>
               </div>
               <div class="col d-flex gap-1 justify-content-center align-items-center">
-                <div class="square" style="background:#F4D581"></div> <div class="lead">Билет категории "Gold"</div>
+                <div class="square" style="background:#F4D581"></div> <div class="">Билет категории "Gold"</div>
               </div>
               <div class="col d-flex gap-1 justify-content-center align-items-center">
-                <div class="square" style="background:#c9c9c9"></div> <div class="lead">Билет категории "Silver"</div>
+                <div class="square" style="background:#c9c9c9"></div> <div class="">Билет категории "Silver"</div>
               </div>
               <div class="col d-flex gap-1 justify-content-center align-items-center">
-                <div class="square" style="background:#5F2C9F"></div> <div class="lead">Билет категории "Bronze"</div>
+                <div class="square" style="background:#5F2C9F"></div> <div class="">Билет категории "Bronze"</div>
               </div>
             </div>
             <div id="zoomer" class="btn btn-primary">
@@ -8186,19 +8186,27 @@
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
         <script>
+         
+          var boxPos = {height:104.8,width:160}
+          var ratio = window.devicePixelRatio || 1;
+          var w = screen.width
+          var h = screen.height 
           var scale=1
-            $( function() {
-              $( "#draggable" ).draggable();
+          if(w<650){
+            scale=4
+            $('#draggable').css('transform',`scale(4, 4)`)
+          }
+            
+          $( "#draggable" ).draggable();
               
-            } );
-            $('#zoomer').on('click',function (){
-              scale+=0.5
-              $('#draggable').css('transform',`scale(${scale}, ${scale})`)
-              })
-              $('#zoomOut').on('click',function (){
-                scale-=0.5
-              $('#draggable').css('transform',`scale(${scale}, ${scale})`)
-              })
+          $('#zoomer').on('click',function (){
+            scale+=1
+            $('#draggable').css('transform',`scale(${scale}, ${scale})`)
+            })
+            $('#zoomOut').on('click',function (){
+              scale-=1
+            $('#draggable').css('transform',`scale(${scale}, ${scale})`)
+            })
           var sectorList={
             1:{title:'Bronze',color:"#c9c9c9" },
             2:{title:'Platinum',color:"#313131"},
@@ -8213,8 +8221,8 @@
             
           })
         $('svg path').mouseover(async function(e) {
-          
-         
+          if(!this.id.includes('Vector')){
+            var pos = this.getBoundingClientRect();
             let secId
             switch (this.id.split('-')[0]) {
                 case 'bronze':
@@ -8235,14 +8243,7 @@
             var result = await array.find(obj => {
               return obj.col == this.id.split('-')[2] && obj.row ==this.id.split('-')[1] && obj.active==true && obj.sectorId==secId
             })
-            var pos = this.getBoundingClientRect();
-            var boxPos = {height:104.8,width:160}
-            var ratio = window.devicePixelRatio || 1;
-            var w = screen.width
-            var h = screen.height 
-           
             if(result){
-            
               $('#addItem').attr('data-id', this.id)
               $(this).css('filter', `drop-shadow(0px 0px 2px ${sectorList[result.sectorId].color}`)
               let price=result.price
@@ -8262,15 +8263,15 @@
                 $('#colText').text(result.col)
                 $('#rowText').text(result.row)
               }
-          }else{
-            
-              $('#statusText').text('Забронировано')
-              $('#statusText').css('color', '#ff0000')
+            }else{
+              
+                $('#statusText').text('Забронировано')
+                $('#statusText').css('color', '#ff0000')
+                $('#sectorText').text(sectorList[secId].title).css('color', sectorList[secId].color)
+                $('#colText').text(this.id.split('-')[2])
+                $('#rowText').text(this.id.split('-')[1])
+            }await $('#hoverInfo').css("display", 'block').css("top", pos.top-boxPos.height).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
           }
-       
-              
-              
-             await $('#hoverInfo').css("display", 'block').css("top", pos.top-boxPos.height).css('left', (pos.left+(pos.width/2)-(boxPos.width/2)))
           });
         fetch('/api/seat').then(async(res)=>{
             array=await res.json()

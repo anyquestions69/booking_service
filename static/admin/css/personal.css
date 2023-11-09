@@ -7,8 +7,8 @@
 }
 
 .square{
-  width: 1.7em;
-  height: 1.7em;
+  width: 1.3em;
+  height: 1.3em;
   background: #1c1c1c;
   border-radius: 50%;
 }
@@ -29,37 +29,7 @@
   
   border-top: 16px solid green;
 }
-#clickInfo{
-  display: flex;
-  width: 100%;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  justify-content: space-around;
-  background: ghostwhite;
-  align-items: center;
-}
-#ticketArray{
-  overflow-x:scroll;
-  overflow-y:scroll;
-  max-height: 25em;
-}
-#bookingForm{
-  position: fixed;
-  border: 1px solid #6f42c1;
-  border-radius:4px;
-  display: none;
-  background: white;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-.ticket{
-  background: #fff;
-}
+
 #canvas{
   overflow:hidden
-}
-#track{
-  margin-bottom: 160px;
 }
