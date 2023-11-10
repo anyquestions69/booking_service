@@ -61,10 +61,16 @@ $('#updatePrice').on('submit', async (e)=>{
     }
 })
 $('#book').on('submit', async (e)=>{
+    $('#error').empty()
     e.preventDefault()
+    let arena=$('#arena').val()
+    let row =parseInt($('#row').val())
+    if(arena==2){
+        row+=6
+    }
     let user = {
         sectorId:$('#sectorBook').val(),
-        row:$('#row').val(),
+        row:row,
         col:$('#col').val(),
         email:$('#email').val()
     }

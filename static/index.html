@@ -8235,15 +8235,18 @@
           if(!this.id.includes('Vector')){
             var pos = this.getBoundingClientRect();
             let secId
+            let row=-6
             switch (this.id.split('-')[0]) {
                 case 'bronze':
                   secId =  1
                   break;
                 case 'silver':
                 secId =  2
+                
                   break;
                 case 'gold':
                 secId =  3
+                row=-6
                   break;
                 case 'platinum':
                 secId =  4
@@ -8254,6 +8257,10 @@
             var result = await array.find(obj => {
               return obj.col == this.id.split('-')[2] && obj.row ==this.id.split('-')[1] && obj.active==true && obj.sectorId==secId
             })
+            row+=parseInt(this.id.split('-')[1])
+            if(row<=0){
+              row+=6
+            }
             if(result){
               $('#addItem').attr('data-id', this.id)
               $(this).css('filter', `drop-shadow(0px 0px 2px ${sectorList[result.sectorId].color}`)
@@ -8265,14 +8272,14 @@
                 $('#statusText').css('color', '#00ff00')
                 $('#sectorText').text(sectorList[result.sectorId].title).css('color', sectorList[result.sectorId].color)
                 $('#colText').text(result.col)
-                $('#rowText').text(result.row)
+                $('#rowText').text(row)
               }else{
                 $('#statusText').text('Забронировано')
                 $('#statusText').css('color', '#ff0000')
                 
                 $('#sectorText').text(sectorList[result.sectorId].title).css('color', sectorList[result.sectorId].color)
                 $('#colText').text(result.col)
-                $('#rowText').text(result.row)
+                $('#rowText').text(row)
               }
             }else{
               

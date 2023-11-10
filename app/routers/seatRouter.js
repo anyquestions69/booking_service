@@ -3,6 +3,7 @@ const seatController = require("../controllers/seatController.js");
 const seatRouter = express.Router();
 const mw = require('../middleware/auth.js')
 seatRouter.get("/requests", mw.isAuth, seatController.showRequests);
+seatRouter.get("/booked", mw.isAuth, seatController.showBooked);
 seatRouter.get("/", seatController.getAll);
 
 seatRouter.put('/', mw.isAuth, seatController.updatePrice)

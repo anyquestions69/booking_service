@@ -23,6 +23,10 @@ class Manager{
         let seats = await Seat.findAll({where:{active:true, statusId:2}})
         return res.send(seats)
     }
+    async showBooked(req,res){
+        let seats = await Seat.findAll({where:{active:true, statusId:3}})
+        return res.send(seats)
+    }
     async updatePrice(req,res){
         try{
             let {sectorId, row, col, price} = req.body
@@ -63,6 +67,7 @@ class Manager{
             let {id} = req.body
             //filterInput(req.body) soon
             let seat = await Seat.findOne({where:{id}})
+            let row=-6
             console.log(seat)
             if(!seat)
                 return res.status(400).send({error:'Место указано не верно'})
@@ -87,12 +92,16 @@ class Manager{
               default:
                 break;
             }
+            row+=seat.row
+            if(row<=0){
+                row+=6
+            }
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
                 to: seat.email,
                 subject: `Бронь места`,
                 text: `<h4>Ваше место успешно забронировано!</h4>
-                        <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${seat.row}</p>`
+                        <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
             };
             
             transporter.sendMail(mailOptions, function(error, info){
@@ -114,7 +123,6 @@ class Manager{
             //filterInput(req.body) soon
         console.log(req.body)
             let seat = await Seat.findOne({where:{id}})
-            console.log(seat)
             if(!seat)
                 return res.status(400).send({error:'Место указано не верно'})
             let response = await Seat.update({statusId:1, email:seat.email },{where:{id}})
@@ -133,7 +141,7 @@ class Manager{
                     console.log('Email sent: ' + info.response);
                 }
             });
-            return res.send({res:""})
+            return res.send({res:"Бронь отменена"})
         }catch(e){
             console.log(e)
             return res.send({error:"Unhandled error"})
@@ -147,6 +155,7 @@ class Manager{
             let email=ticket.email
             let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
             let text = ``
+            let row=-6
             if(!re.test(email))
                 return res.status(400).send({error:'Неверно указан email'})
             let seat = await Seat.findOne({where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
@@ -171,7 +180,11 @@ class Manager{
             default:
                 break;
             }
-            text+=`<p>Сектор: ${ticket.sector} Место: ${ticket.col} Ряд: ${ticket.row}</p>`
+            row+=seat.row
+            if(row<=0){
+                row+=6
+            }
+            text+=`<p>Сектор: ${ticket.sector} Место: ${ticket.col} Ряд: ${row}</p>`
             
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
