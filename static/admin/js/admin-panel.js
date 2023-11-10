@@ -60,3 +60,25 @@ $('#updatePrice').on('submit', async (e)=>{
        location.reload()
     }
 })
+$('#book').on('submit', async (e)=>{
+    e.preventDefault()
+    let user = {tickets:[{
+        
+        sectorId:$('#sectorBook').val(),
+        row:$('#row').val(),
+        col:$('#col').val(),
+    }],email:$('#email').val()}
+    console.log(user)
+    let response = await fetch('/api/seat/request',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body:JSON.stringify(user)
+    })
+    let text = await response.json()
+    
+    if(response.ok){    
+        document.getElementById('frame').contentWindow.location.reload();
+    }
+})

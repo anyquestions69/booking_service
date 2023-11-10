@@ -42,13 +42,9 @@
         </ul>
       </nav>
           <div class="container " >
-                
-            <form   class="row py-4"
-              id="updatePrice"
-              role="tabpanel">
-              
-                  <div class="d-md-flex gap-1">
-                    <div class="">
+             
+                  <div class="d-md-flex gap-1 py-3">
+                    <form class="" id="updatePrice">
                       <div class="col-12"> <label for="">Ряд</label>
                         <input type="text" class="form-control" id="row-start" placeholder="С какого">
                         <br>
@@ -60,31 +56,54 @@
                           <br>
                           <input type="text" class="form-control" id="col-end" placeholder="По какое (Пустое если одно место)">
                         </div>
-                      <div class="col-6">
+                        <div class="col-6">
+                        <br>
+                          <label for="sector">Сектор</label>
+                          <select id="sector" class="form-control">
+                            <option value="1" selected>Bronze</option>
+                            <option value="4">Silver</option>
+                            <option value="3">Gold</option>
+                            <option value="2">Platinum</option>
+                          </select>
+                        </div>
+                        <div class="col-6">
+                          <br>
+                          <label for="">Цена</label>
+                          <input type="text" class="form-control" id="price" placeholder="1000">
+                        </div>
+                        <div class="col-12 mt-4">
+                        <button type="submit"  class="w-100 btn btn-primary">Обновить цену</button>
+                        </div>
+                  </form>
+                  <div class="w-100">
+                    <iframe id="frame" src="/" frameborder="0" height="600px" width="100%"></iframe>
+                  </div>
+                  <form id="book">
+                    <div class="col-12"><h4>Забронировать место</h4></div>
+                    <div class="col-12"> 
+                      <input type="text" class="form-control" id="row" placeholder="Ряд">
                       <br>
-                        <label for="sector">Сектор</label>
-                        <select id="sector" class="form-control">
+                      </div>
+                      <div class="col-12">
+                        <input type="text" class="form-control" id="col" placeholder="Место">
+                        <br>
+                        <select id="sectorBook" class="form-control">
                           <option value="1" selected>Bronze</option>
                           <option value="4">Silver</option>
                           <option value="3">Gold</option>
                           <option value="2">Platinum</option>
                         </select>
-                      </div>
-                      <div class="col-6">
                         <br>
-                        <label for="">Цена</label>
-                        <input type="text" class="form-control" id="price" placeholder="1000">
+                      </div>
+                      <div class="col-12"> 
+                        <input type="email" class="form-control" id="email" placeholder="email">
                       </div>
                       <div class="col-12 mt-4">
-                      <button type="submit"  class="w-100 btn btn-primary">Обновить цену</button>
-                    </div>
-                  </div>
-                  <div class="w-100">
-                    <iframe src="/" frameborder="0" height="600px" width="100%"></iframe>
-                  </div>
-                </div>
+                        <button type="submit" id="bookButton"  class="w-100 btn btn-primary">Забронировать</button>
+                      </div>
+                    </form>
                
-            </form>
+              </div>
            
       </div>
        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
