@@ -45,7 +45,7 @@
              
                   <div class="d-md-flex gap-1 py-3">
                     <form class="" id="updatePrice">
-                      <div class="col-12"> <label for="">Ряд</label>
+                      <div class="col-12"> <label for="row-start">Ряд</label>
                         <input type="text" class="form-control" id="row-start" placeholder="С какого">
                         <br>
                         <input type="text" class="form-control" id="row-end" placeholder="По какой (Пустое если 1 ряд)"></div>
@@ -81,12 +81,15 @@
                   <form id="book">
                     <div class="col-12"><h4>Забронировать место</h4></div>
                     <div class="col-12"> 
+                      <label for="row">Ряд</label>
                       <input type="text" class="form-control" id="row" placeholder="Ряд">
                       <br>
                       </div>
                       <div class="col-12">
+                        <label for="col">Место</label>
                         <input type="text" class="form-control" id="col" placeholder="Место">
                         <br>
+                        <label for="">Сектор</label>
                         <select id="sectorBook" class="form-control">
                           <option value="1" selected>Bronze</option>
                           <option value="4">Silver</option>
@@ -101,6 +104,7 @@
                       <div class="col-12 mt-4">
                         <button type="submit" id="bookButton"  class="w-100 btn btn-primary">Забронировать</button>
                       </div>
+                      <div class="text-danger" id="error"></div>
                     </form>
                
               </div>

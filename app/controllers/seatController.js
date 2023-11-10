@@ -143,33 +143,35 @@ class Manager{
     async requestBooking(req,res){
         try{
             console.log(req.body)
-            let tickets= req.body.tickets
-            let email=req.body.email
+            let ticket= req.body
+            let email=ticket.email
             let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
             let text = ``
             if(!re.test(email))
                 return res.status(400).send({error:'Неверно указан email'})
-            for(let ticket of tickets){
-                let response = await Seat.update({statusId:2, email },{where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
-                switch (ticket.sectorId) {
-                case 1:
-                    ticket.sector =  'Bronze'
-                    break;
-                case 2:
-                    ticket.sector =  'Platinum'
-                    break;
-                case 3:
-                    ticket.sector =  'Gold'
-                    break;
-                case 4:
-                    ticket.sector =  'Silver'
-                    break;
-                default:
-                    break;
-                }
-                text+=`<p>Сектор: ${ticket.sector} Место: ${ticket.col} Ряд: ${ticket.row}</p>`
+            let seat = await Seat.findOne({where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
+            if(!seat)
+                return res.status(404).send({error:'Неверно указано место'})
+            if(seat.statusId!=1)
+                return res.status(404).send({error:'Место уже забронировано'})
+            let response = await Seat.update({statusId:2, email },{where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
+            switch (ticket.sectorId) {
+            case 1:
+                ticket.sector =  'Bronze'
+                break;
+            case 2:
+                ticket.sector =  'Platinum'
+                break;
+            case 3:
+                ticket.sector =  'Gold'
+                break;
+            case 4:
+                ticket.sector =  'Silver'
+                break;
+            default:
+                break;
             }
-            
+            text+=`<p>Сектор: ${ticket.sector} Место: ${ticket.col} Ряд: ${ticket.row}</p>`
             
             const mailOptions = {
                 from: process.env.SMTP_MAIL,

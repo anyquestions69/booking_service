@@ -62,12 +62,12 @@ $('#updatePrice').on('submit', async (e)=>{
 })
 $('#book').on('submit', async (e)=>{
     e.preventDefault()
-    let user = {tickets:[{
-        
+    let user = {
         sectorId:$('#sectorBook').val(),
         row:$('#row').val(),
         col:$('#col').val(),
-    }],email:$('#email').val()}
+        email:$('#email').val()
+    }
     console.log(user)
     let response = await fetch('/api/seat/request',{
         method: 'POST',
@@ -80,5 +80,8 @@ $('#book').on('submit', async (e)=>{
     
     if(response.ok){    
         document.getElementById('frame').contentWindow.location.reload();
+        
+    }else{
+        $('#error').text(text.error)
     }
 })
