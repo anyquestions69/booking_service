@@ -5,7 +5,12 @@
   
   transition: all .4s;
 }
-
+.btn-10{
+  width:100px;
+}
+.req{
+  width:350px
+}
 .square{
   width: 1.3em;
   height: 1.3em;

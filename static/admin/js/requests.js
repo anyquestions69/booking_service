@@ -51,7 +51,7 @@ function show(){
               }
             $('#reqList').append(`
             <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
-            <div class="d-lg-flex gap-4 justify-content-start align-items-center">
+            <div class="d-lg-flex gap-2 req justify-content-between align-items-center">
              <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
             
             
@@ -61,8 +61,8 @@ function show(){
             <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
             
                 <div data-id=${r.id} 
-                class="mb-1 p-1 request-accept btn-success text-white btn" >Забронировать</div>
-                <div data-id=${r.id} class=" p-1 mb-1 btn-danger text-small btn text-white request-decline ">Отклонить</div>
+                class="mb-1 p-1 request-accept btn-success text-white btn btn-10" >Оплачено</div>
+                <div data-id=${r.id} class=" p-1 mb-1 btn-danger text-small btn text-white btn-10 request-decline ">Отклонить</div>
               
            
           </div>
@@ -154,10 +154,9 @@ function showBooked(){
         if(row<=0){
           row+=6
         }
-        console.log(row)
           $('#bookList').append(`
           <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
-          <div class="d-lg-flex gap-4 justify-content-start align-items-center">
+          <div class="d-lg-flex gap-2 req justify-content-start align-items-center">
            <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
           
           
@@ -166,7 +165,7 @@ function showBooked(){
           </div>
           <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
           
-              <div data-id=${r.id} class=" p-2 mb-0 btn-danger text-small btn text-white book-decline ">Отменить</div>
+              <div data-id=${r.id} class=" p-1 mb-0 btn-danger text-small btn btn-10 text-white book-decline ">Отменить</div>
             
          
         </div>
