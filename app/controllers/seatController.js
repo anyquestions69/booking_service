@@ -14,6 +14,16 @@ const transporter = createTransport({
 
 
 class Manager{
+    async getPlace(req,res){
+        try{
+            let uuid=req.params.uuid
+            let seat= await Seat.findOne({where:{uuid}})
+            return res.send({seat})
+        }catch(e){
+            return res.status(404).send({error:'Биллет не найден'})
+        }
+       
+    }
    
     async getAll(req,res){
         let seats = await Seat.findAll({where:{active:true}})

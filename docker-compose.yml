@@ -12,6 +12,8 @@ services:
     restart: always
     expose:
       - '3000'
+    volumes:
+      - ./app/tickets:/opt/server/tickets
     depends_on:
       - db
     command: npm run start

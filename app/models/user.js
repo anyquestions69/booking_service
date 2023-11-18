@@ -39,6 +39,12 @@ const User = sequelize.define("user", {
     active:{
       type:Sequelize.BOOLEAN,
       default:true
+    },
+    uuid:{
+      type:Sequelize.STRING
+    },
+    qr:{
+      type:Sequelize.TEXT
     }
   });
   const Event = sequelize.define("event", {

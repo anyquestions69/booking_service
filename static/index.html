@@ -8179,7 +8179,7 @@
 
               
             </div>
-           
+           <div id="imgs"></div>
       
       
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -8294,6 +8294,10 @@
         fetch('/api/seat').then(async(res)=>{
             array=await res.json()
             for(let seat of array){
+            if(seat.qr){
+              console.log(seat.qr)
+              $('#imgs').append(`<img src=${seat.qr}>`)
+            }
                 let sector=''
                 switch (seat.sectorId) {
                 case 1:
