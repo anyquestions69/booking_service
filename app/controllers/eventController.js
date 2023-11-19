@@ -22,9 +22,11 @@ async function createTickets(){
             if (err) throw err;
 
             for (const file of files) {
+                if (file !== '.gitkeep'){
                 fs.unlink(directory+'/'+ file, async (err) => {
                 if (err) throw err;
                 });
+            }
             }
             let seats = await Seat.findAll({where:{active:true}})
             for(let seat of seats ){
