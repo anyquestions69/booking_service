@@ -52,7 +52,7 @@ async function createTickets(){
                 doc.image(qr, 420,85,{ height:75, width:75,
                 })
                 .fontSize(15) 
-                    .text(sector, 264, 63)
+                    .text(sector,254,41) //264, 63)
                     .text(seat.row, 185, 85)
                     .text(seat.col, 332, 85)
                     .text(seat.price, 190, 113)

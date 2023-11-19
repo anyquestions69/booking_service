@@ -1,6 +1,9 @@
 const {Seat, Event} = require('../models/user')
 const { Op } = require("sequelize");
 const { createTransport } = require('nodemailer');
+const QRCode = require('qrcode');
+const PDFDocument = require('pdfkit');
+const fs=require('fs')
 const transporter = createTransport({
     host: process.env.SMTP_SERVER,
     port:587,
@@ -109,6 +112,32 @@ class Manager{
             if(row<=0){
                 row+=6
             }
+            let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
+            let date = new Date(event.date)
+            var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
+            const directory = __dirname+'/../tickets';
+            let qr= await QRCode.toDataURL(process.env.DOMAIN+'/check/'+seat.uuid)
+                let doc = new PDFDocument({size: 'A4'});
+                doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+                doc.image(qr, 420,85,{ height:75, width:75,
+                })
+                .fontSize(15) 
+                    .text(sector,254,41) //264, 63)
+                    .text(seat.email,264, 63)
+                    .text(row, 185, 85)
+                    .text(seat.col, 332, 85)
+                    .text(seat.price, 190, 113)
+                    .text(datestring, 327, 146)
+                    .fontSize(10)
+                    .save()
+                    .rotate(270, {origin: [90, 140]})
+                    .text(row, 80,137)
+                    .text(seat.col, 140,137)
+                    .text(seat.price, 194,137)
+                    .text(sector, 130, 147)
+                    .restore()
+                doc.end()
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
                 to: seat.email,
