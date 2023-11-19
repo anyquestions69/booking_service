@@ -13,18 +13,44 @@ const getPagingData = (data, page, limit) => {
     return { totalItems:totalItems.length, rows, totalPages, currentPage };
   };
 async function createTickets(){
-    let seats = await Seat.findAll({where:{active:true}})
-    for(let seat of seats ){
-        if(seat.qr){
-            let doc = new PDFDocument({size: 'A4'});
-            doc.pipe(fs.createWriteStream(__dirname+'/../tickets/'+seat.uuid+'.pdf')); 
-            doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})//{width: 1253, height:457}); 
-            doc.image(seat.qr, 420,85,{ height:75, width:75,
-              }); 
-            doc.end()
-        }
-        
-    }
+    let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
+    let date = new Date(event.date)
+    var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
+    const directory = __dirname+'/../tickets';
+    let qr =''
+        fs.readdir(directory, async (err, files) => {
+            if (err) throw err;
+
+            for (const file of files) {
+                fs.unlink(directory+'/'+ file, async (err) => {
+                if (err) throw err;
+                });
+            }
+            let seats = await Seat.findAll({where:{active:true}})
+            for(let seat of seats ){
+                
+                qr= await QRCode.toDataURL(process.env.DOMAIN+'/check/'+seat.uuid)
+                let doc = new PDFDocument({size: 'A4'});
+                doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+                doc.image(qr, 420,85,{ height:75, width:75,
+                })
+                .fontSize(15) 
+                    .text(seat.row, 185, 85)
+                    .text(seat.col, 332, 85)
+                    .text(seat.price, 190, 113)
+                    .text(datestring, 327, 149)
+                    .fontSize(10)
+                    .save()
+                    .rotate(270, {origin: [90, 140]})
+                    .text(seat.row, 80,137)
+                    .text(seat.col, 140,137)
+                    .text(seat.price, 194,137)
+                    .restore()
+                doc.end()
+            }
+        })
+    
     
 }
 async function createSeats(body, eventId){
@@ -35,8 +61,7 @@ async function createSeats(body, eventId){
     for(let i=1;i<43;i++){//silver
         if(i<19){
             id=uuid()
-            qr= await QRCode.toDataURL(process.env.DOMAIN+'/api/seat/'+id)
-            arenaSeats.push({row:1, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true, uuid:id, qr:qr }) //1
+            arenaSeats.push({row:1, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true, uuid:id }) //1
             
         if(i<5 || i>8){
             arenaSeats.push({row:2, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true , uuid:uuid()}) //2
@@ -168,7 +193,7 @@ async function createSeats(body, eventId){
         if(i>10&&i<51&&i!=30&&i!=31){
             arenaSeats.push({row:11, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true, uuid:uuid()})
         }
-        if(i>10&&i<54&&i!=32){
+        if(i>10&&i<54&&i!=32&&i!=33){
             arenaSeats.push({row:12, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true, uuid:uuid()})
         }
         if(i>24&&i<56&&i!=40&&i!=41){

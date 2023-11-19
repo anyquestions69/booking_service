@@ -18,9 +18,12 @@ class Manager{
         try{
             let uuid=req.params.uuid
             let seat= await Seat.findOne({where:{uuid}})
-            return res.send({seat})
+            if(!seat){
+                return res.status(404).send({error:'Билет не найден'})
+            }
+            return res.send(seat)
         }catch(e){
-            return res.status(404).send({error:'Биллет не найден'})
+            return res.status(404).send({error:'Билет не найден'})
         }
        
     }
@@ -110,6 +113,11 @@ class Manager{
                 from: process.env.SMTP_MAIL,
                 to: seat.email,
                 subject: `Бронь места`,
+                attachments: [
+                    {   // file on disk as an attachment
+                        filename: 'ticket.pdf',
+                        path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
+                    }],
                 text: `<h4>Ваше место успешно забронировано!</h4>
                         <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
             };
