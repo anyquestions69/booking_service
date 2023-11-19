@@ -73,6 +73,7 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 app/tickets/*.pdf
+app/tables/*.csv
 # dotenv environment variable files
 #.env
 .env.development.local

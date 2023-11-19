@@ -4,7 +4,6 @@ const { createTransport } = require('nodemailer');
 const QRCode = require('qrcode');
 const PDFDocument = require('pdfkit');
 const fs=require('fs')
-//const bwipjs = require('bwip-js');
 const transporter = createTransport({
     host: process.env.SMTP_SERVER,
     port:587,
@@ -104,13 +103,9 @@ class Manager{
                 default:
                     break;
                 }
-                let bc = await bwipjs.toBuffer({
-                    bcid:        'code128',       // Barcode type
-                    text:        seat.uuid,    // Text to encode
-                })
            
             let segment ='Партер'
-            csv+=bc.toString()+','+segment+','+sector+','+seat.row+','+seat.col+','+seat.price+'\n';
+            csv+=seat.uuid+','+segment+','+sector+','+seat.row+','+seat.col+','+seat.price+'\n';
         }
         fs.writeFile(__dirname+'/../tables/'+filename+'.csv',csv,()=>{
             return res.send(csv)

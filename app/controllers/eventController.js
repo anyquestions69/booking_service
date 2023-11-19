@@ -17,6 +17,7 @@ const getPagingData = (data, page, limit) => {
   };
 
 async function createTickets(){
+    let bc=''
     let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
     let date = new Date(event.date)
     var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
@@ -55,15 +56,17 @@ async function createTickets(){
                 
                 if (err) throw err;
                 
-                let bc = await bwipjs.toBuffer({
-                    bcid:        'code128',       // Barcode type
-                    text:        seat.uuid,    // Text to encode
+                bc = await bwipjs.toBuffer({
+                    bcid:        'code128',     
+                    text:        seat.uuid, 
+                    includetext: true,  
+                    textxalign:  'center',   
                 })
                     let doc = new PDFDocument({size: 'A4'});
                     doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
                     doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
                    
-                    doc.image('data:image/png;base64,'+bc.toString('base64'), 420,85,{ height:20})
+                    doc.image('data:image/png;base64,'+bc.toString('base64'), 405,85,{ height:25})
                     .fontSize(15) 
                         .text(sector,254,31) //264, 63)
                         .text(seat.row, 185, 85)
