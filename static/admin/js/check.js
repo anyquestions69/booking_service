@@ -8,13 +8,13 @@ let res =  fetch('/api/seat/'+uuid).then(async res=>{
             sector='Bronze'
             break;
         case 2:
-            sector='Silver'
+            sector='Platinum'
             break;
         case 3:
             sector='Gold'
             break;
         case 4:
-            sector='Platinum'
+            sector='Silver'
             break;
         default:
             break;

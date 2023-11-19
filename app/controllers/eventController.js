@@ -28,7 +28,23 @@ async function createTickets(){
             }
             let seats = await Seat.findAll({where:{active:true}})
             for(let seat of seats ){
-                
+                let sector=''
+                switch (r.sectorId) {
+                    case 1:
+                        sector='Bronze'
+                        break;
+                    case 2:
+                        sector='Platinum'
+                        break;
+                    case 3:
+                        sector='Gold'
+                        break;
+                    case 4:
+                        sector='Silver'
+                        break;
+                    default:
+                        break;
+                    }
                 qr= await QRCode.toDataURL(process.env.DOMAIN+'/check/'+seat.uuid)
                 let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
@@ -36,16 +52,18 @@ async function createTickets(){
                 doc.image(qr, 420,85,{ height:75, width:75,
                 })
                 .fontSize(15) 
+                    .text(sector, 264, 63)
                     .text(seat.row, 185, 85)
                     .text(seat.col, 332, 85)
                     .text(seat.price, 190, 113)
-                    .text(datestring, 327, 149)
+                    .text(datestring, 327, 146)
                     .fontSize(10)
                     .save()
                     .rotate(270, {origin: [90, 140]})
                     .text(seat.row, 80,137)
                     .text(seat.col, 140,137)
                     .text(seat.price, 194,137)
+                    .text(sector, 130, 147)
                     .restore()
                 doc.end()
             }
