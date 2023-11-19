@@ -123,7 +123,7 @@ class Manager{
                 doc.image(qr, 420,85,{ height:75, width:75,
                 })
                 .fontSize(15) 
-                    .text(sector,254,41) //264, 63)
+                    .text(sector,254,31) //264, 63)
                     .text(seat.email,264, 63)
                     .text(row, 185, 85)
                     .text(seat.col, 332, 85)
@@ -135,7 +135,7 @@ class Manager{
                     .text(row, 80,137)
                     .text(seat.col, 140,137)
                     .text(seat.price, 194,137)
-                    .text(sector, 130, 147)
+                    .text(sector, 130, 151)
                     .restore()
                 doc.end()
             const mailOptions = {

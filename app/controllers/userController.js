@@ -65,13 +65,13 @@ class Manager{
             if(!re.test(wallet))
                 return res.status(401).send({error:'Введите валидный адрес кошелька'}) */
             let user = await User.findOne({where:{email}})
-            
+            console.log(user)
             if(!user)
                 return res.status(401).send({error:'Такого email не существует'})
             
             if(user.password==password){
-                const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '360000s' });
-                return res.cookie('user',token, { maxAge: 900000, httpOnly: true }).send(user)
+                const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '3600000s' });
+                return res.cookie('user',token, { maxAge: 900000}).send({token})
             }else{
                 return res.status(404).send({error:'Неверный пароль'})
             }

@@ -21,7 +21,6 @@ class Auth{
 
         const token = req.cookies.user
         if (token == null) return res.sendStatus(401)
-
         await jwt.verify(token, process.env.TOKEN_SECRET, async(err, user) => {
             console.log(err)
       
@@ -29,6 +28,7 @@ class Auth{
             let exists = await User.findOne({where:{id:user.id}})
             if(exists){
                 req.user = exists
+               
                 next()
             }else{
                 return res.sendStatus(403)

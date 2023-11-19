@@ -15,10 +15,12 @@ $('#loginForm').on('submit',async(e)=>{
         },
         body:JSON.stringify(user)
     })
+    let msg = await response.json()
     if(response.ok){
+        
         window.location.href="/admin"
     }else{
-        let msg = await response.json()
+       
         return $('#error').text(msg.error)
     }
 
