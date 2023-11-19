@@ -4,6 +4,7 @@ const seatRouter = express.Router();
 const mw = require('../middleware/auth.js')
 seatRouter.get("/requests", mw.isAuth, seatController.showRequests);
 seatRouter.get("/booked", mw.isAuth, seatController.showBooked);
+seatRouter.get("/list", seatController.getList);
 seatRouter.get('/:uuid', seatController.getPlace)
 seatRouter.get("/", seatController.getAll);
 

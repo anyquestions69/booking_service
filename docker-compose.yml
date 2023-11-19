@@ -14,6 +14,7 @@ services:
       - '3000'
     volumes:
       - ./app/tickets:/opt/server/tickets
+      - ./app/tables:/opt/server/tables
     depends_on:
       - db
     command: npm run start

@@ -4,6 +4,9 @@ const QRCode = require('qrcode');
 const { v4: uuid } = require('uuid');
 const PDFDocument = require('pdfkit');
 const fs=require('fs')
+const bwipjs = require('bwip-js');
+
+
 
 const getPagingData = (data, page, limit) => {
     const { count: totalItems, rows: rows } = data;
@@ -12,67 +15,77 @@ const getPagingData = (data, page, limit) => {
   
     return { totalItems:totalItems.length, rows, totalPages, currentPage };
   };
+
 async function createTickets(){
     let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
     let date = new Date(event.date)
     var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
     const directory = __dirname+'/../tickets';
     let qr =''
-        fs.readdir(directory, async (err, files) => {
-            if (err) throw err;
+    fs.readdir(directory, async (err, files) => {
+        if (err) throw err;
 
-            for (const file of files) {
-                if (file !== '.gitkeep'){
+        for (const file of files) {
+            if (file !== '.gitkeep'){
                 fs.unlink(directory+'/'+ file, async (err) => {
                 if (err) throw err;
                 });
             }
-            }
-            let seats = await Seat.findAll({where:{active:true}})
-            for(let seat of seats ){
-                let sector=''
-                switch (seat.sectorId) {
-                    case 1:
-                        sector='Bronze'
-                        break;
-                    case 2:
-                        sector='Platinum'
-                        break;
-                    case 3:
-                        sector='Gold'
-                        break;
-                    case 4:
-                        sector='Silver'
-                        break;
-                    default:
-                        break;
-                    }
-                qr= await QRCode.toDataURL(process.env.DOMAIN+'/check/'+seat.uuid)
-                let doc = new PDFDocument({size: 'A4'});
-                doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                doc.image(qr, 420,85,{ height:75, width:75,
+        }
+        let seats = await Seat.findAll({where:{active:true}})
+        for(let seat of seats ){
+            let sector=''
+            switch (seat.sectorId) {
+                case 1:
+                    sector='Bronze'
+                    break;
+                case 2:
+                    sector='Platinum'
+                    break;
+                case 3:
+                    sector='Gold'
+                    break;
+                case 4:
+                    sector='Silver'
+                    break;
+                default:
+                    break;
+                }
+              
+                
+                if (err) throw err;
+                
+                let bc = await bwipjs.toBuffer({
+                    bcid:        'code128',       // Barcode type
+                    text:        seat.uuid,    // Text to encode
                 })
-                .fontSize(15) 
-                    .text(sector,254,31) //264, 63)
-                    .text(seat.row, 185, 85)
-                    .text(seat.col, 332, 85)
-                    .text(seat.price, 190, 113)
-                    .text(datestring, 327, 146)
-                    .fontSize(10)
-                    .save()
-                    .rotate(270, {origin: [90, 140]})
-                    .text(seat.row, 80,137)
-                    .text(seat.col, 140,137)
-                    .text(seat.price, 194,137)
-                    .text(sector, 130, 151)
-                    .restore()
-                doc.end()
+                    let doc = new PDFDocument({size: 'A4'});
+                    doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+                    doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+                   
+                    doc.image('data:image/png;base64,'+bc.toString('base64'), 420,85,{ height:20})
+                    .fontSize(15) 
+                        .text(sector,254,31) //264, 63)
+                        .text(seat.row, 185, 85)
+                        .text(seat.col, 332, 85)
+                        .text(seat.price, 190, 113)
+                        .text(datestring, 327, 146)
+                        .fontSize(10)
+                        .save()
+                        .rotate(270, {origin: [90, 140]})
+                        .text(seat.row, 80,137)
+                        .text(seat.col, 140,137)
+                        .text(seat.price, 194,137)
+                        .text(sector, 130, 151)
+                        .restore() 
+                    doc.end()
                
-            }
-        })
-    
-    
+               
+            
+        }
+        
+    })
+   
 }
 async function createSeats(body, eventId){
     let {bronze, silver, gold, platinum} = body

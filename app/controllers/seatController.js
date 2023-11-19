@@ -4,6 +4,7 @@ const { createTransport } = require('nodemailer');
 const QRCode = require('qrcode');
 const PDFDocument = require('pdfkit');
 const fs=require('fs')
+//const bwipjs = require('bwip-js');
 const transporter = createTransport({
     host: process.env.SMTP_SERVER,
     port:587,
@@ -77,6 +78,44 @@ class Manager{
             return res.send({error:"Unhandled error"})
         }
         
+    }
+    async getList(req,res){
+        let csv=''
+        let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
+        let date = new Date(event.date)
+        var filename = date.getFullYear()+('0' +(date.getMonth()+1)).slice(-2)+('0' + date.getDate()).slice(-2) +event.name
+        let seats = await Seat.findAll({where:{active:true}})
+        let qr=''
+        for(let seat of seats ){
+            let sector=''
+            switch (seat.sectorId) {
+                case 1:
+                    sector='Bronze'
+                    break;
+                case 2:
+                    sector='Platinum'
+                    break;
+                case 3:
+                    sector='Gold'
+                    break;
+                case 4:
+                    sector='Silver'
+                    break;
+                default:
+                    break;
+                }
+                let bc = await bwipjs.toBuffer({
+                    bcid:        'code128',       // Barcode type
+                    text:        seat.uuid,    // Text to encode
+                })
+           
+            let segment ='Партер'
+            csv+=bc.toString()+','+segment+','+sector+','+seat.row+','+seat.col+','+seat.price+'\n';
+        }
+        fs.writeFile(__dirname+'/../tables/'+filename+'.csv',csv,()=>{
+            return res.send(csv)
+        })
+       
     }
     async bookOne(req,res){
         try{
