@@ -1,9 +1,11 @@
 const {Seat, Event} = require('../models/user')
 const { Op } = require("sequelize");
 const { createTransport } = require('nodemailer');
-const QRCode = require('qrcode');
 const PDFDocument = require('pdfkit');
 const fs=require('fs')
+const bwipjs = require('bwip-js');
+const path = require("path")
+
 const transporter = createTransport({
     host: process.env.SMTP_SERVER,
     port:587,
@@ -107,13 +109,15 @@ class Manager{
             let segment ='Партер'
             csv+=seat.uuid+','+segment+','+sector+','+seat.row+','+seat.col+','+seat.price+'\n';
         }
-        fs.writeFile(__dirname+'/../tables/'+filename+'.csv',csv,()=>{
-            return res.send(csv)
+        fs.writeFile(__dirname+'/../tables/'+filename+'.csv',csv,(file)=>{
+            console.log(file)
+            return res.sendFile(path.join(__dirname, `../tables/${filename}.csv`))
         })
        
     }
     async bookOne(req,res){
         try{
+            let bc
             let {id} = req.body
             //filterInput(req.body) soon
             let seat = await Seat.findOne({where:{id}})
@@ -150,12 +154,17 @@ class Manager{
             let date = new Date(event.date)
             var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
             const directory = __dirname+'/../tickets';
-            let qr= await QRCode.toDataURL(process.env.DOMAIN+'/check/'+seat.uuid)
+            bc = await bwipjs.toBuffer({
+                bcid:        'interleaved2of5',     
+                text:        seat.uuid, 
+                includetext: true,  
+                textxalign:  'center',   
+            })
+           
                 let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
                 doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                doc.image(qr, 420,85,{ height:75, width:75,
-                })
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
                 .fontSize(15) 
                     .text(sector,254,31) //264, 63)
                     .text(seat.email,264, 63)
