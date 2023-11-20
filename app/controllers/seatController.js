@@ -86,8 +86,10 @@ class Manager{
         let date = new Date(event.date)
         var filename = date.getFullYear()+('0' +(date.getMonth()+1)).slice(-2)+('0' + date.getDate()).slice(-2) +event.name
         let seats = await Seat.findAll({where:{active:true}})
-        let qr=''
+        
         for(let seat of seats ){
+            let row=-6
+            let segment =''
             let sector=''
             switch (seat.sectorId) {
                 case 1:
@@ -105,9 +107,15 @@ class Manager{
                 default:
                     break;
                 }
-           
-            let segment ='Партер'
-            csv+=seat.uuid+','+segment+','+sector+','+seat.row+','+seat.col+','+seat.price+'\n';
+                row+=seat.row
+            if(row<=0){
+                row+=6
+                segment='Арена'
+            }else{
+                segment='Партер'
+            }
+            
+            csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
         }
         fs.writeFile(__dirname+'/../tables/'+filename+'.csv',csv,(file)=>{
             console.log(file)
@@ -160,6 +168,7 @@ class Manager{
                 includetext: true,  
                 textxalign:  'center',   
             })
+            
            
                 let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 

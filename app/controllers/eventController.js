@@ -19,7 +19,7 @@ async function createTickets(){
     let bc=''
     let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
     let date = new Date(event.date)
-    var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
+    var datestring = ('0' + date.getDate()).slice(-2)+('0' +(date.getMonth()+1)).slice(-2)+date.getFullYear()
     const directory = __dirname+'/../tickets';
    
     fs.readdir(directory, async (err, files) => {
@@ -34,6 +34,8 @@ async function createTickets(){
         }
         let seats = await Seat.findAll({where:{active:true}})
         for(let seat of seats ){
+            let row=-6
+            let segment=''
             let sector=''
             switch (seat.sectorId) {
                 case 1:
@@ -61,26 +63,33 @@ async function createTickets(){
                     includetext: true,  
                     textxalign:  'center',   
                 })
-                    let doc = new PDFDocument({size: 'A4'});
-                    doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                    doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                   
-                    doc.image('data:image/png;base64,'+bc.toString('base64'), 421,85,{ height:66})
-                    .fontSize(15) 
-                        .text(sector,254,31) //264, 63)
-                        .text(seat.row, 185, 85)
-                        .text(seat.col, 332, 85)
-                        .text(seat.price, 190, 113)
-                        .text(datestring, 327, 146)
-                        .fontSize(10)
-                        .save()
-                        .rotate(270, {origin: [90, 140]})
-                        .text(seat.row, 80,137)
-                        .text(seat.col, 140,137)
-                        .text(seat.price, 194,137)
-                        .text(sector, 130, 151)
-                        .restore() 
-                    doc.end()
+                row+=seat.row
+                if(row<=0){
+                    row+=6
+                    segment='Арена'
+                }else{
+                    segment='Партер'
+                }
+                let doc = new PDFDocument({size: 'A4'});
+                doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+                
+                doc.image('data:image/png;base64,'+bc.toString('base64'), 421,85,{ height:66})
+                .fontSize(15) 
+                    .text(sector,254,31) //264, 63)
+                    .text(seat.row, 185, 85)
+                    .text(seat.col, 332, 85)
+                    .text(seat.price, 190, 113)
+                    .text(datestring, 327, 146)
+                    .fontSize(10)
+                    .save()
+                    .rotate(270, {origin: [90, 140]})
+                    .text(row, 80,137)
+                    .text(seat.col, 140,137)
+                    .text(seat.price, 194,137)
+                    .text(sector, 130, 151)
+                    .restore() 
+                doc.end()
                
                
             
