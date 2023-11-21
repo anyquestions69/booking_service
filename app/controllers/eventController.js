@@ -182,7 +182,7 @@ async function createSeats(body, eventId){
         if(i<64){
             arenaSeats.push({row:18, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
-        if(i!=26 && i!=27 && i!= 78 && i!=79){
+        if((i<41||i>64)&&i!=26 && i!=27 && i!= 78 && i!=79){
             arenaSeats.push({row:17, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
     }
@@ -214,7 +214,7 @@ async function createSeats(body, eventId){
         if((i>10&&i<25)||(i>55&&i<70)){
             arenaSeats.push({row:13, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
-        if(i>10&&i<87){
+        if((i>10&&i<18)||(i>37&&i<60)||(i>79&&i<87)){
             arenaSeats.push({row:14, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
         if(i>10&&i<83){
@@ -222,6 +222,9 @@ async function createSeats(body, eventId){
         }
         if(i>10&&i<93&&i!=26&&i!=77){
             arenaSeats.push({row:16, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+        }
+        if(i>40&&i<65){
+            arenaSeats.push({row:17, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
         
     }
@@ -243,6 +246,12 @@ async function createSeats(body, eventId){
         }
         if(i>24&&i<56&&i!=40&&i!=41){
             arenaSeats.push({row:13, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+        }
+        
+    }
+    for(let i=0;i<80;i++){
+        if((i>17&&i<38)||(i>59&&i<80)){
+            arenaSeats.push({row:14, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
     }
     return arenaSeats

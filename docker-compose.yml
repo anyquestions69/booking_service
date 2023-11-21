@@ -49,18 +49,6 @@ services:
       - ./static:/var/www/static
       
     restart: always
-  # pgadmin:
-  #   container_name: pgadmin
-  #   depends_on:
-  #     - db
-  #   image: dpage/pgadmin4
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL:  admin@mail.ru
-  #     PGADMIN_DEFAULT_PASSWORD: aaa
-  #   expose:
-  #     - '80'
-  #   restart: always
-
 
 networks:
   network: {}

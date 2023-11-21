@@ -71,7 +71,7 @@ class Manager{
             
             if(user.password==password){
                 const token = jwt.sign({id:user.id, email:user.email}, process.env.TOKEN_SECRET, { expiresIn: '3600000s' });
-                return res.cookie('user',token, { maxAge: 900000}).send({token})
+                return res.cookie('user',token).send({token})
             }else{
                 return res.status(404).send({error:'Неверный пароль'})
             }

@@ -195,6 +195,12 @@ $('.book-decline').each(function (index, value) {
 }
 showBooked()
 
-/* $('#getList').on('click', async()=>{
+/* $('#getList').on('click', async(e)=>{
+  e.preventDefault()
   let res = await fetch('/api/seat/list')
+  let file = await res.blob()
+  console.log(file)
+  let f = window.URL.createObjectURL(file);
+  console.log(f)
+    window.location.assign(f);
 }) */

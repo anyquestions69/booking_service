@@ -114,12 +114,22 @@ class Manager{
             }else{
                 segment='Партер'
             }
-            
-            csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            let bc = await bwipjs.toBuffer({
+                bcid:        'interleaved2of5',     
+                text:        seat.uuid, 
+                includetext: true,  
+                textxalign:  'center',   
+            })
+            csv+='data:image/png;base64,'+bc.toString('base64')+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
         }
-        fs.writeFile(__dirname+'/../tables/'+filename+'.csv',csv,(file)=>{
-            console.log(file)
-            return res.sendFile(path.join(__dirname, `../tables/${filename}.csv`))
+        let file = path.join(__dirname,`../tables/${filename}.csv`)
+        fs.writeFile(file,csv,()=>{
+            res.set('Content-Disposition',`attachment; filename="${filename}.csv"`).sendFile(file)
+            setTimeout(()=>{fs.unlink(file, async (err) => {
+                if (err) throw err;
+                })}, 
+                20000)
+            
         })
        
     }
