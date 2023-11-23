@@ -37,6 +37,10 @@ class Manager{
         let seats = await Seat.findAll({where:{active:true}})
         return res.send(seats)
     }
+    async getAllWithFilters(req,res){
+        let seats = await Seat.findAll({where:{active:true}})
+        return res.send(seats)
+    }
     async showRequests(req,res){
         let seats = await Seat.findAll({where:{active:true, statusId:2}})
         return res.send(seats)
@@ -234,7 +238,59 @@ class Manager{
             let seat = await Seat.findOne({where:{id}})
             if(!seat)
                 return res.status(400).send({error:'Место указано не верно'})
-            let response = await Seat.update({statusId:1, email:seat.email },{where:{id}})
+            let uid = Math.floor(Math.random() * 10000000000000)
+            let response = await Seat.update({statusId:1, email:'', uuid:uid},{where:{id}})
+            let sector = ''
+            switch (seat.sectorId) {
+              case 1:
+                sector =  'Bronze'
+                break;
+              case 2:
+                sector =  'Platinum'
+                break;
+              case 3:
+              sector =  'Gold'
+                break;
+              case 4:
+              sector =  'Silver'
+                break;
+              default:
+                break;
+            }
+            row+=seat.row
+            if(row<=0){
+                row+=6
+            }
+            
+            const directory = __dirname+'/../tickets';
+            let bc = await bwipjs.toBuffer({
+                bcid:        'interleaved2of5',     
+                text:        uid, 
+                includetext: true,  
+                textxalign:  'center',   
+            }) 
+            fs.unlink(directory+'/'+seat.uuid+'.pdf', async (err) => {
+                if (err) throw err;
+                })
+            let doc = new PDFDocument({size: 'A4'});
+                doc.pipe(fs.createWriteStream(directory+'/'+uid+'.pdf')); 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
+                .fontSize(15) 
+                    .text(sector,254,31) //264, 63)
+                    .text(row, 185, 85)
+                    .text(seat.col, 332, 85)
+                    .text(seat.price, 190, 113)
+                    .text(datestring, 327, 146)
+                    .fontSize(10)
+                    .save()
+                    .rotate(270, {origin: [90, 140]})
+                    .text(row, 80,137)
+                    .text(seat.col, 140,137)
+                    .text(seat.price, 194,137)
+                    .text(sector, 130, 151)
+                    .restore()
+                doc.end()
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
                 to: seat.email,
@@ -314,6 +370,48 @@ class Manager{
             console.log(e)
             return res.send({error:"Unhandled error"})
         }
+    }
+    async changeEmail(req,res){
+        let {id} = req.params
+        let {email} = req.body
+        let response = await Seat.update({email },{where:{id}})
+        return res.send(response)
+    }
+    async downloadTicket(req,res){
+        let {id} = req.params
+        let seat = await Seat.findOne({where:{id}})
+        let file = path.join(__dirname,`../tickets/${seat.uuid}.pdf`) 
+        return res.set('Content-Disposition',`attachment; filename="ticket.pdf"`).sendFile(file)
+    }
+    async sendAgain(req,res){
+        let bc
+            let {id} = req.body
+            //filterInput(req.body) soon
+            let seat = await Seat.findOne({where:{id}})
+            let row=-6
+            if(!seat)
+                return res.status(400).send({error:'Место указано не верно'})
+            const mailOptions = {
+                from: process.env.SMTP_MAIL,
+                to: seat.email,
+                subject: `Бронь места`,
+                attachments: [
+                    {   // file on disk as an attachment
+                        filename: 'ticket.pdf',
+                        path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
+                    }],
+                text: `<h4>Ваш билет</h4>
+                        `
+            };
+            
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            return res.send({res:"Билет продублирован на почту"})
     }
     
 }
