@@ -38,7 +38,20 @@ class Manager{
         return res.send(seats)
     }
     async getAllWithFilters(req,res){
-        let seats = await Seat.findAll({where:{active:true}})
+        let {segment, row, order} = req.body
+        let rowQuery
+        if(segment==1){
+            rowQuery={[Op.gt]: 6}
+        }else if(segment==2){
+            rowQuery={[Op.lte]: 6}
+        }
+        let seats = await Seat.findAll({where:{
+            active:true,
+            row:{
+
+            }
+            
+        }})
         return res.send(seats)
     }
     async showRequests(req,res){
