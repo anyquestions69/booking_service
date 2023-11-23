@@ -182,7 +182,7 @@ async function createSeats(body, eventId){
         if(i<64){
             arenaSeats.push({row:18, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
-        if((i<41||i>64)&&i!=26 && i!=27 && i!= 78 && i!=79){
+        if((i<41||i>64)&&(i<9||i>18)&&(i<87||i>96)&&i!=26 && i!=27 && i!= 78 && i!=79){
             arenaSeats.push({row:17, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
     }
@@ -223,10 +223,13 @@ async function createSeats(body, eventId){
         if(i>10&&i<93&&i!=26&&i!=77){
             arenaSeats.push({row:16, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
-        if(i>40&&i<65){
+        if((i>40&&i<65)||(i>8&&i<19)||(i>86&&i<97)){
             arenaSeats.push({row:17, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
         
+    }
+    for(let i =93;i<97;i++){
+        arenaSeats.push({row:17, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
     }
     for(let i=9;i<56;i++){
         if(i<21||(i>35&&i<48)){
