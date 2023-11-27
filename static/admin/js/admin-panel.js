@@ -5,7 +5,12 @@ $(document).ready(async function () {
         window.location.href="/admin/login"
     }
 });
-
+$('#previous').on('click',async ()=>{
+    let res = await fetch('/api/event/previous')
+    if(res.ok){
+        window.location.href="/admin"
+    }
+})
 $('#addForm').on('submit', async (e)=>{
     e.preventDefault()
     

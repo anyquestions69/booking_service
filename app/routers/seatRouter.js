@@ -5,7 +5,9 @@ const mw = require('../middleware/auth.js')
 seatRouter.get("/requests", mw.isAuth, seatController.showRequests);
 seatRouter.get("/booked", mw.isAuth, seatController.showBooked);
 seatRouter.get("/list", seatController.getList);
-seatRouter.post('/download/:id', mw.isAuth, seatController.downloadTicket)
+seatRouter.get('/filter', mw.isAuth, seatController.getAllWithFilters)
+seatRouter.get('/download/:id', mw.isAuth, seatController.downloadTicket)
+seatRouter.get('/resend/:id', mw.isAuth, seatController.resend)
 seatRouter.get('/:uuid', seatController.getPlace)
 seatRouter.get("/", seatController.getAll);
 

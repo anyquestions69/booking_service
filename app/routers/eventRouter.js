@@ -4,6 +4,7 @@ const eventRouter = express.Router();
 const mw = require('../middleware/auth.js')
 
 eventRouter.get("/", mw.isAuth,eventController.getAll);
+eventRouter.get("/previous", mw.isAuth, eventController.previous);
 eventRouter.get("/:eventId", mw.isAuth, eventController.getOne);
 eventRouter.post('/', mw.isAuth, eventController.addOne)
 eventRouter.delete('/:eventId', mw.isAuth, eventController.deleteOne)

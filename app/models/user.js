@@ -47,6 +47,37 @@ const User = sequelize.define("user", {
       type:Sequelize.TEXT
     }
   });
+  const Balcony = sequelize.define("balcony", {
+    id: {
+      type: Sequelize.BIGINT,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    row: {
+      type: Sequelize.INTEGER,
+    },
+    col: {
+      type: Sequelize.INTEGER,
+    },
+    email: {
+      type: Sequelize.STRING,
+      allowNull:true
+    },
+    price:{
+      type: Sequelize.FLOAT
+    },
+    active:{
+      type:Sequelize.BOOLEAN,
+      default:true
+    },
+    uuid:{
+      type:Sequelize.STRING
+    },
+    qr:{
+      type:Sequelize.TEXT
+    }
+  });
   const Event = sequelize.define("event", {
     id: {
       type: Sequelize.BIGINT,

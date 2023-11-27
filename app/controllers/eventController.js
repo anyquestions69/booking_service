@@ -315,6 +315,18 @@ class Manager{
        createTickets()
         return res.send(event)
     }
+    async previous(req,res){
+        let event = await Event.findOne({order: [ [ 'id', 'DESC' ]],})
+        if(event){
+        await Seat.update({active:false},{where:{active:true}})
+        await Seat.update({active:true},{where:{eventId:parseInt(event.id-1)}})
+        await Seat.destroy({where:{eventId:event.id}})
+        await Event.destroy({where:{id:event.id}})
+        return res.send({success:'Откат успешно выполнен', eventId:parseInt(event.id-1)})
+        }else{
+            return res.send({success:''})
+        }
+    }
     async deleteOne(req,res){
         let {eventId}= req.params
         let event = await Event.destroy({id:eventId})

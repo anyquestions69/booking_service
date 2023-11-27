@@ -43,6 +43,11 @@
               Список билетов
             </a>
           </li>
+          <li>
+            <div class="nav-link" id="previous">
+             Откат
+            </div>
+          </li>
         </ul>
       </nav>
         <div class="container"  >
@@ -50,6 +55,40 @@
               <div   class="d-md-flex py-4 gap-1">
                 <div class="col">
                   <div class="h3 mb-3 text-center">Все заявки</div>
+                  <div class="filters">
+                    <div class="input-group mb-1">
+                      <label class="input-group-text" for="order">Сортировать...</label>
+                      <select class="form-select filter" id="order">
+                        <option selected value="1">Вниз</option>
+                        <option value="2">Вверх</option>
+                      </select>
+                      <select class="form-select filter" id="segment">
+                        <option selected value="0">Сектор</option>
+                        <option  value="1">Арена</option>
+                        <option value="2">Партер</option>
+                      </select>
+                      <input type="number" max="18" min="1" class="form-control filter" id="row" placeholder="Ряд">
+                    </div>
+                    <div class="input-group mb-1 text-center" id="checks">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input filter" type="checkbox" id="brcheck" value="1">
+                        <label class="form-check-label" for="brcheck">Bronze</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input filter" type="checkbox" id="sicheck" value="4">
+                        <label class="form-check-label" for="sicheck">Silver</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input filter" type="checkbox" id="gocheck" value="3" >
+                        <label class="form-check-label" for="gocheck">Gold</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input filter" type="checkbox" id="plcheck" value="2" >
+                        <label class="form-check-label" for="plcheck">Platinum</label>
+                      </div>
+                    </div>
+                    
+                  </div>
                   <div class="list-group  mx-auto" id="reqList">
                        
                   </div>

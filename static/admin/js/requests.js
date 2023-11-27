@@ -5,6 +5,12 @@ $(document).ready(async function () {
       window.location.href="/admin/login"
   }
 });
+$('#previous').on('click',async ()=>{
+  let res = await fetch('/api/event/previous')
+  if(res.ok){
+      window.location.href="/admin"
+  }
+})
 function show(){
     $('#reqList').empty()
     fetch('/api/seat/requests',{
@@ -100,12 +106,14 @@ function show(){
      })
      let resText = await res.json()
      show()
+     showBooked()
     })
   })
 })
     
 }
 show()
+
 
 function showBooked(){
   $('#bookList').empty()
@@ -164,9 +172,13 @@ function showBooked(){
           <div class="opacity-50 text-nowrap">${day}.${month}.${year}</div>
           </div>
           <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
-          
+          <div class='mb-1'>
+          <a href='/api/seat/download/${r.id}' class=" p-1 mb-0 btn-info text-small btn btn-10 text-white book-download ">Скачать билет</a>
+            <div data-id=${r.id} class=" p-1 mb-0 btn-warning text-small btn btn-10 text-white book-resend ">Отправить повторно</div>
+            </div><div>
               <div data-id=${r.id} class=" p-1 mb-0 btn-danger text-small btn btn-10 text-white book-decline ">Отменить</div>
-            
+              <div data-id=${r.id} class=" p-1 mb-0 btn-warning text-small btn btn-10 text-white book-changeEmail ">Изменить email</div>
+            </div>
          
         </div>
           `)
@@ -175,32 +187,52 @@ function showBooked(){
     }
 }).then(fin=>{
 
-$('.book-decline').each(function (index, value) { 
-  $(this).on('click', async function(){
-    let id   = $(this).data('id')
-   console.log(id)
-   let res = await fetch('/api/seat/decline', {
-    method:'POST',
-    body:JSON.stringify({id:id}),
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    }
-   })
-   let resText = await res.json()
-   showBooked()
+  $('.book-decline').each(function (index, value) { 
+    $(this).on('click', async function(){
+      let id   = $(this).data('id')
+    console.log(id)
+    let res = await fetch('/api/seat/decline', {
+      method:'POST',
+      body:JSON.stringify({id:id}),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+    })
+    let resText = await res.json()
+    showBooked()
+    show()
+    })
   })
+  
+  $('.book-resend').each(function (index, value) { 
+    $(this).on('click', async function(){
+      let id   = $(this).data('id')
+    let res = await fetch('/api/seat/resend/'+id)
+    let resText = await res.json()
+    console.log(resText)
+    })
 })
 })
   
 }
 showBooked()
 
-/* $('#getList').on('click', async(e)=>{
-  e.preventDefault()
-  let res = await fetch('/api/seat/list')
-  let file = await res.blob()
-  console.log(file)
-  let f = window.URL.createObjectURL(file);
-  console.log(f)
-    window.location.assign(f);
-}) */
+$('.filter').on('input', async function(e){
+  let order
+  let segment
+  let row
+    order=$('#order').val()
+  
+    segment=$('#segment').val()
+  if($('#row').val()){
+    row=$('#row').val()
+  }
+  var status = [];
+  $('#checks input:checked').each(function() {
+      status.push($(this).val());
+  });
+  console.log(order)
+  console.log(segment)
+  console.log(row)
+  console.log(status)
+})

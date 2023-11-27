@@ -38,20 +38,40 @@ class Manager{
         return res.send(seats)
     }
     async getAllWithFilters(req,res){
-        let {segment, row, order} = req.body
+        let {segment, row, order, sectorId} = req.query
         let rowQuery
-        if(segment==1){
-            rowQuery={[Op.gt]: 6}
-        }else if(segment==2){
-            rowQuery={[Op.lte]: 6}
+        let orderQuery
+        if(segment==2){
+            if(row){
+                row+=6
+                rowQuery=row
+            }else{
+                rowQuery={[Op.gt]: 6}
+            }
+        }else if(segment==1){
+            if(row){
+                rowQuery=row
+            }else{
+                rowQuery={[Op.lte]: 6}
+            }
+           
+        }
+        if(!sectorId){
+            sectorId=[1,2,3,4]
+        }
+        if(order==2){
+            orderQuery=[['row', 'DESC']]
+        }else{
+            orderQuery=[['row', 'ASC']]
         }
         let seats = await Seat.findAll({where:{
             active:true,
-            row:{
-
-            }
-            
-        }})
+            row:rowQuery,
+            sectorId: {
+                [Op.or]: sectorId
+              }
+        }, order: orderQuery
+        })
         return res.send(seats)
     }
     async showRequests(req,res){
@@ -396,12 +416,11 @@ class Manager{
         let file = path.join(__dirname,`../tickets/${seat.uuid}.pdf`) 
         return res.set('Content-Disposition',`attachment; filename="ticket.pdf"`).sendFile(file)
     }
-    async sendAgain(req,res){
-        let bc
-            let {id} = req.body
-            //filterInput(req.body) soon
+    async resend(req,res){
+       
+            let {id} = req.params
             let seat = await Seat.findOne({where:{id}})
-            let row=-6
+           
             if(!seat)
                 return res.status(400).send({error:'Место указано не верно'})
             const mailOptions = {
