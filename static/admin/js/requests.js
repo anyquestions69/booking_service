@@ -4,23 +4,26 @@ $(document).ready(async function () {
       console.log('Not authorized')
       window.location.href="/admin/login"
   }
+
+  let result = await fetch('/api/seat/requests',{
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    }
+  })
+  let res = await result.json()
+  show(res)
+  $('#previous').on('click',async ()=>{
+    let res = await fetch('/api/event/previous')
+    if(res.ok){
+        window.location.href="/admin"
+    }
+  })
 });
-$('#previous').on('click',async ()=>{
-  let res = await fetch('/api/event/previous')
-  if(res.ok){
-      window.location.href="/admin"
-  }
-})
-function show(){
+
+async function show(res){
     $('#reqList').empty()
-    fetch('/api/seat/requests',{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        }
-    }).then(async (response)=> {
-      if(response.ok){    
-      let res = await response.json()
+    
       let i=1
       for(let r of res){
         if(r.statusId==2){
@@ -74,25 +77,9 @@ function show(){
           </div>
             `)
             i++
-        }
-      }
-}}).then(fin=>{
-  $('.request-accept').each(function (index, value) { 
-  $(this).on('click', async function(){
-    let id   = $(this).data('id')
-   console.log(id)
-   let res = await fetch('/api/seat/', {
-    method:'POST',
-    body:JSON.stringify({id:id}),
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    }
-   })
-   let resText = await res.json()
-   console.log(resText)
-   show()
-  })
-})
+            }
+            
+}
   $('.request-decline').each(function (index, value) { 
     $(this).on('click', async function(){
       let id   = $(this).data('id')
@@ -105,14 +92,12 @@ function show(){
       }
      })
      let resText = await res.json()
-     show()
+     show(resText)
      showBooked()
     })
   })
-})
-    
 }
-show()
+    
 
 
 function showBooked(){
@@ -224,16 +209,28 @@ $('.filter').on('input', async function(e){
     order=$('#order').val()
   
     segment=$('#segment').val()
-  if($('#row').val()!=undefined){
+  if($('#row').val()!=''){
     row=$('#row').val()
+   
   }
   var status = [];
   $('#checks input:checked').each(function() {
       status.push($(this).val());
   });
-  console.log(`/api/seat/filter?order=${order}&segment=${segment}&row=${row}&status=${status}`)
+
+  let str = `/api/seat/filter?order=${order}&segment=${segment}&`
+  if(row){
+    str+=`row=${row}&`
+  }
+  for(let s of status){
+    str+=`sectorId=${s}&`
+  }
+  console.log(str)
   
-  let response = await fetch(`/api/seat/filter?order=${order}&segment=${segment}&row=${row}&status=${status}`)
+  let response = await fetch(str)
   let res = await response.json()
   console.log(res)
+  if(response.ok){
+    show(res)
+  }
 })

@@ -41,6 +41,13 @@ class Manager{
         let {segment, row, order, sectorId} = req.query
         let rowQuery
         let orderQuery
+
+        if(Array.isArray(sectorId)){
+            for(let el of sectorId){
+                el=parseInt(el)
+            }
+        }
+        
         if(segment==2){
             if(row){
                 row+=6
@@ -55,6 +62,8 @@ class Manager{
                 rowQuery={[Op.lte]: 6}
             }
            
+        }else{
+            rowQuery={[Op.gte]: 0}
         }
         if(!sectorId){
             sectorId=[1,2,3,4]
@@ -67,11 +76,30 @@ class Manager{
         let seats = await Seat.findAll({where:{
             active:true,
             row:rowQuery,
-            sectorId: {
-                [Op.or]: sectorId
-              }
+           
         }, order: orderQuery
         })
+        if(sectorId){
+            if(sectorId.length>1){
+                seats = await Seat.findAll({where:{
+                    active:true,
+                    row:rowQuery,
+                    sectorId: {
+                        [Op.or]: sectorId
+                      }
+                }, order: orderQuery
+                })
+            }else{
+                 seats= await Seat.findAll({where:{
+                    active:true,
+                    row:rowQuery,
+                    sectorId: sectorId[0]
+                }, order: orderQuery
+                })
+            }
+        }
+        
+        
         return res.send(seats)
     }
     async showRequests(req,res){
