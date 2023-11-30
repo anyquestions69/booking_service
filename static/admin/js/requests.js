@@ -13,12 +13,7 @@ $(document).ready(async function () {
   })
   let res = await result.json()
   show(res)
-  $('#previous').on('click',async ()=>{
-    let res = await fetch('/api/event/previous')
-    if(res.ok){
-        window.location.href="/admin"
-    }
-  })
+ 
 });
 
 async function show(res){

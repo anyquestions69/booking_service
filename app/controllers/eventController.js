@@ -315,7 +315,7 @@ class Manager{
        createTickets()
         return res.send(event)
     }
-    async previous(req,res){
+    /* async previous(req,res){
         let event = await Seat.findOne({where: {active:true}})
         if(event){
         await Seat.update({active:false},{where:{active:true}})
@@ -324,7 +324,7 @@ class Manager{
         }else{
             return res.send({success:''})
         }
-    }
+    } */ //nahui 
     async deleteOne(req,res){
         let {eventId}= req.params
         let event = await Event.destroy({id:eventId})
