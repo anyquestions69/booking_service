@@ -56,8 +56,8 @@ services:
       - db
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: a@mail.cu
-      PGADMIN_DEFAULT_PASSWORD: 0666
+      PGADMIN_DEFAULT_EMAIL: admin@mail.ru
+      PGADMIN_DEFAULT_PASSWORD: aaa000
     expose:
       - '80'
     restart: always

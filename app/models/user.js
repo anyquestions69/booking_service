@@ -47,7 +47,7 @@ const User = sequelize.define("user", {
       type:Sequelize.TEXT
     }
   });
-  const Balcony = sequelize.define("balcony", {
+  const Balcon = sequelize.define("balcon", {
     id: {
       type: Sequelize.BIGINT,
       autoIncrement: true,
@@ -108,9 +108,12 @@ const User = sequelize.define("user", {
   })
 
 Event.hasMany(Seat, { onDelete: "cascade" })
+Event.hasMany(Balcon, { onDelete: "cascade" })
 
 Sector.hasMany(Seat, { onDelete: "cascade" })
+Sector.hasMany(Balcon, { onDelete: "cascade" })
 Status.hasMany(Seat, { onDelete: "cascade"})
+Status.hasMany(Balcon, { onDelete: "cascade"})
 
 const sectors = [{name:"Bronze"},{name:"Silver"}, {name:"Gold"}, {name:"Platinum"}]
 const status = [{name: "Свободно"}, {name: "Ожидает подтверждения"}, {name:"Забронирован"}]
@@ -126,4 +129,4 @@ sequelize.sync({force: false}).then(async function (result){
 })
 .catch(err=> console.log(err));
 
-module.exports = { User, Seat, Event}
+module.exports = { User, Seat, Event, Balcon}

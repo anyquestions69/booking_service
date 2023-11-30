@@ -1,4 +1,4 @@
-const {Seat, Event} = require('../models/user')
+const {Seat, Event, Balcon} = require('../models/user')
 const { Op } = require("sequelize");
 const { createTransport } = require('nodemailer');
 const PDFDocument = require('pdfkit');
@@ -35,6 +35,10 @@ class Manager{
    
     async getAll(req,res){
         let seats = await Seat.findAll({where:{active:true}})
+        return res.send(seats)
+    }
+    async getBalcon(req,res){
+        let seats = await Balcon.findAll({where:{active:true}})
         return res.send(seats)
     }
     async getAllWithFilters(req,res){
@@ -180,13 +184,7 @@ class Manager{
             }else{
                 segment='Партер'
             }
-            let bc = await bwipjs.toBuffer({
-                bcid:        'interleaved2of5',     
-                text:        seat.uuid, 
-                includetext: true,  
-                textxalign:  'center',   
-            })
-            csv+='data:image/png;base64,'+bc.toString('base64')+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
         }
         let file = path.join(__dirname,`../tables/${filename}.csv`)
         fs.writeFile(file,csv,()=>{

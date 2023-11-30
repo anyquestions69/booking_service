@@ -1,4 +1,4 @@
-const {Event, Seat} = require('../models/user')
+const {Event, Seat, Balcon} = require('../models/user')
 const Sequelize = require('sequelize')
 const { v4: uuid } = require('uuid');
 const PDFDocument = require('pdfkit');
@@ -252,13 +252,41 @@ async function createSeats(body, eventId){
         }
         
     }
-    for(let i=0;i<80;i++){
+    for(let i=1;i<80;i++){
         if((i>17&&i<38)||(i>59&&i<80)){
             arenaSeats.push({row:14, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
         }
     }
     return arenaSeats
    
+}
+
+async function createBalcon(body, eventId){
+    let {bronze, silver, gold, platinum} = body
+    let balkonSeats=[]
+    let id=''
+    let qr=''
+    for(let i=1;i<82;i++){
+        balkonSeats.push({row:1, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+
+        if((i<81)){
+            balkonSeats.push({row:2, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+        }
+    }
+    for(let i=1;i<80;i++){
+        balkonSeats.push({row:3, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+
+        if((i<66)){
+            balkonSeats.push({row:4, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+        }
+        if((i<56)){
+            balkonSeats.push({row:5, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+        }
+        if((i<41)){
+            balkonSeats.push({row:6, col:i, statusId:1, sectorId:1, price:bronze, eventId,active:true, uuid:Math.floor(Math.random() * 10000000000000)})
+        }
+    }
+    return balkonSeats
 }
 
 class Manager{
@@ -311,7 +339,9 @@ class Manager{
         await Seat.update({active:false},{where:{active:true}})
        
         let seats  = await createSeats(req.body, event.id)
+        let balcon = await createBalcon(req.body, event.id)
         let result = await Seat.bulkCreate(seats, { validate: true })
+        let balconRes = await Balcon.bulkCreate(balcon, { validate: true })
        createTickets()
         return res.send(event)
     }
