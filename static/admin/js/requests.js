@@ -224,15 +224,16 @@ $('.filter').on('input', async function(e){
     order=$('#order').val()
   
     segment=$('#segment').val()
-  if($('#row').val()){
+  if($('#row').val()!=undefined){
     row=$('#row').val()
   }
   var status = [];
   $('#checks input:checked').each(function() {
       status.push($(this).val());
   });
-  console.log(order)
-  console.log(segment)
-  console.log(row)
-  console.log(status)
+  console.log(`/api/seat/filter?order=${order}&segment=${segment}&row=${row}&status=${status}`)
+  
+  let response = await fetch(`/api/seat/filter?order=${order}&segment=${segment}&row=${row}&status=${status}`)
+  let res = await response.json()
+  console.log(res)
 })

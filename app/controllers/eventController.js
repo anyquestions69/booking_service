@@ -316,12 +316,10 @@ class Manager{
         return res.send(event)
     }
     async previous(req,res){
-        let event = await Event.findOne({order: [ [ 'id', 'DESC' ]],})
+        let event = await Seat.findOne({where: {active:true}})
         if(event){
         await Seat.update({active:false},{where:{active:true}})
-        await Seat.update({active:true},{where:{eventId:parseInt(event.id-1)}})
-        await Seat.destroy({where:{eventId:event.id}})
-        await Event.destroy({where:{id:event.id}})
+        await Seat.update({active:true},{where:{eventId:parseInt(event.eventId-1)}})
         return res.send({success:'Откат успешно выполнен', eventId:parseInt(event.id-1)})
         }else{
             return res.send({success:''})

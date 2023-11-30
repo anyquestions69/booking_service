@@ -119,7 +119,8 @@ class Manager{
     }
     async getList(req,res){
         let csv=''
-        let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
+        let activeSeat = await Seat.findOne({where:{active:true}})
+        let event = await Event.findOne({where: {id:activeSeat.eventId}})
         let date = new Date(event.date)
         var filename = date.getFullYear()+('0' +(date.getMonth()+1)).slice(-2)+('0' + date.getDate()).slice(-2) +event.name
         let seats = await Seat.findAll({where:{active:true}})
