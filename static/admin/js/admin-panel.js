@@ -65,29 +65,54 @@ $('#book').on('submit', async (e)=>{
     e.preventDefault()
     let arena=$('#arena').val()
     let row =parseInt($('#row').val())
-    if(arena==2){
-        row+=6
-    }
-    let user = {
-        sectorId:$('#sectorBook').val(),
-        row:row,
-        col:$('#col').val(),
-        email:$('#email').val()
-    }
-    console.log(user)
-    let response = await fetch('/api/seat/request',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body:JSON.stringify(user)
-    })
-    let text = await response.json()
-    
-    if(response.ok){    
-        document.getElementById('frame').contentWindow.location.reload();
+    if(arena==3){
+        let user = {
+            sectorId:$('#sectorBook').val(),
+            row:row,
+            col:$('#col').val(),
+            email:$('#email').val()
+        }
+        console.log(user)
+        let response = await fetch('/api/seat/balcon/request',{
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+            },
+            body:JSON.stringify(user)
+        })
+        let text = await response.json()
         
+        if(response.ok){    
+            document.getElementById('frame').contentWindow.location.reload();
+            
+        }else{
+            $('#error').text(text.error)
+        }
     }else{
-        $('#error').text(text.error)
+        if(arena==2){
+            row+=6
+        }
+        let user = {
+            sectorId:$('#sectorBook').val(),
+            row:row,
+            col:$('#col').val(),
+            email:$('#email').val()
+        }
+        console.log(user)
+        let response = await fetch('/api/seat/request',{
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+            },
+            body:JSON.stringify(user)
+        })
+        let text = await response.json()
+        
+        if(response.ok){    
+            document.getElementById('frame').contentWindow.location.reload();
+            
+        }else{
+            $('#error').text(text.error)
+        }
     }
 })

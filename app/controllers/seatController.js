@@ -290,6 +290,96 @@ class Manager{
             return res.send({error:"Unhandled error"})
         }
     }
+    async bookBalcon(req,res){
+        try{
+            let bc
+            let {id} = req.body
+            //filterInput(req.body) soon
+            let seat = await Balcon.findOne({where:{id}})
+           
+            console.log(seat)
+            if(!seat)
+                return res.status(400).send({error:'Место указано не верно'})
+            if(seat.statusId==3){
+                return res.status(400).send({error:'Место уже занято'})
+            }
+            let response = await Balcon.update({statusId:3, email:seat.email },{where:{id}})
+            let sector = ''
+            switch (seat.sectorId) {
+              case 1:
+                sector =  'Bronze'
+                break;
+              case 2:
+                sector =  'Platinum'
+                break;
+              case 3:
+              sector =  'Gold'
+                break;
+              case 4:
+              sector =  'Silver'
+                break;
+              default:
+                break;
+            }
+            let row=seat.row
+            let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
+            let date = new Date(event.date)
+            var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
+            const directory = __dirname+'/../tickets';
+            bc = await bwipjs.toBuffer({
+                bcid:        'interleaved2of5',     
+                text:        seat.uuid, 
+                includetext: true,  
+                textxalign:  'center',   
+            })
+            
+           
+                let doc = new PDFDocument({size: 'A4'});
+                doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
+                .fontSize(15) 
+                    .text(sector,254,31) //264, 63)
+                    .text(seat.email,264, 63)
+                    .text(row, 185, 85)
+                    .text(seat.col, 332, 85)
+                    .text(seat.price, 190, 113)
+                    .text(datestring, 327, 146)
+                    .fontSize(10)
+                    .save()
+                    .rotate(270, {origin: [90, 140]})
+                    .text(row, 80,137)
+                    .text(seat.col, 140,137)
+                    .text(seat.price, 194,137)
+                    .text(sector, 130, 151)
+                    .restore()
+                doc.end()
+            const mailOptions = {
+                from: process.env.SMTP_MAIL,
+                to: seat.email,
+                subject: `Бронь места`,
+                attachments: [
+                    {   // file on disk as an attachment
+                        filename: 'ticket.pdf',
+                        path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
+                    }],
+                text: `<h4>Ваше место успешно забронировано!</h4>
+                        <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
+            };
+            
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            return res.send({res:"Место успешно забронировано"})
+        }catch(e){
+            console.log(e)
+            return res.send({error:"Unhandled error"})
+        }
+    }
     async declineBooking(req, res){
         try{
             let {id} = req.body
@@ -300,6 +390,88 @@ class Manager{
                 return res.status(400).send({error:'Место указано не верно'})
             let uid = Math.floor(Math.random() * 10000000000000)
             let response = await Seat.update({statusId:1, email:'', uuid:uid},{where:{id}})
+            let sector = ''
+            switch (seat.sectorId) {
+              case 1:
+                sector =  'Bronze'
+                break;
+              case 2:
+                sector =  'Platinum'
+                break;
+              case 3:
+              sector =  'Gold'
+                break;
+              case 4:
+              sector =  'Silver'
+                break;
+              default:
+                break;
+            }
+            row+=seat.row
+            if(row<=0){
+                row+=6
+            }
+            
+            const directory = __dirname+'/../tickets';
+            let bc = await bwipjs.toBuffer({
+                bcid:        'interleaved2of5',     
+                text:        uid, 
+                includetext: true,  
+                textxalign:  'center',   
+            }) 
+            fs.unlink(directory+'/'+seat.uuid+'.pdf', async (err) => {
+                if (err) throw err;
+                })
+            let doc = new PDFDocument({size: 'A4'});
+                doc.pipe(fs.createWriteStream(directory+'/'+uid+'.pdf')); 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
+                .fontSize(15) 
+                    .text(sector,254,31) //264, 63)
+                    .text(row, 185, 85)
+                    .text(seat.col, 332, 85)
+                    .text(seat.price, 190, 113)
+                    .text(datestring, 327, 146)
+                    .fontSize(10)
+                    .save()
+                    .rotate(270, {origin: [90, 140]})
+                    .text(row, 80,137)
+                    .text(seat.col, 140,137)
+                    .text(seat.price, 194,137)
+                    .text(sector, 130, 151)
+                    .restore()
+                doc.end()
+            const mailOptions = {
+                from: process.env.SMTP_MAIL,
+                to: seat.email,
+                subject: `Бронь места отменена`,
+                text: `<h4>Ваш запрос был отклонён менеджером</h4>
+                       `
+            };
+            
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            return res.send({res:"Бронь отменена"})
+        }catch(e){
+            console.log(e)
+            return res.send({error:"Unhandled error"})
+        }
+    }
+    async declineBalcon(req, res){
+        try{
+            let {id} = req.body
+            //filterInput(req.body) soon
+        console.log(req.body)
+            let seat = await Balcon.findOne({where:{id}})
+            if(!seat)
+                return res.status(400).send({error:'Место указано не верно'})
+            let uid = Math.floor(Math.random() * 10000000000000)
+            let response = await Balcon.update({statusId:1, email:'', uuid:uid},{where:{id}})
             let sector = ''
             switch (seat.sectorId) {
               case 1:
@@ -431,10 +603,150 @@ class Manager{
             return res.send({error:"Unhandled error"})
         }
     }
+    async requestBalcon(req,res){
+        try{
+            console.log(req.body)
+            let ticket= req.body
+            let email=ticket.email
+            let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
+            let text = ``
+            let row=0
+            if(!re.test(email))
+                return res.status(400).send({error:'Неверно указан email'})
+            let seat = await Seat.findOne({where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
+            if(!seat)
+                return res.status(404).send({error:'Неверно указано место'})
+            if(seat.statusId!=1)
+                return res.status(404).send({error:'Место уже забронировано'})
+            let response = await Balcon.update({statusId:2, email },{where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
+            switch (ticket.sectorId) {
+            case 1:
+                ticket.sector =  'Bronze'
+                break;
+            case 2:
+                ticket.sector =  'Platinum'
+                break;
+            case 3:
+                ticket.sector =  'Gold'
+                break;
+            case 4:
+                ticket.sector =  'Silver'
+                break;
+            default:
+                break;
+            }
+            row=seat.row
+            text+=`<p>Сектор: ${ticket.sector} Место: ${ticket.col} Ряд: ${row}</p>`
+            
+            const mailOptions = {
+                from: process.env.SMTP_MAIL,
+                to: process.env.ADMIN_EMAIL,//process.env.ADMIN_EMAIL,
+                subject: `Новая заявка на бронирование`,
+                text: text+`<p>email: ${email}</p>`
+            };
+            
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            return res.send({res:"Ожидайте рассмотрения заявки менеджером"})
+        }catch(e){
+            console.log(e)
+            return res.send({error:"Unhandled error"})
+        }
+    }
     async changeEmail(req,res){
         let {id} = req.params
         let {email} = req.body
-        let response = await Seat.update({email },{where:{id}})
+        let result = await Seat.update({email },{where:{id, active:true}})
+       let seat= await Seat.findOne({where:{id:id} })
+        let bc
+        let row=-6
+       
+        
+        let sector = ''
+        switch (seat.sectorId) {
+          case 1:
+            sector =  'Bronze'
+            break;
+          case 2:
+            sector =  'Platinum'
+            break;
+          case 3:
+          sector =  'Gold'
+            break;
+          case 4:
+          sector =  'Silver'
+            break;
+          default:
+            break;
+        }
+        row+=seat.row
+        if(row<=0){
+            row+=6
+        }
+        let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
+        let date = new Date(event.date)
+        var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
+        const directory = __dirname+'/../tickets';
+        bc = await bwipjs.toBuffer({
+            bcid:        'interleaved2of5',     
+            text:        seat.uuid, 
+            includetext: true,  
+            textxalign:  'center',   
+        })
+        
+       
+            let doc = new PDFDocument({size: 'A4'});
+            doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+            doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+            doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
+            .fontSize(15) 
+                .text(sector,254,31) //264, 63)
+                .text(email,264, 63)
+                .text(row, 185, 85)
+                .text(seat.col, 332, 85)
+                .text(seat.price, 190, 113)
+                .text(datestring, 327, 146)
+                .fontSize(10)
+                .save()
+                .rotate(270, {origin: [90, 140]})
+                .text(row, 80,137)
+                .text(seat.col, 140,137)
+                .text(seat.price, 194,137)
+                .text(sector, 130, 151)
+                .restore()
+            doc.end()
+        const mailOptions = {
+            from: process.env.SMTP_MAIL,
+            to: seat.email,
+            subject: `Бронь места`,
+            attachments: [
+                {   // file on disk as an attachment
+                    filename: 'ticket.pdf',
+                    path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
+                }],
+            text: `<h4>Ваше место успешно забронировано!</h4>
+                    <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+        return res.send({res:"Место успешно забронировано"})
+        //return res.send(response)
+    }
+    async changeEmailBalcon(req,res){
+        let {id} = req.params
+        let {email} = req.body
+        let response = await Balcon.update({email },{where:{id}})
         return res.send(response)
     }
     async downloadTicket(req,res){
@@ -472,6 +784,7 @@ class Manager{
             });
             return res.send({res:"Билет продублирован на почту"})
     }
+    
     
 }
 

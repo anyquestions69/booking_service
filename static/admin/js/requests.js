@@ -12,7 +12,43 @@ $(document).ready(async function () {
     }
   })
   let res = await result.json()
-  show(res)
+  show(res).then(r=>{
+   
+  })
+  $('.request-accept').each(function (index, value) { 
+    $(this).on('click', async function(){
+      console.log('clicked')
+      let id   = $(this).data('id')
+     console.log(id)
+     let res = await fetch('/api/seat/', {
+      method:'POST',
+      body:JSON.stringify({id:id}),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+     })
+     let resText = await res.json()
+     show(resText)
+     showBooked()
+    })
+  })
+  $('.request-decline').each(function (index, value) { 
+    $(this).on('click', async function(){
+      console.log('clicked')
+      let id   = $(this).data('id')
+     console.log(id)
+     let res = await fetch('/api/seat/decline', {
+      method:'POST',
+      body:JSON.stringify({id:id}),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+     })
+     let resText = await res.json()
+     show(resText)
+     showBooked()
+    })
+  })
  
 });
 
@@ -75,25 +111,23 @@ async function show(res){
             }
             
 }
-  $('.request-decline').each(function (index, value) { 
-    $(this).on('click', async function(){
-      let id   = $(this).data('id')
-     console.log(id)
-     let res = await fetch('/api/seat/decline', {
-      method:'POST',
-      body:JSON.stringify({id:id}),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-     })
-     let resText = await res.json()
-     show(resText)
-     showBooked()
-    })
-  })
+  
 }
     
+$('#changeEmailForm').on('submit', async function(e){
+  e.preventDefault()
+  let id   = $('#emailText').data('id')
+  let res = await fetch('/api/seat/'+id, {method: 'POST',
+  headers: {
+  'Content-Type': 'application/json;charset=utf-8'
+  },
+  body:JSON.stringify({email:$('#emailText').val()})
+})
 
+  let resText = await res.json()
+  $('#changeEmailForm').css('display', 'none')
+  showBooked()
+})
 
 function showBooked(){
   $('#bookList').empty()
@@ -192,7 +226,15 @@ function showBooked(){
     console.log(resText)
     })
 })
+$('.book-changeEmail').each(function (index, value) { 
+  $(this).on('click', async function(){
+    $('#changeEmailForm').css('display', 'block')
+  $('#emailText').data('id', $(this).data('id'))
+  })
 })
+
+})
+
   
 }
 showBooked()
