@@ -35,6 +35,7 @@ class Manager{
    
     async getAll(req,res){
         let seats = await Seat.findAll({where:{active:true}})
+       
         return res.send(seats)
     }
     async getBalcon(req,res){
@@ -45,13 +46,14 @@ class Manager{
         let {segment, row, order, sectorId} = req.query
         let rowQuery
         let orderQuery
-
-        if(Array.isArray(sectorId)){
-            for(let el of sectorId){
-                el=parseInt(el)
-            }
+        let balcon
+        let seats
+        if(!sectorId){
+            sectorId=[1,2,3,4]
         }
-        
+        if(!Array.isArray(sectorId)){
+            sectorId=[sectorId]
+        }
         if(segment==2){
             if(row){
                 row+=6
@@ -65,53 +67,142 @@ class Manager{
             }else{
                 rowQuery={[Op.lte]: 6}
             }
-           
-        }else{
-            rowQuery={[Op.gte]: 0}
-        }
-        if(!sectorId){
-            sectorId=[1,2,3,4]
+        }else {
+            if(row){
+                rowQuery={[Op.or]: [parseInt(row),parseInt(row)+6]}
+            }else{
+                rowQuery={[Op.gte]: 0}
+            }
         }
         if(order==2){
             orderQuery=[['row', 'DESC']]
         }else{
             orderQuery=[['row', 'ASC']]
         }
-        let seats = await Seat.findAll({where:{
-            active:true,
-            row:rowQuery,
+
+        if(segment==3){
            
-        }, order: orderQuery
-        })
-        if(sectorId){
+           
             if(sectorId.length>1){
-                seats = await Seat.findAll({where:{
+                balcon = await Balcon.findAll({where:{
                     active:true,
                     row:rowQuery,
                     sectorId: {
                         [Op.or]: sectorId
-                      }
+                    }
                 }, order: orderQuery
                 })
             }else{
-                 seats= await Seat.findAll({where:{
+                balcon= await Balcon.findAll({where:{
                     active:true,
                     row:rowQuery,
                     sectorId: sectorId[0]
                 }, order: orderQuery
                 })
             }
+           
+            return res.send(balcon)
+        }else {
+            if(segment==2){
+                if(sectorId.length>1){
+                    seats = await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                            }
+                    }, order: orderQuery
+                    })
+                }else{
+                        seats= await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0]
+                    }, order: orderQuery
+                    })
+                }
+               
+                return res.send(seats)
+            }else if(segment==1){
+               
+                if(sectorId.length>1){
+                    seats = await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                            }
+                    }, order: orderQuery
+                    })
+                }else{
+                        seats= await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0]
+                    }, order: orderQuery
+                    })
+                }
+               
+                return res.send(seats)
+            }else{ 
+                
+                if(sectorId.length>1){
+                    seats = await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                            }
+                    }, order: orderQuery
+                    })
+                }else{
+                        seats= await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0]
+                    }, order: orderQuery
+                    })
+                }
+                if(sectorId.length>1){
+                    balcon = await Balcon.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                        }
+                    }, order: orderQuery
+                    })
+                }else{
+                    balcon= await Balcon.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0]
+                    }, order: orderQuery
+                    })
+                }
+                for(let b of balcon){
+                    seats.push(b)
+                }
+                return res.send(seats)
+            }
+           
+            
         }
-        
-        
-        return res.send(seats)
     }
     async showRequests(req,res){
         let seats = await Seat.findAll({where:{active:true, statusId:2}})
+        let balcon = await Balcon.findAll({where:{active:true, statusId:2}})
+        for(let balc of balcon){
+            seats.push(balc)
+        }
         return res.send(seats)
     }
     async showBooked(req,res){
         let seats = await Seat.findAll({where:{active:true, statusId:3}})
+        let balcon = await Balcon.findAll({where:{active:true, statusId:3}})
+        for(let balc of balcon){
+            seats.push(balc)
+        }
         return res.send(seats)
     }
     async updatePrice(req,res){
@@ -202,15 +293,26 @@ class Manager{
             let bc
             let {id} = req.body
             //filterInput(req.body) soon
-            let seat = await Seat.findOne({where:{id}})
+            let place=1
+            let seat = await Seat.findOne({where:{id, active:true,statusId:2}})
+            
             let row=-6
             console.log(seat)
-            if(!seat)
-                return res.status(400).send({error:'Место указано не верно'})
+            if(!seat){
+                seat = await Balcon.findOne({where:{id, active:true,statusId:2}})
+                place=2
+            }
+               
+            
             if(seat.statusId==3){
                 return res.status(400).send({error:'Место уже занято'})
             }
-            let response = await Seat.update({statusId:3, email:seat.email },{where:{id}})
+            let response 
+            if(place==1){
+                response= await Seat.update({statusId:3, email:seat.email },{where:{id}})
+            }else{
+                response= await Seat.update({statusId:3, email:seat.email },{where:{id}})
+            }
             let sector = ''
             switch (seat.sectorId) {
               case 1:
@@ -284,7 +386,12 @@ class Manager{
                     console.log('Email sent: ' + info.response);
                 }
             });
-            return res.send({res:"Место успешно забронировано"})
+            let aa = await Seat.findAll({where:{active:true, statusId:2}})
+            let bb = await Balcon.findAll({where:{active:true, statusId:2}})
+            for(let balc of bb){
+                aa.push(balc)
+            }
+            return res.send(aa)
         }catch(e){
             console.log(e)
             return res.send({error:"Unhandled error"})
@@ -295,11 +402,10 @@ class Manager{
             let bc
             let {id} = req.body
             //filterInput(req.body) soon
-            let seat = await Balcon.findOne({where:{id}})
-           
+            let seat = await Balcon.findOne({where:{id, active:true, statusId:2}})
             console.log(seat)
             if(!seat)
-                return res.status(400).send({error:'Место указано не верно'})
+                return res.status(400).send({error:'Место уже занято'})
             if(seat.statusId==3){
                 return res.status(400).send({error:'Место уже занято'})
             }
@@ -374,7 +480,12 @@ class Manager{
                     console.log('Email sent: ' + info.response);
                 }
             });
-            return res.send({res:"Место успешно забронировано"})
+            let aa = await Seat.findAll({where:{active:true, statusId:2}})
+            let bb = await Balcon.findAll({where:{active:true, statusId:2}})
+            for(let balc of bb){
+                aa.push(balc)
+            }
+            return res.send(aa)
         }catch(e){
             console.log(e)
             return res.send({error:"Unhandled error"})
@@ -383,11 +494,10 @@ class Manager{
     async declineBooking(req, res){
         try{
             let {id} = req.body
-            //filterInput(req.body) soon
-        console.log(req.body)
-            let seat = await Seat.findOne({where:{id}})
+            let seat = await Seat.findOne({where:{id, active:true, statusId:2}})
+            console.log(seat)
             if(!seat)
-                return res.status(400).send({error:'Место указано не верно'})
+                seat = await Balcon.findOne({where:{id, active:true, statusId:2}})
             let uid = Math.floor(Math.random() * 10000000000000)
             let response = await Seat.update({statusId:1, email:'', uuid:uid},{where:{id}})
             let sector = ''
@@ -456,7 +566,12 @@ class Manager{
                     console.log('Email sent: ' + info.response);
                 }
             });
-            return res.send({res:"Бронь отменена"})
+            let aa = await Seat.findAll({where:{active:true, statusId:2}})
+            let bb = await Balcon.findAll({where:{active:true, statusId:2}})
+            for(let balc of bb){
+                aa.push(balc)
+            }
+            return res.send(aa)
         }catch(e){
             console.log(e)
             return res.send({error:"Unhandled error"})
