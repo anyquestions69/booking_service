@@ -613,7 +613,7 @@ class Manager{
             let row=0
             if(!re.test(email))
                 return res.status(400).send({error:'Неверно указан email'})
-            let seat = await Seat.findOne({where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
+            let seat = await Balcon.findOne({where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
             if(!seat)
                 return res.status(404).send({error:'Неверно указано место'})
             if(seat.statusId!=1)
