@@ -340,7 +340,7 @@ class Manager{
             const directory = __dirname+'/../tickets';
             bc = await bwipjs.toBuffer({
                 bcid:        'interleaved2of5',     
-                text:        seat.uuid, 
+                text:        parseInt(seat.uuid), 
                 includetext: true,  
                 textxalign:  'center',   
             })
@@ -434,7 +434,7 @@ class Manager{
             const directory = __dirname+'/../tickets';
             bc = await bwipjs.toBuffer({
                 bcid:        'interleaved2of5',     
-                text:        seat.uuid, 
+                text:        parseInt(seat.uuid), 
                 includetext: true,  
                 textxalign:  'center',   
             })
