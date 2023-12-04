@@ -497,7 +497,7 @@ class Manager{
             let seat = await Seat.findOne({where:{id, active:true, statusId:2}})
             console.log(seat)
             if(!seat)
-                seat = await Balcon.findOne({where:{id, active:true, statusId:2}})
+                return res.status(400).send({error:'Место указано не верно'})
             let uid = Math.floor(Math.random() * 10000000000000)
             let response = await Seat.update({statusId:1, email:'', uuid:uid},{where:{id}})
             let sector = ''
@@ -574,7 +574,7 @@ class Manager{
             return res.send(aa)
         }catch(e){
             console.log(e)
-            return res.send({error:"Unhandled error"})
+            return res.status(500).send({error:"Unhandled error"})
         }
     }
     async declineBalcon(req, res){
@@ -776,8 +776,16 @@ class Manager{
     async changeEmail(req,res){
         let {id} = req.params
         let {email} = req.body
-        let result = await Seat.update({email },{where:{id, active:true}})
-       let seat= await Seat.findOne({where:{id:id} })
+        let seat= await Seat.findOne({where:{id:id,active:true, statusId:3} })
+        let result 
+        result= await Seat.update({email },{where:{id, active:true, statusId:3}})
+        if(!seat){
+            seat= await Balcon.findOne({where:{id:id,active:true, statusId:3} })
+            result = await Balcon.update({email },{where:{id, active:true, statusId:3}})
+        }
+            
+       
+       //let seat= await Seat.findOne({where:{id:id} })
         let bc
         let row=-6
        

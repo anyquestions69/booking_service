@@ -16,7 +16,7 @@ seatRouter.get("/", seatController.getAll);
 seatRouter.put('/', mw.isAuth, seatController.updatePrice)
 seatRouter.post('/balcon/request',  seatController.requestBalcon)
 seatRouter.post('/request',  seatController.requestBooking)
-seatRouter.post('/balcon/decline', mw.isAuth, seatController.declineBooking)
+seatRouter.post('/balcon/decline', mw.isAuth, seatController.declineBalcon)
 seatRouter.post('/decline', mw.isAuth, seatController.declineBooking)
 seatRouter.post('/balcon', mw.isAuth, seatController.bookBalcon)
 seatRouter.post('/:id', mw.isAuth, seatController.changeEmail)

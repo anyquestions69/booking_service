@@ -370,6 +370,30 @@ function showBooked(){
         if(row<=0){
           row+=6
         }
+        let segment=1
+        if((r.row<=2&&r.sectorId==4)||(r.sectorId==1&&r.row<=6)){
+          segment=2
+          $('#bookList').append(`
+          <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
+          <div class="d-lg-flex gap-2 req justify-content-start align-items-center">
+           <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
+          
+          
+          <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}</div>
+          <div class="opacity-50 text-nowrap">${day}.${month}.${year}</div>
+          </div>
+          <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
+          <div class='mb-1'>
+          <a href='/api/seat/download/${r.id}' class=" p-1 mb-0 btn-info text-small btn btn-10 text-white book-download ">Скачать билет</a>
+            <div data-id=${r.id} class=" p-1 mb-0 btn-warning text-small btn btn-10 text-white book-resend ">Отправить повторно</div>
+            </div><div>
+              <div data-id=${r.id} class=" p-1 mb-0 btn-danger text-small btn btn-10 text-white balcon-book-decline ">Отменить</div>
+              <div data-id=${r.id} class=" p-1 mb-0 btn-warning text-small btn btn-10 text-white book-changeEmail ">Изменить email</div>
+            </div>
+         
+        </div>
+          `)
+        }else{
           $('#bookList').append(`
           <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
           <div class="d-lg-flex gap-2 req justify-content-start align-items-center">
@@ -390,6 +414,7 @@ function showBooked(){
          
         </div>
           `)
+        }
           i++
       }
     }
@@ -408,7 +433,22 @@ function showBooked(){
     })
     let resText = await res.json()
     showBooked()
-    show()
+   
+    })
+  })
+  $('.balcon-book-decline').each(function (index, value) { 
+    $(this).on('click', async function(){
+      let id   = $(this).data('id')
+    console.log(id)
+    let res = await fetch('/api/seat/balcon/decline', {
+      method:'POST',
+      body:JSON.stringify({id:id}),
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+    })
+    let resText = await res.json()
+    showBooked()
     })
   })
   
