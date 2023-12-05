@@ -186,7 +186,7 @@ async function createSeats(body, eventId){
         if(i>8 && i<43){
             arenaSeats.push({row:7, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true, uuid:parseInt(Math.floor(Math.random() * 10000000000000)) }) //7
         }
-        if(i>20 && i<36){
+        if(i>8 && i<48){
             arenaSeats.push({row:8, col:i, statusId:1, sectorId:2, price:silver, eventId,active:true, uuid:parseInt(Math.floor(Math.random() * 10000000000000)) }) //8
         }
     }
@@ -291,9 +291,9 @@ async function createSeats(body, eventId){
         arenaSeats.push({row:17, col:i, statusId:1, sectorId:4, price:platinum, eventId,active:true, uuid:parseInt(Math.floor(Math.random() * 10000000000000))})
     }
     for(let i=9;i<56;i++){
-        if(i<21||(i>35&&i<48)){
+        /* if(i<9||(i>47&&i<48)){
             arenaSeats.push({row:8, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true, uuid:parseInt(Math.floor(Math.random() * 10000000000000))})
-        }
+        } */
         if(i<35||i>38){
             arenaSeats.push({row:9, col:i, statusId:1, sectorId:3, price:gold, eventId,active:true, uuid:parseInt(Math.floor(Math.random() * 10000000000000))})
         }
