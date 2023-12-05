@@ -8,7 +8,7 @@ const path = require("path")
 
 const transporter = createTransport({
     host: process.env.SMTP_SERVER,
-    port:587,
+    port:465,
     auth: {
      
       user: process.env.SMTP_MAIL,
@@ -275,7 +275,37 @@ class Manager{
             }else{
                 segment='Партер'
             }
-            csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            csv+='0'+seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+        }
+        seats = await Balcon.findAll({where:{active:true}})
+        
+        for(let seat of seats ){
+            let row=-6
+            let segment =''
+            let sector=''
+            switch (seat.sectorId) {
+                case 1:
+                    sector='Bronze'
+                    break;
+                case 2:
+                    sector='Platinum'
+                    break;
+                case 3:
+                    sector='Gold'
+                    break;
+                case 4:
+                    sector='Silver'
+                    break;
+                default:
+                    break;
+                }
+                row+=seat.row
+            if(row<=0){
+                row+=6
+                
+            }
+            segment='Балкон'
+            csv+='0'+seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
         }
         let file = path.join(__dirname,`../tables/${filename}.csv`)
         fs.writeFile(file,csv,()=>{
@@ -340,7 +370,7 @@ class Manager{
             const directory = __dirname+'/../tickets';
             bc = await bwipjs.toBuffer({
                 bcid:        'interleaved2of5',     
-                text:        parseInt(seat.uuid), 
+                text:        seat.uuid, 
                 includetext: true,  
                 textxalign:  'center',   
             })
@@ -434,7 +464,7 @@ class Manager{
             const directory = __dirname+'/../tickets';
             bc = await bwipjs.toBuffer({
                 bcid:        'interleaved2of5',     
-                text:        parseInt(seat.uuid), 
+                text:        seat.uuid, 
                 includetext: true,  
                 textxalign:  'center',   
             })
@@ -494,7 +524,7 @@ class Manager{
     async declineBooking(req, res){
         try{
             let {id} = req.body
-            let seat = await Seat.findOne({where:{id, active:true, statusId:2}})
+            let seat = await Seat.findOne({where:{id, active:true, statusId:3}})
             console.log(seat)
             if(!seat)
                 return res.status(400).send({error:'Место указано не верно'})

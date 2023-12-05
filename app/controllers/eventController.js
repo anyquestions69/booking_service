@@ -396,6 +396,7 @@ class Manager{
     async addOne(req,res){
         let event = await Event.create({name:req.body.name, date:req.body.date})
         await Seat.update({active:false},{where:{active:true}})
+        await Balcon.update({active:false},{where:{active:true}})
        
         let seats  = await createSeats(req.body, event.id)
         let balcon = await createBalcon(req.body, event.id)

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const { createTransport } = require('nodemailer');
 const transporter = createTransport({
     host: process.env.SMTP_SERVER,
-    port:587,
+    port:465,
     auth: {
      
       user: process.env.SMTP_MAIL,
