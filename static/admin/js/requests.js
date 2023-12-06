@@ -15,74 +15,7 @@ $(document).ready(async function () {
   show(res).then(r=>{
    
   })
-  $('.request-accept').each(function (index, value) { 
-    $(this).on('click', async function(){
-      console.log('clicked')
-      let id   = $(this).data('id')
-     console.log(id)
-     let res = await fetch('/api/seat/', {
-      method:'POST',
-      body:JSON.stringify({id:id}),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-     })
-     let resText = await res.json()
-     show(resText)
-     showBooked()
-    })
-  })
-  $('.request-accept-balcon').each(function (index, value) { 
-    $(this).on('click', async function(){
-      console.log('clicked')
-      let id   = $(this).data('id')
-     console.log(id)
-     let res = await fetch('/api/seat/balcon', {
-      method:'POST',
-      body:JSON.stringify({id:id}),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-     })
-     let resText = await res.json()
-     show(resText)
-     showBooked()
-    })
-  })
-  $('.request-decline').each(function (index, value) { 
-    $(this).on('click', async function(){
-      console.log('clicked')
-      let id   = $(this).data('id')
-     console.log(id)
-     let res = await fetch('/api/seat/decline', {
-      method:'POST',
-      body:JSON.stringify({id:id}),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-     })
-     let resText = await res.json()
-     show(resText)
-     showBooked()
-    })
-  })
-  $('.request-decline-balcon').each(function (index, value) { 
-    $(this).on('click', async function(){
-      console.log('clicked')
-      let id   = $(this).data('id')
-     console.log(id)
-     let res = await fetch('/api/seat/balcon/decline', {
-      method:'POST',
-      body:JSON.stringify({id:id}),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-     })
-     let resText = await res.json()
-     show(resText)
-     showBooked()
-    })
-  })
+
  
 });
 
@@ -184,7 +117,7 @@ $('.request-accept').each(function (index, value) {
    })
    let resText = await res.json()
    show(resText)
-   showBooked()
+   await showBooked()
   })
 })
 $('.request-accept-balcon').each(function (index, value) { 
@@ -239,75 +172,7 @@ $('.request-decline-balcon').each(function (index, value) {
   })
 })
 }
-$('.request-accept').each(function (index, value) { 
-  $(this).on('click', async function(){
-    console.log('clicked')
-    let id   = $(this).data('id')
-   console.log(id)
-   let res = await fetch('/api/seat/', {
-    method:'POST',
-    body:JSON.stringify({id:id}),
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    }
-   })
-   let resText = await res.json()
-   show(resText)
-   showBooked()
-  })
-})
-$('.request-accept-balcon').each(function (index, value) { 
-  $(this).on('click', async function(){
-    console.log('clicked')
-    let id   = $(this).data('id')
-   console.log(id)
-   let res = await fetch('/api/seat/balcon', {
-    method:'POST',
-    body:JSON.stringify({id:id}),
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    }
-   })
-   let resText = await res.json()
-   show(resText)
-   showBooked()
-  })
-})
-$('.request-decline').each(function (index, value) { 
-  $(this).on('click', async function(){
-    console.log('clicked')
-    let id   = $(this).data('id')
-   console.log(id)
-   let res = await fetch('/api/seat/decline', {
-    method:'POST',
-    body:JSON.stringify({id:id}),
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    }
-   })
-   let resText = await res.json()
-   show(resText)
-   showBooked()
-  })
-})
-$('.request-decline-balcon').each(function (index, value) { 
-  $(this).on('click', async function(){
-    console.log('clicked')
-    let id   = $(this).data('id')
-   console.log(id)
-   let res = await fetch('/api/seat/balcon/decline', {
-    method:'POST',
-    body:JSON.stringify({id:id}),
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    }
-   })
-   let resText = await res.json()
-   show(resText)
-   showBooked()
-  })
-})
-    
+  
 $('#changeEmailForm').on('submit', async function(e){
   e.preventDefault()
   let id   = $('#emailText').data('id')

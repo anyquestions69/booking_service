@@ -91,6 +91,41 @@
                 </div>
                 <div class="col">
                 <div class="h3 mb-3 text-center">Забронированные места</div>
+                <div class="filters">
+                  <div class="input-group mb-1">
+                    <label class="input-group-text" for="bookedorder">Сортировать...</label>
+                    <select class="form-select filter" id="bookedorder">
+                      <option selected value="1">Вниз</option>
+                      <option value="2">Вверх</option>
+                    </select>
+                    <select class="form-select filter" id="bookedsegment">
+                      <option selected value="0">Сектор</option>
+                      <option  value="1">Арена</option>
+                      <option value="2">Партер</option>
+                      <option value="3">Балкон</option>
+                    </select>
+                    <input type="number" max="18" min="1" class="form-control filter" id="bookedrow" placeholder="Ряд">
+                  </div>
+                  <div class="input-group mb-1 text-center" id="bookedchecks">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input filter" type="checkbox" id="bookedbrcheck" value="1">
+                      <label class="form-check-label" for="bookedbrcheck">Bronze</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input filter" type="checkbox" id="bookedsicheck" value="4">
+                      <label class="form-check-label" for="bookedsicheck">Silver</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input filter" type="checkbox" id="bookedgocheck" value="3" >
+                      <label class="form-check-label" for="bookedgocheck">Gold</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input filter" type="checkbox" id="bookedplcheck" value="2" >
+                      <label class="form-check-label" for="bookedplcheck">Platinum</label>
+                    </div>
+                  </div>
+                  
+                </div>
                 <div class="list-group  mx-auto" id="bookList">
                 </div>
                                

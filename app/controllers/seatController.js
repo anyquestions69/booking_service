@@ -275,7 +275,7 @@ class Manager{
             }else{
                 segment='Партер'
             }
-            csv+='0'+seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
         }
         seats = await Balcon.findAll({where:{active:true}})
         
@@ -305,7 +305,7 @@ class Manager{
                 
             }
             segment='Балкон'
-            csv+='0'+seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
         }
         let file = path.join(__dirname,`../tables/${filename}.csv`)
         fs.writeFile(file,csv,()=>{
@@ -911,10 +911,10 @@ class Manager{
     async resend(req,res){
        
             let {id} = req.params
-            let seat = await Seat.findOne({where:{id}})
-           
-            if(!seat)
-                return res.status(400).send({error:'Место указано не верно'})
+            let seat = await Seat.findOne({where:{id,active:true, statusId:3}})
+            if(!seat){
+                seat= await Balcon.findOne({where:{id:id,active:true, statusId:3} })
+            }
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
                 to: seat.email,
