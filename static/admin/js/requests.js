@@ -69,7 +69,7 @@ async function show(res){
               }
               
               let segment=1
-              if((r.row<=2&&r.sectorId==4)||(r.sectorId==1&&r.row<=6)){
+              if(r.balcon){
                 segment=2
                 segmentName='Балкон'
                 $('#reqList').append(`
@@ -128,8 +128,7 @@ $('.request-accept').each(function (index, value) {
     }
    })
    let resText = await res.json()
-   show(resText)
-   await showBooked()
+   location.reload()
   })
 })
 $('.request-accept-balcon').each(function (index, value) { 
@@ -145,8 +144,7 @@ $('.request-accept-balcon').each(function (index, value) {
     }
    })
    let resText = await res.json()
-   show(resText)
-   showBooked()
+   location.reload()
   })
 })
 $('.request-decline').each(function (index, value) { 
@@ -162,8 +160,7 @@ $('.request-decline').each(function (index, value) {
     }
    })
    let resText = await res.json()
-   show(resText)
-   showBooked()
+   location.reload()
   })
 })
 $('.request-decline-balcon').each(function (index, value) { 
@@ -179,8 +176,7 @@ $('.request-decline-balcon').each(function (index, value) {
     }
    })
    let resText = await res.json()
-   show(resText)
-   showBooked()
+   location.reload()
   })
 })
 }
@@ -243,7 +239,7 @@ async function showBooked(res){
           segmentName='Арена'
         }
         let segment=1
-        if((r.row<=2&&r.sectorId==4)||(r.sectorId==1&&r.row<=6)){
+        if(r.balcon){
           segment=2
           segmentName='Балкон'
           $('#bookList').append(`
@@ -302,8 +298,7 @@ async function showBooked(res){
           }
         })
         let resText = await res.json()
-        showBooked(resText)
-       
+        location.reload()
         })
       })
       $('.balcon-book-decline').each(function (index, value) { 
@@ -318,7 +313,7 @@ async function showBooked(res){
           }
         })
         let resText = await res.json()
-        showBooked(resText)
+        location.reload()
         })
       })
       

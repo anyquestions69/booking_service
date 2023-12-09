@@ -35,7 +35,7 @@ async function createTickets(){
         let seats = await Seat.findAll({where:{active:true}})
         for(let seat of seats ){
             let row=-6
-            let segment=''
+            let segment='Stalls'
             let sector=''
             switch (seat.sectorId) {
                 case 1:
@@ -66,29 +66,20 @@ async function createTickets(){
                 row+=seat.row
                 if(row<=0){
                     row+=6
-                    segment='Арена'
-                }else{
-                    segment='Партер'
+                    segment='Arena'
                 }
                 let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                
-                doc.image('data:image/png;base64,'+bc.toString('base64'), 421,85,{ height:66})
-                .fontSize(15) 
-                    .text(sector,254,31) //264, 63)
-                    .text(seat.row, 185, 85)
-                    .text(seat.col, 332, 85)
-                    .text(seat.price, 190, 113)
-                    .text(datestring, 327, 146)
-                    .fontSize(10)
-                    .save()
-                    .rotate(270, {origin: [90, 140]})
-                    .text(row, 80,137)
-                    .text(seat.col, 140,137)
-                    .text(seat.price, 194,137)
-                    .text(sector, 130, 151)
-                    .restore() 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  170,500,{ height:76})
+                .fontSize(18) 
+                .text(row, 160, 342)
+                .text(seat.col, 340, 344)
+                .text(segment,160,383)
+                //.text(seat.email,360, 379)
+                .text(sector,160,424)
+                //.text(datestring, 340, 421)
+                .save()
                 doc.end()
                
                
@@ -97,7 +88,7 @@ async function createTickets(){
         let balcon = await Balcon.findAll({where:{active:true}})
         for(let seat of balcon ){
             
-            let segment=''
+            let segment='Balcon'
             let sector=''
             switch (seat.sectorId) {
                 case 1:
@@ -127,27 +118,18 @@ async function createTickets(){
                 })
                 row=seat.row
                 
-                    segment='Балкон'
-                
                 let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                
-                doc.image('data:image/png;base64,'+bc.toString('base64'), 421,85,{ height:66})
-                .fontSize(15) 
-                    .text(sector,254,31) //264, 63)
-                    .text(seat.row, 185, 85)
-                    .text(seat.col, 332, 85)
-                    .text(seat.price, 190, 113)
-                    .text(datestring, 327, 146)
-                    .fontSize(10)
-                    .save()
-                    .rotate(270, {origin: [90, 140]})
-                    .text(row, 80,137)
-                    .text(seat.col, 140,137)
-                    .text(seat.price, 194,137)
-                    .text(sector, 130, 151)
-                    .restore() 
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  170,500,{ height:76})
+                .fontSize(18) 
+                .text(row, 160, 342)
+                .text(seat.col, 340, 344)
+                .text(segment,160,383)
+                //.text(seat.email,360, 379)
+                .text(sector,160,424)
+                //.text(datestring, 340, 421)
+                .save()
                 doc.end()
                
                

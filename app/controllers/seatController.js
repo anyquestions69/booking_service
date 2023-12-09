@@ -100,6 +100,9 @@ class Manager{
                 }, order: orderQuery
                 })
             }
+            for(let b of balcon){
+                b.dataValues.balcon=1
+            }
            
             return res.send(balcon)
         }else {
@@ -181,6 +184,7 @@ class Manager{
                     })
                 }
                 for(let b of balcon){
+                    b.dataValues.balcon=1
                     seats.push(b)
                 }
                 return res.send(seats)
@@ -249,7 +253,10 @@ class Manager{
                 }, order: orderQuery
                 })
             }
-           
+            for(let b of balcon){
+                b.dataValues.balcon=1
+                //balcon.push(b)
+            }
             return res.send(balcon)
         }else {
             if(segment==2){
@@ -338,6 +345,7 @@ class Manager{
                     })
                 }
                 for(let b of balcon){
+                    b.dataValues.balcon=1
                     seats.push(b)
                 }
                 return res.send(seats)
@@ -350,17 +358,22 @@ class Manager{
         let seats = await Seat.findAll({where:{active:true, statusId:2}})
         let balcon = await Balcon.findAll({where:{active:true, statusId:2}})
         for(let balc of balcon){
+            balc.dataValues.balcon=1
+            console.log(balc)
             seats.push(balc)
         }
+        console.log(seats)
         return res.send(seats)
     }
     async showBooked(req,res){
         let seats = await Seat.findAll({where:{active:true, statusId:3}})
         let balcon = await Balcon.findAll({where:{active:true, statusId:3}})
         for(let balc of balcon){
+            balc.dataValues.balcon=1
             seats.push(balc)
+            console.log(balc)
         }
-        console.log(seats)
+        
         return res.send(seats)
     }
     async updatePrice(req,res){
@@ -483,11 +496,13 @@ class Manager{
             //filterInput(req.body) soon
             let place=1
             let seat = await Seat.findOne({where:{id, active:true,statusId:2}})
-            
+            let segment ='Stalls'
             let row=-6
             console.log(seat)
             if(!seat){
                 seat = await Balcon.findOne({where:{id, active:true,statusId:2}})
+                row+=6
+                segment ='Balcony'
                 place=2
             }
                
@@ -520,6 +535,7 @@ class Manager{
             }
             row+=seat.row
             if(row<=0){
+                segment ='Arena'
                 row+=6
             }
             let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
@@ -536,23 +552,16 @@ class Manager{
            
                 let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
-                .fontSize(15) 
-                    .text(sector,254,31) //264, 63)
-                    .text(seat.email,264, 63)
-                    .text(row, 185, 85)
-                    .text(seat.col, 332, 85)
-                    .text(seat.price, 190, 113)
-                    .text(datestring, 327, 146)
-                    .fontSize(10)
-                    .save()
-                    .rotate(270, {origin: [90, 140]})
-                    .text(row, 80,137)
-                    .text(seat.col, 140,137)
-                    .text(seat.price, 194,137)
-                    .text(sector, 130, 151)
-                    .restore()
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  170,500,{ height:76})
+                .fontSize(14) 
+                .text(row, 160, 342)
+                .text(seat.col, 340, 344)
+                .text(segment,160,383)
+                .text(seat.email,293, 379)
+                .text(sector,160,424)
+                //.text(datestring, 340, 421)
+                .save()
                 doc.end()
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
@@ -577,6 +586,7 @@ class Manager{
             let aa = await Seat.findAll({where:{active:true, statusId:2}})
             let bb = await Balcon.findAll({where:{active:true, statusId:2}})
             for(let balc of bb){
+                balc.dataValues.balcon=1
                 aa.push(balc)
             }
             return res.send(aa)
@@ -630,23 +640,15 @@ class Manager{
            
                 let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
-                .fontSize(15) 
-                    .text(sector,254,31) //264, 63)
-                    .text(seat.email,264, 63)
-                    .text(row, 185, 85)
-                    .text(seat.col, 332, 85)
-                    .text(seat.price, 190, 113)
-                    .text(datestring, 327, 146)
-                    .fontSize(10)
-                    .save()
-                    .rotate(270, {origin: [90, 140]})
-                    .text(row, 80,137)
-                    .text(seat.col, 140,137)
-                    .text(seat.price, 194,137)
-                    .text(sector, 130, 151)
-                    .restore()
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  170,500,{ height:76})
+                .text(row, 160, 342)
+                .text(seat.col, 340, 344)
+                .text(segment,160,383)
+                .text(seat.email,293, 379)
+                .text(sector,160,424)
+                //.text(datestring, 340, 421)
+                .save()
                 doc.end()
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
@@ -671,6 +673,7 @@ class Manager{
             let aa = await Seat.findAll({where:{active:true, statusId:2}})
             let bb = await Balcon.findAll({where:{active:true, statusId:2}})
             for(let balc of bb){
+                balc.dataValues.balcon=1
                 aa.push(balc)
             }
             return res.send(aa)
@@ -722,22 +725,16 @@ class Manager{
                 })
             let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+uid+'.pdf')); 
-                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
-                .fontSize(15) 
-                    .text(sector,254,31) //264, 63)
-                    .text(row, 185, 85)
-                    .text(seat.col, 332, 85)
-                    .text(seat.price, 190, 113)
-                    .text(datestring, 327, 146)
-                    .fontSize(10)
-                    .save()
-                    .rotate(270, {origin: [90, 140]})
-                    .text(row, 80,137)
-                    .text(seat.col, 140,137)
-                    .text(seat.price, 194,137)
-                    .text(sector, 130, 151)
-                    .restore()
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  170,500,{ height:76})
+                .fontSize(14) 
+                .text(row, 160, 342)
+                .text(seat.col, 340, 344)
+                .text(segment,160,383)
+                .text(seat.email,293, 379)
+                .text(sector,160,424)
+                //.text(datestring, 340, 421)
+                .save()
                 doc.end()
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
@@ -809,22 +806,16 @@ class Manager{
                 })
             let doc = new PDFDocument({size: 'A4'});
                 doc.pipe(fs.createWriteStream(directory+'/'+uid+'.pdf')); 
-                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
-                .fontSize(15) 
-                    .text(sector,254,31) //264, 63)
-                    .text(row, 185, 85)
-                    .text(seat.col, 332, 85)
-                    .text(seat.price, 190, 113)
-                    .text(datestring, 327, 146)
-                    .fontSize(10)
-                    .save()
-                    .rotate(270, {origin: [90, 140]})
-                    .text(row, 80,137)
-                    .text(seat.col, 140,137)
-                    .text(seat.price, 194,137)
-                    .text(sector, 130, 151)
-                    .restore()
+                doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
+                doc.image('data:image/png;base64,'+bc.toString('base64'),  170,500,{ height:76})
+                .fontSize(14) 
+                .text(row, 160, 342)
+                .text(seat.col, 340, 344)
+                .text(segment,160,383)
+                .text(seat.email,293, 379)
+                .text(sector,160,424)
+                //.text(datestring, 340, 421)
+                .save()
                 doc.end()
             const mailOptions = {
                 from: process.env.SMTP_MAIL,
@@ -1013,23 +1004,16 @@ class Manager{
        
             let doc = new PDFDocument({size: 'A4'});
             doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-            doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:595})
+            doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
             doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
-            .fontSize(15) 
-                .text(sector,254,31) //264, 63)
-                .text(email,264, 63)
-                .text(row, 185, 85)
-                .text(seat.col, 332, 85)
-                .text(seat.price, 190, 113)
-                .text(datestring, 327, 146)
-                .fontSize(10)
+            .fontSize(14) 
+            .text(row, 160, 342)
+            .text(seat.col, 340, 344)
+            .text(segment,160,383)
+            .text(seat.email,293, 379)
+            .text(sector,160,424)
+                //.text(datestring, 340, 421)
                 .save()
-                .rotate(270, {origin: [90, 140]})
-                .text(row, 80,137)
-                .text(seat.col, 140,137)
-                .text(seat.price, 194,137)
-                .text(sector, 130, 151)
-                .restore()
             doc.end()
         const mailOptions = {
             from: process.env.SMTP_MAIL,
