@@ -1018,7 +1018,7 @@ class Manager{
             let doc = new PDFDocument({size: 'A4'});
             doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
             doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
-            doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
+            doc.image('data:image/png;base64,'+bc.toString('base64'),  170,500,{ height:76})
             .fontSize(14) 
             .text(row, 160, 342)
             .text(seat.col, 340, 344)
