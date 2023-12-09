@@ -405,7 +405,7 @@ class Manager{
                         filename: 'ticket.pdf',
                         path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
                     }],
-                text: `<h4>Ваше место успешно забронировано!</h4>
+                html: `<h4>Ваше место успешно забронировано!</h4>
                         <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
             };
             
@@ -499,7 +499,7 @@ class Manager{
                         filename: 'ticket.pdf',
                         path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
                     }],
-                text: `<h4>Ваше место успешно забронировано!</h4>
+                html: `<h4>Ваше место успешно забронировано!</h4>
                         <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
             };
             
@@ -882,7 +882,7 @@ class Manager{
                     filename: 'ticket.pdf',
                     path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
                 }],
-            text: `<h4>Ваше место успешно забронировано!</h4>
+            html: `<h4>Ваше место успешно забронировано!</h4>
                     <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
         };
         
@@ -924,7 +924,7 @@ class Manager{
                         filename: 'ticket.pdf',
                         path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
                     }],
-                text: `<h4>Ваш билет</h4>
+                html: `<h4>Ваш билет</h4>
                         `
             };
             
