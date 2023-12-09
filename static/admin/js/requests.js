@@ -11,11 +11,12 @@ $(document).ready(async function () {
       'Content-Type': 'application/json;charset=utf-8'
     }
   })
+  //showBooked()
   let res = await result.json()
   show(res).then(r=>{
    
   })
-
+  showBooked()
  
 });
 
@@ -336,7 +337,7 @@ $('.book-changeEmail').each(function (index, value) {
 
   
 }
-showBooked()
+
 
 $('.filter').on('input', async function(e){
   let order
@@ -368,5 +369,37 @@ $('.filter').on('input', async function(e){
   console.log(res)
   if(response.ok){
     show(res)
+  }
+})
+$('.bookedfilter').on('input', async function(e){
+  let order
+  let segment
+  let row
+    order=$('#bookedorder').val()
+  
+    segment=$('#bookedsegment').val()
+  if($('#bookedrow').val()!=''){
+    row=$('#bookedrow').val()
+   
+  }
+  var status = [];
+  $('#bookedchecks input:checked').each(function() {
+      status.push($(this).val());
+  });
+
+  let str = `/api/seat/balcon/filter?order=${order}&segment=${segment}&`
+  if(row){
+    str+=`row=${row}&`
+  }
+  for(let s of status){
+    str+=`sectorId=${s}&`
+  }
+  console.log(str)
+  
+  let response = await fetch(str)
+  let res = await response.json()
+  console.log(res)
+  if(response.ok){
+    showBooked(res)
   }
 })
