@@ -8,6 +8,7 @@ seatRouter.get("/booked", mw.isAuth, seatController.showBooked);
 seatRouter.get("/balcon", seatController.getBalcon);
 seatRouter.get("/list", seatController.getList);
 seatRouter.get('/filter', mw.isAuth, seatController.getAllWithFilters)
+seatRouter.get('/booked/filter', mw.isAuth, seatController.getBookedWithFilters)
 seatRouter.get('/download/:id', mw.isAuth, seatController.downloadTicket)
 seatRouter.get('/resend/:id', mw.isAuth, seatController.resend)
 seatRouter.get('/:uuid', seatController.getPlace)

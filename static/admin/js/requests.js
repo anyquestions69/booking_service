@@ -16,7 +16,14 @@ $(document).ready(async function () {
   show(res).then(r=>{
    
   })
-  showBooked()
+  let bresult = await fetch('/api/seat/booked',{
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    }
+})   
+  let bres = await bresult.json()
+  showBooked(bres)
  
 });
 
@@ -53,21 +60,25 @@ async function show(res){
                 default:
                   break;
               }
+              
               row+=r.row
+              let segmentName='Партер'
               if(row<=0){
                 row+=6
+                segmentName='Арена'
               }
-
+              
               let segment=1
               if((r.row<=2&&r.sectorId==4)||(r.sectorId==1&&r.row<=6)){
                 segment=2
+                segmentName='Балкон'
                 $('#reqList').append(`
                 <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
                 <div class="d-lg-flex gap-2 req justify-content-between align-items-center">
                  <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
                 
                 
-                <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}</div>
+                <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}  <div>${segmentName}</div></div>
                 <div class="opacity-50 text-nowrap">${day}.${month}.${year}</div>
                 </div>
                 <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
@@ -86,7 +97,7 @@ async function show(res){
                  <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
                 
                 
-                <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}</div>
+                <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col} <div>${segmentName}</div></div>
                 <div class="opacity-50 text-nowrap">${day}.${month}.${year}</div>
                 </div>
                 <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
@@ -186,19 +197,12 @@ $('#changeEmailForm').on('submit', async function(e){
 
   let resText = await res.json()
   $('#changeEmailForm').css('display', 'none')
-  showBooked()
+  //showBooked()
 })
 
-function showBooked(){
+async function showBooked(res){
   $('#bookList').empty()
-  fetch('/api/seat/booked',{
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-  }).then(async (response)=> {
-    if(response.ok){    
-    let res = await response.json()
+  
     console.log(res)
     let i=1
     for(let r of res){
@@ -233,19 +237,22 @@ function showBooked(){
             }
             console.log(r.sectorId)
           row+=r.row
+          let segmentName='Партер'
         if(row<=0){
           row+=6
+          segmentName='Арена'
         }
         let segment=1
         if((r.row<=2&&r.sectorId==4)||(r.sectorId==1&&r.row<=6)){
           segment=2
+          segmentName='Балкон'
           $('#bookList').append(`
           <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
           <div class="d-lg-flex gap-2 req justify-content-start align-items-center">
            <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
           
           
-          <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}</div>
+          <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}  <div>${segmentName}</div></div>
           <div class="opacity-50 text-nowrap">${day}.${month}.${year}</div>
           </div>
           <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
@@ -266,7 +273,7 @@ function showBooked(){
            <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
           
           
-          <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}</div>
+          <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}  <div>${segmentName}</div></div>
           <div class="opacity-50 text-nowrap">${day}.${month}.${year}</div>
           </div>
           <div class="d-sm-dlex gap-1 justify-content-end align-items-center">
@@ -283,60 +290,58 @@ function showBooked(){
         }
           i++
       }
+      $('.book-decline').each(function (index, value) { 
+        $(this).on('click', async function(){
+          let id   = $(this).data('id')
+        console.log(id)
+        let res = await fetch('/api/seat/decline', {
+          method:'POST',
+          body:JSON.stringify({id:id}),
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          }
+        })
+        let resText = await res.json()
+        showBooked(resText)
+       
+        })
+      })
+      $('.balcon-book-decline').each(function (index, value) { 
+        $(this).on('click', async function(){
+          let id   = $(this).data('id')
+        console.log(id)
+        let res = await fetch('/api/seat/balcon/decline', {
+          method:'POST',
+          body:JSON.stringify({id:id}),
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          }
+        })
+        let resText = await res.json()
+        showBooked(resText)
+        })
+      })
+      
+      $('.book-resend').each(function (index, value) { 
+        $(this).on('click', async function(){
+          let id   = $(this).data('id')
+        let res = await fetch('/api/seat/resend/'+id)
+        let resText = await res.json()
+        console.log(resText)
+        })
+    })
+    $('.book-changeEmail').each(function (index, value) { 
+      $(this).on('click', async function(){
+        $('#changeEmailForm').css('display', 'block')
+      $('#emailText').data('id', $(this).data('id'))
+      })
+    })
     }
-}).then(fin=>{
 
-  $('.book-decline').each(function (index, value) { 
-    $(this).on('click', async function(){
-      let id   = $(this).data('id')
-    console.log(id)
-    let res = await fetch('/api/seat/decline', {
-      method:'POST',
-      body:JSON.stringify({id:id}),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-    })
-    let resText = await res.json()
-    showBooked()
-   
-    })
-  })
-  $('.balcon-book-decline').each(function (index, value) { 
-    $(this).on('click', async function(){
-      let id   = $(this).data('id')
-    console.log(id)
-    let res = await fetch('/api/seat/balcon/decline', {
-      method:'POST',
-      body:JSON.stringify({id:id}),
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-    })
-    let resText = await res.json()
-    showBooked()
-    })
-  })
-  
-  $('.book-resend').each(function (index, value) { 
-    $(this).on('click', async function(){
-      let id   = $(this).data('id')
-    let res = await fetch('/api/seat/resend/'+id)
-    let resText = await res.json()
-    console.log(resText)
-    })
-})
-$('.book-changeEmail').each(function (index, value) { 
-  $(this).on('click', async function(){
-    $('#changeEmailForm').css('display', 'block')
-  $('#emailText').data('id', $(this).data('id'))
-  })
-})
-
-})
 
   
-}
+
+
 
 
 $('.filter').on('input', async function(e){
@@ -387,7 +392,7 @@ $('.bookedfilter').on('input', async function(e){
       status.push($(this).val());
   });
 
-  let str = `/api/seat/balcon/filter?order=${order}&segment=${segment}&`
+  let str = `/api/seat/booked/filter?order=${order}&segment=${segment}&`
   if(row){
     str+=`row=${row}&`
   }

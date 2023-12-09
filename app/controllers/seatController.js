@@ -189,6 +189,163 @@ class Manager{
             
         }
     }
+    async getBookedWithFilters(req,res){
+        let {segment, row, order, sectorId} = req.query
+        let rowQuery
+        let orderQuery
+        let balcon
+        let seats
+        if(!sectorId){
+            sectorId=[1,2,3,4]
+        }
+        if(!Array.isArray(sectorId)){
+            sectorId=[sectorId]
+        }
+        if(segment==2){
+            if(row){
+                row+=6
+                rowQuery=row
+            }else{
+                rowQuery={[Op.gt]: 6}
+            }
+        }else if(segment==1){
+            if(row){
+                rowQuery=row
+            }else{
+                rowQuery={[Op.lte]: 6}
+            }
+        }else {
+            if(row){
+                rowQuery={[Op.or]: [parseInt(row),parseInt(row)+6]}
+            }else{
+                rowQuery={[Op.gte]: 0}
+            }
+        }
+        if(order==2){
+            orderQuery=[['row', 'DESC']]
+        }else{
+            orderQuery=[['row', 'ASC']]
+        }
+
+        if(segment==3){
+           
+           
+            if(sectorId.length>1){
+                balcon = await Balcon.findAll({where:{
+                    active:true,
+                    row:rowQuery,
+                    sectorId: {
+                        [Op.or]: sectorId
+                    },
+                    statusId:3
+                }, order: orderQuery
+                })
+            }else{
+                balcon= await Balcon.findAll({where:{
+                    active:true,
+                    row:rowQuery,
+                    sectorId: sectorId[0],
+                    statusId:3
+                }, order: orderQuery
+                })
+            }
+           
+            return res.send(balcon)
+        }else {
+            if(segment==2){
+                if(sectorId.length>1){
+                    seats = await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                            },
+                            statusId:3
+                    }, order: orderQuery
+                    })
+                }else{
+                        seats= await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0],
+                        statusId:3
+                    }, order: orderQuery
+                    })
+                }
+               
+                return res.send(seats)
+            }else if(segment==1){
+               
+                if(sectorId.length>1){
+                    seats = await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                            },
+                            statusId:3
+                    }, order: orderQuery
+                    })
+                }else{
+                        seats= await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0],
+                        statusId:3
+                    }, order: orderQuery
+                    })
+                }
+               
+                return res.send(seats)
+            }else{ 
+                
+                if(sectorId.length>1){
+                    seats = await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                            },
+                            statusId:3
+                    }, order: orderQuery
+                    })
+                }else{
+                        seats= await Seat.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0],
+                        statusId:3
+                    }, order: orderQuery
+                    })
+                }
+                if(sectorId.length>1){
+                    balcon = await Balcon.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: {
+                            [Op.or]: sectorId
+                        },
+                        statusId:3
+                    }, order: orderQuery
+                    })
+                }else{
+                    balcon= await Balcon.findAll({where:{
+                        active:true,
+                        row:rowQuery,
+                        sectorId: sectorId[0],
+                        statusId:3
+                    }, order: orderQuery
+                    })
+                }
+                for(let b of balcon){
+                    seats.push(b)
+                }
+                return res.send(seats)
+            }
+           
+            
+        }
+    }
     async showRequests(req,res){
         let seats = await Seat.findAll({where:{active:true, statusId:2}})
         let balcon = await Balcon.findAll({where:{active:true, statusId:2}})
@@ -203,6 +360,7 @@ class Manager{
         for(let balc of balcon){
             seats.push(balc)
         }
+        console.log(seats)
         return res.send(seats)
     }
     async updatePrice(req,res){
@@ -585,7 +743,7 @@ class Manager{
                 from: process.env.SMTP_MAIL,
                 to: seat.email,
                 subject: `Бронь места отменена`,
-                text: `<h4>Ваш запрос был отклонён менеджером</h4>
+                html: `<h4>Ваш запрос был отклонён менеджером</h4>
                        `
             };
             
@@ -672,7 +830,7 @@ class Manager{
                 from: process.env.SMTP_MAIL,
                 to: seat.email,
                 subject: `Бронь места отменена`,
-                text: `<h4>Ваш запрос был отклонён менеджером</h4>
+                html: `<h4>Ваш запрос был отклонён менеджером</h4>
                        `
             };
             
@@ -732,7 +890,7 @@ class Manager{
                 from: process.env.SMTP_MAIL,
                 to: process.env.ADMIN_EMAIL,//process.env.ADMIN_EMAIL,
                 subject: `Новая заявка на бронирование`,
-                text: text+`<p>email: ${email}</p>`
+                html: text+`<p>email: ${email}</p>`
             };
             
             transporter.sendMail(mailOptions, function(error, info){
@@ -787,7 +945,7 @@ class Manager{
                 from: process.env.SMTP_MAIL,
                 to: process.env.ADMIN_EMAIL,//process.env.ADMIN_EMAIL,
                 subject: `Новая заявка на бронирование`,
-                text: text+`<p>email: ${email}</p>`
+                html: text+`<p>email: ${email}</p>`
             };
             
             transporter.sendMail(mailOptions, function(error, info){
@@ -800,7 +958,7 @@ class Manager{
             return res.send({res:"Ожидайте рассмотрения заявки менеджером"})
         }catch(e){
             console.log(e)
-            return res.send({error:"Unhandled error"})
+            return res.status(404).send({error:"Unhandled error"})
         }
     }
     async changeEmail(req,res){
@@ -847,7 +1005,7 @@ class Manager{
         const directory = __dirname+'/../tickets';
         bc = await bwipjs.toBuffer({
             bcid:        'interleaved2of5',     
-            text:        parseInt(seat.uuid), 
+            text:        seat.uuid, 
             includetext: true,  
             textxalign:  'center',   
         })
@@ -904,7 +1062,10 @@ class Manager{
     }
     async downloadTicket(req,res){
         let {id} = req.params
-        let seat = await Seat.findOne({where:{id}})
+        let seat = await Seat.findOne({where:{id, active:true, statusId:3}})
+        if(!seat){
+            seat= await Balcon.findOne({where:{id:id,active:true, statusId:3} })
+        }
         let file = path.join(__dirname,`../tickets/${seat.uuid}.pdf`) 
         return res.set('Content-Disposition',`attachment; filename="ticket.pdf"`).sendFile(file)
     }
