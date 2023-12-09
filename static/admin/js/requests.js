@@ -184,7 +184,7 @@ $('.request-decline-balcon').each(function (index, value) {
 $('#changeEmailForm').on('submit', async function(e){
   e.preventDefault()
   let id   = $('#emailText').data('id')
-  let res = await fetch('/api/seat/'+id, {method: 'POST',
+  let res = await fetch('/api/seat/email/'+id, {method: 'POST',
   headers: {
   'Content-Type': 'application/json;charset=utf-8'
   },

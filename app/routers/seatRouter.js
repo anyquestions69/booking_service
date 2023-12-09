@@ -20,7 +20,7 @@ seatRouter.post('/request',  seatController.requestBooking)
 seatRouter.post('/balcon/decline', mw.isAuth, seatController.declineBalcon)
 seatRouter.post('/decline', mw.isAuth, seatController.declineBooking)
 seatRouter.post('/balcon', mw.isAuth, seatController.bookBalcon)
-seatRouter.post('/:id', mw.isAuth, seatController.changeEmail)
+seatRouter.post('/email/:id', mw.isAuth, seatController.changeEmail)
 seatRouter.post('/', mw.isAuth, seatController.bookOne)
 
  

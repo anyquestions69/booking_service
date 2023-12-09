@@ -609,6 +609,7 @@ class Manager{
             }
             let response = await Balcon.update({statusId:3, email:seat.email },{where:{id}})
             let sector = ''
+            let segment='Balcon'
             switch (seat.sectorId) {
               case 1:
                 sector =  'Bronze'
@@ -692,6 +693,7 @@ class Manager{
             let uid = Math.floor(Math.random() * 10000000000000)
             let response = await Seat.update({statusId:1, email:'', uuid:uid},{where:{id}})
             let sector = ''
+            let segment='Stalls'
             switch (seat.sectorId) {
               case 1:
                 sector =  'Bronze'
@@ -711,6 +713,7 @@ class Manager{
             row+=seat.row
             if(row<=0){
                 row+=6
+                segment='Arena'
             }
             
             const directory = __dirname+'/../tickets';
@@ -773,6 +776,7 @@ class Manager{
             let uid = Math.floor(Math.random() * 10000000000000)
             let response = await Balcon.update({statusId:1, email:'', uuid:uid},{where:{id}})
             let sector = ''
+            let segment='Stalls'
             switch (seat.sectorId) {
               case 1:
                 sector =  'Bronze'
@@ -792,6 +796,7 @@ class Manager{
             row+=seat.row
             if(row<=0){
                 row+=6
+                segment='Arena'
             }
             
             const directory = __dirname+'/../tickets';
@@ -847,6 +852,7 @@ class Manager{
             let re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
             let text = ``
             let row=-6
+            let segment='Stalls'
             if(!re.test(email))
                 return res.status(400).send({error:'Неверно указан email'})
             let seat = await Seat.findOne({where:{active:true, row:ticket.row, col:ticket.col, sectorId:ticket.sectorId}})
@@ -874,6 +880,7 @@ class Manager{
             row+=seat.row
             if(row<=0){
                 row+=6
+
             }
             text+=`<p>Сектор: ${ticket.sector} Место: ${ticket.col} Ряд: ${row}</p>`
             
@@ -957,12 +964,105 @@ class Manager{
         let {email} = req.body
         let seat= await Seat.findOne({where:{id:id,active:true, statusId:3} })
         let result 
-        result= await Seat.update({email },{where:{id, active:true, statusId:3}})
+        let segment='Stalls'
         if(!seat){
             seat= await Balcon.findOne({where:{id:id,active:true, statusId:3} })
             result = await Balcon.update({email },{where:{id, active:true, statusId:3}})
+            segment='Balcon'
+        }else{
+            result= await Seat.update({email },{where:{id, active:true, statusId:3}})
         }
-            
+            console.log(result)
+       
+       //let seat= await Seat.findOne({where:{id:id} })
+        let bc
+        let row=-6
+       
+        
+        let sector = ''
+        switch (seat.sectorId) {
+          case 1:
+            sector =  'Bronze'
+            break;
+          case 2:
+            sector =  'Platinum'
+            break;
+          case 3:
+          sector =  'Gold'
+            break;
+          case 4:
+          sector =  'Silver'
+            break;
+          default:
+            break;
+        }
+        row+=seat.row
+        if(row<=0){
+            row+=6
+            if(segment!='Balcon'){
+                segment='Arena'
+            }
+        }
+        let event = await Event.findOne({order: [ [ 'createdAt', 'DESC' ]],})
+        let date = new Date(event.date)
+        var datestring = date.getDate()  + "." + (date.getMonth()+1) + "." + date.getFullYear()
+        const directory = __dirname+'/../tickets';
+        bc = await bwipjs.toBuffer({
+            bcid:        'interleaved2of5',     
+            text:        seat.uuid, 
+            includetext: true,  
+            textxalign:  'center',   
+        })
+        
+       
+            let doc = new PDFDocument({size: 'A4'});
+            doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+            doc.image(__dirname+'/ticket.jpeg', 0, 0,{width:450})
+            doc.image('data:image/png;base64,'+bc.toString('base64'),  421,85,{ height:66})
+            .fontSize(14) 
+            .text(row, 160, 342)
+            .text(seat.col, 340, 344)
+            .text(segment,160,383)
+            .text(seat.email,293, 379)
+            .text(sector,160,424)
+                //.text(datestring, 340, 421)
+            .save()
+            doc.end()
+        const mailOptions = {
+            from: process.env.SMTP_MAIL,
+            to: seat.email,
+            subject: `Бронь места`,
+            attachments: [
+                {   // file on disk as an attachment
+                    filename: 'ticket.pdf',
+                    path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
+                }],
+            html: `<h4>Ваше место успешно забронировано!</h4>
+                    <p>Сектор: ${sector} Место: ${seat.col} Ряд: ${row}</p>`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+        return res.send({res:"Место успешно забронировано"})
+        //return res.send(response)
+    }
+    async changeEmailBalcon(req,res){
+        let {id} = req.params
+        let {email} = req.body
+        let seat= await Seat.findOne({where:{id:id,active:true, statusId:3} })
+        let result 
+        if(!seat){
+            seat= await Balcon.findOne({where:{id:id,active:true, statusId:3} })
+            result = await Balcon.update({email },{where:{id, active:true, statusId:3}})
+        }else{
+        result= await Seat.update({email },{where:{id, active:true, statusId:3}})
+       
+        }
        
        //let seat= await Seat.findOne({where:{id:id} })
         let bc
@@ -1013,7 +1113,7 @@ class Manager{
             .text(seat.email,293, 379)
             .text(sector,160,424)
                 //.text(datestring, 340, 421)
-                .save()
+            .save()
             doc.end()
         const mailOptions = {
             from: process.env.SMTP_MAIL,
@@ -1038,18 +1138,13 @@ class Manager{
         return res.send({res:"Место успешно забронировано"})
         //return res.send(response)
     }
-    async changeEmailBalcon(req,res){
-        let {id} = req.params
-        let {email} = req.body
-        let response = await Balcon.update({email },{where:{id}})
-        return res.send(response)
-    }
     async downloadTicket(req,res){
         let {id} = req.params
         let seat = await Seat.findOne({where:{id, active:true, statusId:3}})
         if(!seat){
             seat= await Balcon.findOne({where:{id:id,active:true, statusId:3} })
         }
+        console.log(seat)
         let file = path.join(__dirname,`../tickets/${seat.uuid}.pdf`) 
         return res.set('Content-Disposition',`attachment; filename="ticket.pdf"`).sendFile(file)
     }
