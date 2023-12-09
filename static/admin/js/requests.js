@@ -403,3 +403,6 @@ $('.bookedfilter').on('input', async function(e){
     showBooked(res)
   }
 })
+$('#closebtn').on('click',()=>{
+  $('#changeEmailForm').css('display', 'none')
+})
