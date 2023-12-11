@@ -15,6 +15,7 @@
   
   background: white;
   border: 1px solid black;
+  z-index: 99999999;
 }
 .btn-10{
   width:100px;

@@ -384,7 +384,7 @@ class Manager{
         let balcon = await createBalcon(req.body, event.id)
         let result = await Seat.bulkCreate(seats, { validate: true })
         let balconRes = await Balcon.bulkCreate(balcon, { validate: true })
-       createTickets()
+       //createTickets()
         return res.send(event)
     }
     /* async previous(req,res){
