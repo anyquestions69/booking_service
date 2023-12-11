@@ -596,28 +596,40 @@ class Manager{
             
            
                 let doc = new PDFDocument({size: 'A4'});
-                doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
-                .fontSize(15) 
-                .text(row, 210, 443)
-                .text(seat.col, 405, 443)
-                .text(segment,210,496)
-                .text(sector,215,551)
-                .text(seat.email,195, 600)
-                .save()
-                doc.end()
-            const mailOptions = {
-                from: process.env.SMTP_MAIL,
-                to: seat.email,
-                subject: `БИЛЕТ НА BIG BEAUTY BOSS VEGAS`,
-                attachments: [
-                    {   // file on disk as an attachment
-                        filename: 'ticket.pdf',
-                        path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
-                    }],
-                html: mailText
-            };
+                let writeStream = fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')
+            doc.pipe(writeStream);
+            doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
+           await doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
+            .fontSize(15) 
+            .text(row, 210, 443)
+            .text(seat.col, 405, 443)
+            .text(segment,210,496)
+            .text(sector,215,551)
+            .text(seat.email,195, 600)
+            
+                //.text(datestring, 340, 421)
+            .save()
+            await doc.end()
+        const mailOptions = {
+            from: process.env.SMTP_MAIL,
+            to: seat.email,
+            subject: `БИЛЕТ НА BIG BEAUTY BOSS VEGAS`,
+            attachments: [
+                {   // file on disk as an attachment
+                    filename: 'ticket.pdf',
+                    path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
+                }],
+            html: mailText
+        };
+        writeStream.on('finish', function () {
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+        });
             
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
@@ -683,29 +695,32 @@ class Manager{
             
            
                 let doc = new PDFDocument({size: 'A4'});
-                doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
-                doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
-                .fontSize(15) 
-                .text(row, 210, 443)
-                .text(seat.col, 405, 443)
-                .text(segment,210,496)
-                .text(sector,215,551)
-                .text(seat.email,195, 600)
-                .save()
-                doc.end()
-            const mailOptions = {
-                from: process.env.SMTP_MAIL,
-                to: seat.email,
-                subject: `БИЛЕТ НА BIG BEAUTY BOSS VEGAS`,
-                attachments: [
-                    {   // file on disk as an attachment
-                        filename: 'ticket.pdf',
-                        path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
-                    }],
-                html: mailText
-            };
+                let writeStream = fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')
+            doc.pipe(writeStream);
+            doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
+           await doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
+            .fontSize(15) 
+            .text(row, 210, 443)
+            .text(seat.col, 405, 443)
+            .text(segment,210,496)
+            .text(sector,215,551)
+            .text(seat.email,195, 600)
             
+                //.text(datestring, 340, 421)
+            .save()
+            await doc.end()
+        const mailOptions = {
+            from: process.env.SMTP_MAIL,
+            to: seat.email,
+            subject: `БИЛЕТ НА BIG BEAUTY BOSS VEGAS`,
+            attachments: [
+                {   // file on disk as an attachment
+                    filename: 'ticket.pdf',
+                    path: __dirname+'/../tickets/'+seat.uuid+'.pdf' // stream this file
+                }],
+            html: mailText
+        };
+        writeStream.on('finish', function () {
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
                     console.log(error);
@@ -713,6 +728,7 @@ class Manager{
                     console.log('Email sent: ' + info.response);
                 }
             });
+        });
             let aa = await Seat.findAll({where:{active:true, statusId:2}})
             let bb = await Balcon.findAll({where:{active:true, statusId:2}})
             for(let balc of bb){
@@ -1059,7 +1075,8 @@ class Manager{
         
        
             let doc = new PDFDocument({size: 'A4'});
-            doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
+            let writeStream = fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')
+            doc.pipe(writeStream);
             doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
            await doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
             .fontSize(15) 
@@ -1083,14 +1100,16 @@ class Manager{
                 }],
             html: mailText
         };
-        
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
+        writeStream.on('finish', function () {
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
         });
+       
         return res.send({res:"Место успешно забронировано"})
         //return res.send(response)
     }
