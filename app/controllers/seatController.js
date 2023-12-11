@@ -8,7 +8,7 @@ const path = require("path")
 
 const transporter = createTransport({
     host: process.env.SMTP_SERVER,
-    port:465,
+    port:25,
     auth: {
      
       user: process.env.SMTP_MAIL,

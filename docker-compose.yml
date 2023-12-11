@@ -62,8 +62,6 @@ services:
       - '80'
     restart: always
 
-networks:
-  network: {}
 
 volumes:
   postgres:
