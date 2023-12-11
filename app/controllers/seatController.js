@@ -631,13 +631,6 @@ class Manager{
             });
         });
             
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            });
             let aa = await Seat.findAll({where:{active:true, statusId:2}})
             let bb = await Balcon.findAll({where:{active:true, statusId:2}})
             for(let balc of bb){
@@ -784,33 +777,7 @@ class Manager{
             fs.unlink(directory+'/'+seat.uuid+'.pdf', async (err) => {
                 if (err) throw err;
                 })
-            let doc = new PDFDocument({size: 'A4'});
-                doc.pipe(fs.createWriteStream(directory+'/'+uid+'.pdf')); 
-                doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
-                .fontSize(15) 
-                .text(row, 210, 443)
-                .text(seat.col, 405, 443)
-                .text(segment,210,496)
-                .text(sector,215,551)
-                .text(seat.email,195, 600)
-                .save()
-                doc.end()
-            const mailOptions = {
-                from: process.env.SMTP_MAIL,
-                to: seat.email,
-                subject: `Бронь места отменена`,
-                html: `<h4>Ваш запрос был отклонён менеджером</h4>
-                       `
-            };
             
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            });
             let aa = await Seat.findAll({where:{active:true, statusId:2}})
             let bb = await Balcon.findAll({where:{active:true, statusId:2}})
             for(let balc of bb){
@@ -866,33 +833,7 @@ class Manager{
             fs.unlink(directory+'/'+seat.uuid+'.pdf', async (err) => {
                 if (err) throw err;
                 })
-            let doc = new PDFDocument({size: 'A4'});
-                doc.pipe(fs.createWriteStream(directory+'/'+uid+'.pdf')); 
-                doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-                doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
-                .fontSize(15) 
-                .text(row, 210, 443)
-                .text(seat.col, 405, 443)
-                .text(segment,210,496)
-                .text(sector,215,551)
-                .text(seat.email,195, 600)
-                .save()
-                doc.end()
-            const mailOptions = {
-                from: process.env.SMTP_MAIL,
-                to: seat.email,
-                subject: `Бронь места отменена`,
-                html: `<h4>Ваш запрос был отклонён менеджером</h4>
-                       `
-            };
             
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            });
             return res.send({res:"Бронь отменена"})
         }catch(e){
             console.log(e)
