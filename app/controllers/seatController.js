@@ -1011,12 +1011,15 @@ class Manager{
         let segment='Parter'
         if(!seat){
             seat= await Balcon.findOne({where:{id:id,active:true, statusId:3} })
-            result = await Balcon.update({email },{where:{id, active:true, statusId:3}})
+            await Balcon.update({email },{where:{id, active:true, statusId:3}})
             segment='Balcony'
+            result =await Balcon.findOne({where:{id:id,active:true, statusId:3} })
         }else{
-            result= await Seat.update({email },{where:{id, active:true, statusId:3}})
+            await Seat.update({email },{where:{id, active:true, statusId:3}})
+            result= Seat.findOne({where:{id:id,active:true, statusId:3} })
         }
-            console.log(result)
+        
+            console.log('prev: '+seat.email + ' current: ' + result.email)
        
        //let seat= await Seat.findOne({where:{id:id} })
         let bc
@@ -1062,21 +1065,21 @@ class Manager{
             let doc = new PDFDocument({size: 'A4'});
             doc.pipe(fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')); 
             doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-            doc.image('data:image/png;base64,'+bc.toString('base64'),  265,680,{ height:86})
+           await doc.image('data:image/png;base64,'+bc.toString('base64'),  265,680,{ height:86})
             .fontSize(15) 
             .text(row, 210, 452)
             .text(seat.col, 405, 458)
             .text(segment,210,504)
             .text(sector,215,559)
             .fontSize(12) 
-            .text(seat.email,387, 505)
+            .text(email,387, 505)
             
                 //.text(datestring, 340, 421)
             .save()
-            doc.end()
+            await doc.end()
         const mailOptions = {
             from: process.env.SMTP_MAIL,
-            to: seat.email,
+            to: email,
             subject: `БИЛЕТ НА BIG BEAUTY BOSS VEGAS`,
             attachments: [
                 {   // file on disk as an attachment
