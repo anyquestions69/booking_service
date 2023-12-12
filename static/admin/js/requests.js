@@ -194,6 +194,8 @@ $('#changeEmailForm').on('submit', async function(e){
   let resText = await res.json()
   $('#changeEmailForm').css('display', 'none')
   //showBooked()
+  console.log($('.emailChangable[data-id="'+id+'"]'))
+  $('.emailChangable[data-id="'+id+'"]').text($('#emailText').val())
 })
 
 async function showBooked(res){
@@ -245,7 +247,7 @@ async function showBooked(res){
           $('#bookList').append(`
           <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
           <div class="d-lg-flex gap-2 req justify-content-start align-items-center">
-           <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
+           <h6 class="mb-0"><span>${i}. </span><span class='emailChangable' data-id=${r.id}>${r.email}</span></h6>
           
           
           <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}  <div>${segmentName}</div></div>
@@ -266,7 +268,7 @@ async function showBooked(res){
           $('#bookList').append(`
           <div class="list-group-item list-group-item-action d-md-flex justify-content-between gap-2  align-items-center" aria-current="true">
           <div class="d-lg-flex gap-2 req justify-content-start align-items-center">
-           <h6 class="mb-0"><span>${i}. </span>${r.email}</h6>
+           <h6 class="mb-0"><span>${i}. </span><span class='emailChangable' data-id=${r.id}>${r.email}</span></h6>
           
           
           <div><div style="color:${color}">${sector}</div> Ряд: ${row} Место: ${r.col}  <div>${segmentName}</div></div>
