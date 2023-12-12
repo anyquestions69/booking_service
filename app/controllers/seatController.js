@@ -521,7 +521,12 @@ class Manager{
                 
             }
             segment='Балкон'
-            csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            if(seat.uuid.length==12){
+                csv+=seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            }else{
+                csv+='0'+seat.uuid+','+segment+','+sector+','+row+','+seat.col+','+seat.price+'\n';
+            }
+            
         }
         let file = path.join(__dirname,`../tables/${filename}.csv`)
         fs.writeFile(file,csv,()=>{
