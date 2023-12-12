@@ -599,7 +599,7 @@ class Manager{
                 let writeStream = fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')
             doc.pipe(writeStream);
             doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-           await doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
+           await doc.image('data:image/png;base64,'+bc.toString('base64'),  221.5,680,{ height:86})
             .fontSize(15) 
             .text(row, 210, 443)
             .text(seat.col, 405, 443)
@@ -691,7 +691,7 @@ class Manager{
                 let writeStream = fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')
             doc.pipe(writeStream);
             doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-           await doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
+           await doc.image('data:image/png;base64,'+bc.toString('base64'),  221.5,680,{ height:86})
             .fontSize(15) 
             .text(row, 210, 443)
             .text(seat.col, 405, 443)
@@ -1019,7 +1019,7 @@ class Manager{
             let writeStream = fs.createWriteStream(directory+'/'+seat.uuid+'.pdf')
             doc.pipe(writeStream);
             doc.image(__dirname+'/ticket.png', 0, 0,{width:595.28, height:841.89})
-           await doc.image('data:image/png;base64,'+bc.toString('base64'),  250,680,{ height:86})
+           await doc.image('data:image/png;base64,'+bc.toString('base64'),  221.5,680,{ height:86})
             .fontSize(15) 
             .text(row, 210, 443)
             .text(seat.col, 405, 443)
